@@ -3,7 +3,7 @@ package no.ntnu.ecomback.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "item")
+@Table(name = "items")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +18,7 @@ public class Item {
     @Column(name = "category")
     private Category category;
 
+    //create location class?
     @Column(name = "location")
     private String location;
 
