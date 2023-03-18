@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @Column(name = "briefDescription")
     private String briefDescription;
@@ -37,7 +37,7 @@ public class Item {
         this.price = price;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
