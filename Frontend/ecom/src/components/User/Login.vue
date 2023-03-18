@@ -47,7 +47,10 @@ export default{
         const tokenStore = useTokenStore();
         return { tokenStore };
     },
-    methods: {
+    methods: { 
+        changeRoute(string){
+        this.$router.push({name:string})
+        },
         async login(){
             await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
             if(this.tokenStore.jwtToken || this.tokenStore.jwtToken){
