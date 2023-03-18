@@ -5,7 +5,7 @@ import jakarta.persistence.*;
  * The User class represents a user of the e-commerce application.
  */
 @Entity
-@Table(name="users")
+@Table
 public class User {
 
     /**
@@ -18,31 +18,31 @@ public class User {
     /**
      * The first name of the user.
      */
-    @Column(name="first_name")
+    @Column
     private String firstName;
 
     /**
      * The last name of the user.
      */
-    @Column(name="first_name")
+    @Column
     private String lastName;
 
     /**
      * The username of the user.
      */
-    @Column(name="username")
+    @Column
     private String username;
 
     /**
      * The password of the user.
      */
-    @Column(name="password")
+    @Column
     private String password;
 
     /**
      * The role of the user
      */
-    @Column(name="role")
+    @Column
     private Role role;
 
     /**
