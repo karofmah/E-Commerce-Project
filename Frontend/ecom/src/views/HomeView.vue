@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <Header/>
+    <Header id="header"/>
     <div class="catAndCont">
         <Categories id="categories"/>
         <Content id="content"/>
@@ -13,10 +13,17 @@
 </template>
 
 <style scoped>
+    .container{
+        display: flex;
+    }
     .catAndCont{
         display: flex;
         flex-flow: column wrap;
         width: 100%;
+        transform: translateY(10em);
+    }
+    #header{
+        z-index: 2;
     }
     #categories{
         position: absolute;

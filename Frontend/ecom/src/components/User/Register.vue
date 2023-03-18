@@ -2,6 +2,7 @@
     <div class=" wrapper">
         <div class="main-container">
             <h1>Ny bruker</h1>
+            <br>
             <div class="email">
                 <input placeholder="Epostadresse" type="email">
             </div>
@@ -78,7 +79,7 @@
       align-items: center;
       background-color: #cbd5e1;
       width: 65%;
-      height: 50%;
+      height: 85%;
       border-radius: 15px;
     }
     

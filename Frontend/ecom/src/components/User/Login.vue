@@ -13,6 +13,7 @@
         <div class="submit">
             <button @click="login()">Logg inn</button>
         </div>
+        <br>
         <div class="register">
             <p>Har du lyst å registere en ny bruker? </p>
             <button>Register ny bruker her</button>
@@ -83,7 +84,7 @@ export default{
   align-items: center;
   background-color: #cbd5e1;
   width: 65%;
-  height: 50%;
+  height: 75%;
   border-radius: 15px;
 }
 
