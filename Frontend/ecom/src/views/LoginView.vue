@@ -4,7 +4,7 @@
 
 
 <script setup>
-import Login from '../components/Login.vue';
+import Login from '../components/User/Login.vue';
 
 
 
