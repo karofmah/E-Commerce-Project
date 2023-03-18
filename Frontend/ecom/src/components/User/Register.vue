@@ -23,14 +23,13 @@
             </div>
             <br>
             <div class="submit">
-                <button @click="login()">Register ny bruker</button>
+                <button @click="register()">Register ny bruker</button>
             </div>
+            <p>{{ error }}</p>
             
         </div>
     </div>
-    
-    
-    </template>
+</template>
     
     
     <script>
@@ -44,11 +43,29 @@
                 forname: '',
                 surname: '',
                 error: '',
+                access: ''
     
             }
         },methods: {
-            login(){
-    
+            changeRoute(string){
+                this.$router.push({name:string})
+            },
+            async register(){
+                const user = {
+                    username: this.username,
+                    password: this.password,
+                    email: this.email,
+                    forname: this.forname,
+                    surname: this.surname,
+                }
+
+                this.access = await(await (axios.post("http://localhost:8080/Createuser",user))).data 
+                if(this.access === true){
+                    this.error = 'Ny bruker var registert'
+                    this.changeRoute('Login')
+                }else{
+                    this.error = 'Registering av fungerte ikke. Prøv igjen....'
+                }
             }
         }
     }
@@ -59,40 +76,40 @@
     
     
     
-    <style scoped>
-    
-    .wrapper{
-        display: flex;
-        flex-direction: column;
-        place-items: center;
-        justify-content: center;
-        align-items: center;
-        width: 100vw; 
-        height: 100vh;
-    }
-    
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: #cbd5e1;
-      width: 65%;
-      height: 50%;
-      border-radius: 15px;
-    }
-    
-    .register{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .forgotten-password {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    
-    </style>
+<style scoped>
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    justify-content: center;
+    align-items: center;
+    width: 100vw; 
+    height: 100vh;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #cbd5e1;
+    width: 65%;
+    height: 50%;
+    border-radius: 15px;
+}
+
+.register{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.forgotten-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+</style>
