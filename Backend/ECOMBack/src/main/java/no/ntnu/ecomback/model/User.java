@@ -12,7 +12,6 @@ public class User {
      * The email address of the user.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String email;
 
     /**
@@ -42,6 +41,7 @@ public class User {
     /**
      * The role of the user
      */
+
     @Column
     private Role role;
 
@@ -148,5 +148,20 @@ public class User {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * Returns the role of the user.
+     * @return the role of the user
+     */
+    public Role getRole() {
+        return role;
+    }
+    /**
+     * Sets the password of the user.
+     * @param role the password to set
+     */
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
