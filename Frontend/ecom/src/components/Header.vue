@@ -5,7 +5,7 @@
       </div>
 
         <div class="links">
-          <a href="">Ny annonse</a>
+          <a @click="changeRoute('NewItem')" href="">Ny annonse</a>
           <a href="">Meldinger</a>
           <a @click="changeRoute('Login')" href="">Logg inn</a>
         </div>

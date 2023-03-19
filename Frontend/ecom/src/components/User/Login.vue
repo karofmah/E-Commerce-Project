@@ -2,7 +2,7 @@
 <div class=" wrapper">
     <div class="main-container">
         <div class="username">
-            <input placeholder="Ditt brukernavn" type="text" v-model="username">
+            <input placeholder="Ditt brukernavn" type="email" v-model="username">
         </div>
         <br>
         <div class="password">
@@ -38,7 +38,7 @@
 export default{
     data(){
         return{
-            username: '',
+            email: '',
             password: '',
             error: '',
 
@@ -52,7 +52,7 @@ export default{
         this.$router.push({name:string})
         },
         async login(){
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
+            await this.tokenStore.getTokenAndSaveInStore(this.email, this.password);
             if(this.tokenStore.jwtToken || this.tokenStore.jwtToken){
             this.changeRoute('Home')
             } else {
