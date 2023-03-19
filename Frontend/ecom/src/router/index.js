@@ -5,6 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import EditView from '../views/EditView.vue'
 import NewItemView from '../views/NewItemView.vue'
 import ItemView from '../views/ItemView.vue'
+import CartView from '../views/CartView.vue'
 
 
 
@@ -12,7 +13,7 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: HomeView
+        component: CartView
     },
     {
         path: '/login',
