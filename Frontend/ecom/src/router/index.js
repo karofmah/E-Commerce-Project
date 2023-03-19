@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import EditView from '../views/EditView.vue'
+import NewItemView from '../views/NewItemView.vue'
+import ItemView from '../views/ItemView.vue'
+
 
 
 const routes = [
@@ -22,9 +25,14 @@ const routes = [
         component: RegisterView
     },
     {
-        path: '/1',
+        path: '/Edit',
         name: 'Edit',
         component: EditView
+    },
+    {
+        path: '/NewItem',
+        name: 'NewItem',
+        component: NewItemView
     }
 
 ]

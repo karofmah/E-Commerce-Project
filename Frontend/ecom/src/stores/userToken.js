@@ -11,13 +11,13 @@ persist: {
 },
 
 actions: {
-    async getTokenAndSaveInStore(username, password) {
+    async getTokenAndSaveInStore(email, password) {
         try{
-            let response = await getJwtToken(username, password);
+            let response = await getJwtToken(email, password);
             let data = response.data;
             if(data != null && data != '' && data != undefined){
                 this.jwtToken = data;
-                let userResponse = await getUserInfo(username, password,this.jwtToken);
+                let userResponse = await getUserInfo(email, password,this.jwtToken);
                 this.loggedInUser = userResponse.data
             }
         } catch (err){
