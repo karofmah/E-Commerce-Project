@@ -5,14 +5,14 @@ export const getJwtToken = (email, password) => {
             "Content-type": "application/json",
         },
     };
-    return axios.post("http://localhost:8080/token", JSON.stringify({ email, password }), config);
+    return axios.post("http://localhost:8080/api/users/login/token", JSON.stringify({ email, password }), config);
 }
-export const getUserInfo = (username,password,token) => {
+export const getUserInfo = (email,password,token) => {
     const config = {
         headers: {
             "Content-type": "application/json",
             "Authorization" : "Bearer " + token
         },
     };
-    return axios.get("http://localhost:8080/users?username=" +username + "&password=" + password,config);
+    return axios.get("http://localhost:8080/api/users/login/?email=" +email + "&password=" + password,config);
 }
