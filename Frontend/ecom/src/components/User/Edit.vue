@@ -4,31 +4,31 @@
             <h1>Endre bruker</h1>
             <div class="email">
                 <input placeholder="Ny epost" type="email" v-model="email">
-                <input placeholder="Nåværende passord" type="password" v-model="password">
+                <input placeholder="Nåværende passord" type="password" v-model="passwordEmail">
                 <button @click="changeEmail()">Endre epostadresse</button>
             </div>
             <br>
             <div class="username">
                 <input placeholder="Ditt brukernavn" type="text" v-model="username">
-                <input placeholder="Nåværende passord" type="password" v-model="password">
+                <input placeholder="Nåværende passord" type="password" v-model="passwordUsername">
                 <button @click="changeUsername()">Endre brukernavn</button>
             </div>
             <br>
             <div class="password">
-                <input placeholder="Nåværende passord" type="password" v-model="password">
+                <input placeholder="Nåværende passord" type="password" v-model="passwordOld">
                 <input placeholder="Nytt passord" type="password" v-model="newPassword">
                 <button @click="changePassword()">Endre passord</button>
             </div>
             <br>
             <div class="forname">
                 <input placeholder="Nytt fornavn" type="text" v-model="forname">
-                <input placeholder="Nåværende passord" type="password" v-model="password">
+                <input placeholder="Nåværende passord" type="password" v-model="passwordOld">
                 <button @click="changeForname()">Endre fornavn</button>
             </div>
             <br>
             <div class="surname">
                 <input placeholder="Etternavn" type="text" v-model="surname">
-                <input placeholder="Nåværende passord" type="password" v-model="password">
+                <input placeholder="Nåværende passord" type="password" v-model="passwordSurname">
                 <button @click="changeSurname()">Endre etternavn</button>
             </div>
             <div>
@@ -48,16 +48,20 @@
 import { useTokenStore } from "../../stores/userToken";
 
 export default{
-    data(){
-        return{
-            email: '',
-            username: '',
-            forname: '',
-            surname: '',
-            password: '',
-            newPassword: '',
-            error: ''
-        }
+        data() {
+        return {
+            email: "",
+            username: "",
+            forname: "",
+            surname: "",
+            passwordEmail: "",
+            passwordUsername: "",
+            passwordOld: "",
+            passwordForname: "",
+            passwordSurname: "",
+            newPassword: "",
+            error: "",
+        };
     },setup(){
         const tokenStore = useTokenStore();
         return { tokenStore };
@@ -67,7 +71,7 @@ export default{
         this.$router.push({name:string})
         },
         async changeEmail(){
-            if(this.tokenStore.loggedInUser.password === this.password){
+            if(this.tokenStore.loggedInUser.password === this.passwordEmail){
                 const user = {
                     username: this.tokenStore.loggedInUser.username,
                     password: this.tokenStore.loggedInUser.password,
@@ -95,7 +99,7 @@ export default{
             
         },
         async changeUsername(){
-            if(this.tokenStore.loggedInUser.password === this.password){
+            if(this.tokenStore.loggedInUser.password === this.passwordUsername){
                 const user = {
                     username: this.username,
                     password: this.tokenStore.loggedInUser.password,
@@ -122,7 +126,7 @@ export default{
             }
         },
         async changePassword(){
-            if(this.tokenStore.loggedInUser.password === this.password){
+            if(this.tokenStore.loggedInUser.password === this.passwordOld){
                 const user = {
                     username: this.tokenStore.loggedInUser.username,
                     password: this.newPassword,
@@ -149,7 +153,7 @@ export default{
             }
         },
         async changeForname(){
-            if(this.tokenStore.loggedInUser.password === this.password){
+            if(this.tokenStore.loggedInUser.password === this.passwordForname){
                 const user = {
                     username: this.tokenStore.loggedInUser.username,
                     password: this.tokenStore.loggedInUser.password,
@@ -176,7 +180,7 @@ export default{
             }
         },
         async changeSurname(){
-            if(this.tokenStore.loggedInUser.password === this.password){
+            if(this.tokenStore.loggedInUser.password === this.passwordSurname){
                 const user = {
                     username: this.tokenStore.loggedInUser.username,
                     password: this.tokenStore.loggedInUser.password,
