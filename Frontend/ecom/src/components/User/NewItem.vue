@@ -2,17 +2,17 @@
     <div class="new-item">
       <h1>Add New Item</h1>
   
-      <div>
+      <div class="field-container">
         <label for="images">Upload Images (Max 10):</label>
         <input type="file" id="images" ref="images" multiple @change="handleImages" />
       </div>
   
-      <div>
+      <div class="field-container">
         <label for="brief-description">Brief Description:</label>
         <input type="text" id="brief-description" v-model="item.briefDescription" />
       </div>
   
-      <div>
+      <div class="field-container">
         <label for="category">Category:</label>
         <select id="category" v-model="item.category">
           <option value="electronics">Electronics</option>
@@ -21,31 +21,32 @@
         </select>
       </div>
   
-      <div>
+      <div class="field-container">
         <label for="full-description">Full Description:</label>
         <textarea id="full-description" v-model="item.fullDescription"></textarea>
       </div>
   
-      <div class="location-container">
-        <div>
+      <div class="field-container">
+        <div class="location-container">
           <label for="location">Location:</label>
           <input type="text" id="location" @change="handleLocation" />
         </div>
         <div id="map" ref="map" class="map"></div>
       </div>
   
-      <div>
+      <div class="field-container">
         <label for="price">Price:</label>
         <input type="number" id="price" v-model="item.price" />
       </div>
   
       <button @click="submit">Submit</button>
-
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+  
       <img id="testBase64" :src="displayedImage" alt="">
       <div id="displayMap" ref="displayMap" class="map"></div>
     </div>
   </template>
-  
+
   <script>
   import Map from 'ol/Map';
   import View from 'ol/View';
@@ -73,6 +74,7 @@
             longitude: null,
             price: null,
         },
+        errorMessage: null,
         map: null,
         marker: null,
         markerLayer: null,
@@ -223,7 +225,42 @@
           this.markerLayer.getSource().addFeature(this.marker);
         }
       },
+      validateForm() {
+      this.errorMessage = null;
+
+      if (this.item.images.length === 0) {
+        this.errorMessage = 'Please upload at least one image.';
+        return false;
+      }
+      if (!this.item.briefDescription) {
+        this.errorMessage = 'Please enter a brief description.';
+        return false;
+      }
+      if (!this.item.category) {
+        this.errorMessage = 'Please select a category.';
+        return false;
+      }
+      if (!this.item.fullDescription) {
+        this.errorMessage = 'Please enter a full description.';
+        return false;
+      }
+      if (!this.item.latitude || !this.item.longitude) {
+        this.errorMessage = 'Please provide a valid location.';
+        return false;
+      }
+      if (!this.item.price) {
+        this.errorMessage = 'Please enter a price.';
+        return false;
+      }
+
+      return true;
+    },
       async submit() {
+
+        if (!this.validateForm()) {
+        return;
+        }
+
         console.log(this.item);
 
         // Display the first image in the testBase64 img tag
@@ -238,27 +275,55 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
 .new-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+width: 70%;
+margin: 0 auto;
+}
+
+.field-container {
+display: flex;
+flex-direction: column;
+width: 100%;
 }
 
 .location-container {
-  display: flex;
-  gap: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+width: 100%;
 }
 
 textarea {
-  width: 100%;
-  height: 150px;
-  resize: vertical;
+width: 100%;
+height: 150px;
+resize: vertical;
+}
+
+label {
+display: block;
+margin-bottom: 5px;
+}
+
+input,
+select {
+width: 100%;
 }
 
 .map {
-  width: 400px;
-  height: 300px;
+width: 400px;
+height: 300px;
+margin-top: 10px;
 }
 </style>

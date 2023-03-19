@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin("http://localhost:5174/")
+@CrossOrigin("http://localhost:5173/")
 public class UserController {
 
     private UserService userService;
@@ -25,8 +25,8 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user){
         return userService.registerUser(user);
     }
-    @GetMapping("/login/token")
-    public String getToken(final @RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
+    @RequestMapping("/login/token")
+    public String getToken(@RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
         return userService.getToken(loginRequest);
     }
 

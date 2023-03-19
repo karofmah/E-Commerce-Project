@@ -8,12 +8,12 @@ public class LoginRequest {
 
 
     @JsonCreator
-    public LoginRequest(@JsonProperty("username") final String email, @JsonProperty("password") final String password) {
+    public LoginRequest(@JsonProperty("email") final String email, @JsonProperty("password") final String password) {
         this.email = email;
         this.password = password;
     }
 
-    @JsonProperty("username")
+    @JsonProperty("email")
     public String getEmail() {
         return email;
     }

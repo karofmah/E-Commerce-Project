@@ -7,20 +7,24 @@ state: () => ({
     loggedInUser: null,
 }),
 persist: {
-    storage: sessionStorage, // note that data in sessionStorage is cleared when the page session ends
+    storage: sessionStorage,
 },
 
 actions: {
     async getTokenAndSaveInStore(email, password) {
+        console.log('FUCK')
         try{
             let response = await getJwtToken(email, password);
             let data = response.data;
+            console.log(data)
             if(data != null && data != '' && data != undefined){
                 this.jwtToken = data;
-                let userResponse = await getUserInfo(email, password,this.jwtToken);
+                let userResponse = await getUserInfo(email,this.jwtToken);
                 this.loggedInUser = userResponse.data
+                console.log(this.loggedInUser)
             }
         } catch (err){
+            console.log('FUCK DEN GIKK INN I ERROR')
             console.log(err)
         }
     }
