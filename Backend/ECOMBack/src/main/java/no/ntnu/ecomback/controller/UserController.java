@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.controller;
 
+import no.ntnu.ecomback.model.LoginRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,13 +26,13 @@ public class UserController {
         return userService.registerUser(user);
     }
     @GetMapping("/login/token")
-    public String getToken(final @RequestBody User user) throws NoSuchAlgorithmException {
-        return userService.getToken(user);
+    public String getToken(final @RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
+        return userService.getToken(loginRequest);
     }
 
     @GetMapping("/login/user")
-    public User getUser(@RequestParam String email){
-        return userService.getUser(email)
+    public Optional<User> getUser(@RequestParam String email){
+        return userService.getUser(email);
     }
 
 }

@@ -2,6 +2,7 @@ package no.ntnu.ecomback.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import no.ntnu.ecomback.model.LoginRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +34,22 @@ public class UserService {
     }
 
 
-    public String getToken(final User user) throws NoSuchAlgorithmException {
+    public String getToken(final LoginRequest loginRequest) throws NoSuchAlgorithmException {
 
 
-        if (checkUserCredentials(user.getEmail(),user.getFirstName(),user.getLastName(),user.getUsername(),user.getPassword())) {
-
-            return generateToken(user.getUsername());
+        if (checkUserCredentials(loginRequest.getEmail(),loginRequest.getPassword())) {
+            return generateToken(loginRequest.getEmail());
         }
 
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access denied, wrong credentials....");
     }
 
-    public String generateToken(final String userId) {
+    public String generateToken(final String email) {
         final Instant now = Instant.now();
         final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
 
         return JWT.create()
-                .withSubject(userId)
+                .withSubject(email)
                 .withIssuer("idatt2105_token_issuer_app")
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
@@ -73,30 +73,29 @@ public class UserService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public boolean checkUserCredentials(final String email,final String firstName,
-                                        final String lastName,final String username,
-                                        final String password) throws NoSuchAlgorithmException {
+    public boolean checkUserCredentials(final String email,final String password) throws NoSuchAlgorithmException {
         for(User user : userRepository.findAll()){
 
-            if(user.getEmail().equals(email) && user.getFirstName().equals(firstName) &&
-            user.getLastName().equals(lastName) && user.getUsername().equals(username) &&
-            user.getPassword().equals(password)) {
+            if(user.getEmail().equals(email)
+            && user.getPassword().equals(password)) {
                 return true;
             }
         }
         return false;
     }
     public Optional<User> getUser(String email){
-        for(User user:userRepository.findAll()){
-            if(user.getEmail().equals(email)){
-                return userRepository.findById(email);
+        try {
+
+
+            for (User user : userRepository.findAll()) {
+                if (user.getEmail().equals(email)) {
+                    return userRepository.findById(email);
+                }
             }
+            return Optional.empty();
+        }catch(Exception e){
+            System.out.println("Error occurred while : " + e.getMessage());
+            return Optional.empty();
         }
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(password.getBytes());
-        String hashedPassword = bytesToHex(hash);
-
-
-        return userRepository.findByNameAndPassword(name,hashedPassword);
     }
 }
