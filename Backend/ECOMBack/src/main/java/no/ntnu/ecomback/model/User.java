@@ -42,7 +42,6 @@ public class User {
      * The role of the user
      */
 
-    @Column
     private Role role;
 
     /**
