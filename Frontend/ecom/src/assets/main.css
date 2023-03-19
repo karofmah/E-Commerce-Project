@@ -116,4 +116,33 @@ input:focus::-webkit-input-placeholder {
     /* border: 1px solid var(--color-red); */
   }
 
+  nav {
+    width: 100%;
+    font-size: 20px;
+    text-align: right;
+    /* margin-top: 2rem; */
+  }
+  
+  nav a.router-link-exact-active {
+    color: var(--color-text);
+  }
+  
+  nav a.router-link-exact-active:hover {
+    background-color: transparent;
+  }
+  
+  nav a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  nav a:hover{
+    background-color: rgba(82, 144, 242, 0.2);
+  }
+  
+  nav a:first-of-type {
+    border: 0;
+  }
+
   
