@@ -83,8 +83,10 @@
       this.initDisplayMap();
     },
     methods: {
+
+        //ALt under her til neste kommentar trenger du kun for å displaye hvor på kartet det er
         async updateDisplayMap() {
-  if (this.item.latitude !== null && this.item.longitude !== null) {
+    if (this.item.latitude !== null && this.item.longitude !== null) {
     const marker = new Feature({
       geometry: new Point(fromLonLat([this.item.longitude, this.item.latitude])),
     });
@@ -125,6 +127,9 @@
                 }),
             });
         },
+
+//Alt under her er kun det du trenger i denne componenten
+
       initMap() {
         this.map = new Map({
           target: this.$refs.map,
