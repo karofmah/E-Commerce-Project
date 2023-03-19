@@ -7,7 +7,7 @@ import EditView from '../views/EditView.vue'
 
 const routes = [
     {
-        path: '/l',
+        path: '/1',
         name: 'Home',
         component: HomeView
     },
