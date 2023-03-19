@@ -4,6 +4,8 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import EditView from '../views/EditView.vue'
 import NewItemView from '../views/NewItemView.vue'
+import ItemView from '../views/ItemView.vue'
+
 
 
 const routes = [

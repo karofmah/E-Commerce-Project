@@ -7,15 +7,15 @@
 
 </script>
 
-<style>
+<style scoped>
 
 
 body{
-    margin:0;
-  }
-  html{
-    margin: 0;
-  }
+  margin:0;
+}
+html{
+  margin: 0;
+}
 
 
 </style>
