@@ -1,37 +1,57 @@
 <template>
-    <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
-      <div class="logo">
-        <h1>LOGO</h1>
-      </div>
-
-        <div class="links">
-          <a @click="changeRoute('NewItem')" href="">Ny annonse</a>
-          <a href="">Meldinger</a>
-          <a @click="changeRoute('Login')" href="">Logg inn</a>
-        </div>
+  <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
+    <div class="logo">
+      <h1>LOGO</h1>
     </div>
+
+    <div class="links">
+      <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
+      <a @click="handleItemClick('Messages')" href="">Meldinger</a>
+      <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
+        <a @click="changeRoute('UserProfile')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
+      </template>
+      <template v-else>
+        <a @click="changeRoute('Login')" href="">Logg inn</a>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
+import axios, { Axios } from 'axios';
+import { useTokenStore } from "../stores/userToken";
+
 export default {
   data() {
     return {
       scrollPosition: 0
     };
   },
+  setup() {
+    const tokenStore = useTokenStore();
+    return { tokenStore };
+  },
   methods: {
     updateScroll() {
       this.scrollPosition = window.scrollY;
     },
-    changeRoute(string){
-      this.$router.push({name:string})
+    handleItemClick(routeName) {
+      if (this.tokenStore.jwtToken && this.tokenStore.jwtToken !== null) {
+        this.changeRoute(routeName);
+      } else {
+        this.changeRoute('Login');
+      }
+    },
+    changeRoute(string) {
+      this.$router.push({ name: string });
     },
   },
-  mounted() {
+  async mounted() {
     window.addEventListener("scroll", this.updateScroll);
-  }
+  },
 };
 </script>
+
 
 <style scoped>
 .header {

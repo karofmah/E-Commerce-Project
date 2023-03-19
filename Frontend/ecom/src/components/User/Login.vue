@@ -1,8 +1,8 @@
 <template>
 <div class=" wrapper">
     <div class="main-container">
-        <div class="username">
-            <input placeholder="Ditt brukernavn" type="email" v-model="username">
+        <div class="email">
+            <input placeholder="Din email" type="email" v-model="email">
         </div>
         <br>
         <div class="password">
@@ -53,6 +53,7 @@ export default{
         },
         async login(){
             await this.tokenStore.getTokenAndSaveInStore(this.email, this.password);
+            console.log(this.tokenStore.jwtToken)
             if(this.tokenStore.jwtToken || this.tokenStore.jwtToken){
             this.changeRoute('Home')
             } else {
