@@ -4,7 +4,7 @@
             <h1>Ny bruker</h1>
             <br>
             <div class="email">
-                <input placeholder="Epostadresse" type="email">
+                <input placeholder="Epostadresse" type="email" v-model="email">
             </div>
             <br>
             <div class="username">
@@ -16,11 +16,11 @@
             </div>
             <br>
             <div class="Forname">
-                <input placeholder="Fornavn" type="text">
+                <input placeholder="Fornavn" type="text" v-model="firstName">
             </div>
             <br>
             <div class="Surname">
-                <input placeholder="Etternavn" type="text">
+                <input placeholder="Etternavn" type="text" v-model="lastName">
             </div>
             <br>
             <div class="submit">
@@ -33,83 +33,88 @@
 </template>
     
     
-    <script>
-    
-    export default{
-        data(){
-            return{
-                username: '',
-                password: '',
-                email: '',
-                forname: '',
-                surname: '',
-                error: '',
-                access: ''
-    
-            }
-        },methods: {
-            changeRoute(string){
-                this.$router.push({name:string})
-            },
-            async register(){
-                const user = {
-                    username: this.username,
-                    password: this.password,
-                    email: this.email,
-                    forname: this.forname,
-                    surname: this.surname,
-                }
+<script>
+import axios, { Axios } from 'axios';
 
-                this.access = await(await (axios.post("http://localhost:8080/Createuser",user))).data 
-                if(this.access === true){
-                    this.error = 'Ny bruker var registert'
-                    this.changeRoute('Login')
-                }else{
-                    this.error = 'Registering av fungerte ikke. Prøv igjen....'
-                }
-            }
+
+export default{
+data(){
+    return{
+        username: '',
+        password: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        error: '',
+        access: '',
+        role: 'NORMAL_USER'
+
+    }
+},methods: {
+    changeRoute(string){
+        this.$router.push({name:string})
+    },
+    async register(){
+        const user = {
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            role: this.role
+        }
+        console.log(user)
+
+        this.access = await(await (axios.post("http://localhost:9090/api/users/register",user))).data 
+        if(this.access.data !== null){
+            this.error = 'Ny bruker var registert'
+            this.changeRoute('Login')
+        }else{
+            this.error = 'Registering av fungerte ikke. Prøv igjen....'
         }
     }
-    
-    
-    </script>
-    
-    
-    
-    
+}
+}
+
+
+</script>
+
+
+
+
 <style scoped>
 
 .wrapper{
-    display: flex;
-    flex-direction: column;
-    place-items: center;
-    justify-content: center;
-    align-items: center;
-    width: 100vw; 
-    height: 100vh;
+display: flex;
+flex-direction: column;
+place-items: center;
+justify-content: center;
+align-items: center;
+width: 100vw; 
+height: 100vh;
 }
 
 .main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #cbd5e1;
-    width: 65%;
-    height: 50%;
-    border-radius: 15px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background-color: #cbd5e1;
+width: 65%;
+height: 50%;
+border-radius: 15px;
 }
 
 .register{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .forgotten-password {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 

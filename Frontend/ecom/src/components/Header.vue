@@ -7,7 +7,7 @@
         <div class="links">
           <a href="">Ny annonse</a>
           <a href="">Meldinger</a>
-          <a href="">Logg inn</a>
+          <a @click="changeRoute('Login')" href="">Logg inn</a>
         </div>
     </div>
 </template>
@@ -22,7 +22,10 @@ export default {
   methods: {
     updateScroll() {
       this.scrollPosition = window.scrollY;
-    }
+    },
+    changeRoute(string){
+      this.$router.push({name:string})
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.updateScroll);

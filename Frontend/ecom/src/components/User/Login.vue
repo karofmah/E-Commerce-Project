@@ -16,7 +16,7 @@
         <br>
         <div class="register">
             <p>Har du lyst å registere en ny bruker? </p>
-            <button>Register ny bruker her</button>
+            <button @click="changeRoute('Register')">Register ny bruker her</button>
         </div>
         <br>
         <div class="forgotten-password">

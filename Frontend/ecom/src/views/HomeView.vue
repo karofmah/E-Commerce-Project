@@ -2,6 +2,7 @@
     import Header from '../components/Header.vue';
     import Categories from '../components/HomePage/Categories.vue'
     import Content from '../components/HomePage/Content.vue'
+    import Foooter from '../components/Footer.vue'
 </script>
 
 <template>
@@ -10,6 +11,8 @@
         <Categories id="categories"/>
         <Content id="content"/>
     </div>
+    <div class=""></div>
+    <Foooter id="footer"/>
 </template>
 
 <style scoped>
@@ -30,5 +33,8 @@
     }
     #content{
         margin: 0 20%;
+    }
+    #footer{
+        transform: translateY(10em);
     }
 </style>
