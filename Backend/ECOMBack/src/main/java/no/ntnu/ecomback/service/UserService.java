@@ -1,19 +1,13 @@
 package no.ntnu.ecomback.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import no.ntnu.ecomback.model.LoginRequest;
+import no.ntnu.ecomback.model.UpdateRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +45,7 @@ public class UserService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public boolean checkUserCredentials(final String email,final String password) throws NoSuchAlgorithmException {
+    public boolean checkUserCredentials(final String email,final String password) {
         for(User user : userRepository.findAll()){
 
             if(user.getEmail().equals(email)
@@ -74,6 +68,28 @@ public class UserService {
         }catch(Exception e){
             System.out.println("Error occurred while : " + e.getMessage());
             return Optional.empty();
+        }
+    }
+    public User updateUser(UpdateRequest updateRequest){
+
+        Optional<User> userByEmail = userRepository.findById(updateRequest.getEmail());
+
+        if (userByEmail.isPresent()) {
+            User _user = userByEmail.get();
+            _user.setFirstName(updateRequest.getFirstName());
+            _user.setLastName(updateRequest.getLastName());
+            System.out.println(_user.getPassword());
+            if(_user.getPassword().equals(updateRequest.getCurrentPassword())){
+                _user.setPassword(updateRequest.getNewPassword());
+            }
+            /*else{
+                System.out.println();
+                _user.setPassword(updateRequest.getCurrentPassword());
+            }*/
+
+            return userRepository.save(_user);
+        } else {
+            return null;
         }
     }
 }
