@@ -16,16 +16,6 @@ const routes = [
         component: HomeView
     },
     {
-        path: '/Item',
-        name: 'Item',
-        component: ItemView
-    },
-    {
-        path: '/Cart',
-        name: 'Cart',
-        component: CartView
-    },
-    {
         path: '/login',
         name: 'Login',
         component: LoginView
@@ -44,7 +34,12 @@ const routes = [
         path: '/NewItem',
         name: 'NewItem',
         component: NewItemView
-    }
+    },
+    {
+        path: '/item',
+        name: 'Item',
+        component: ItemView
+    },
 
 ]
 
