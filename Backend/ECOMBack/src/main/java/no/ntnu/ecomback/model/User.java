@@ -69,6 +69,7 @@ public class User {
         this.role = role;
     }
 
+
     /**
      * Returns the email address of the user.
      * @return the email address of the user

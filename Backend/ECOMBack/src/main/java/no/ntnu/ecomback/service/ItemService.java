@@ -1,28 +1,37 @@
 package no.ntnu.ecomback.service;
 
 import no.ntnu.ecomback.model.Item;
+import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
+import no.ntnu.ecomback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ItemService {
     private ItemRepository itemRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public void setItemRepository(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
+    @Autowired
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
 
     public Item addItem(Item item){
         try {
-            for (Item i:itemRepository.findAll()) {
-                if(i.getSeller().getEmail().equals(item.getSeller().getEmail())){
+            for (User u:userRepository.findAll()) {
+                System.out.println(u.getEmail());
+                if(u.getEmail().equals(item.getSeller().getEmail())){
                     return itemRepository.save(item);
                 }
             }
             System.out.println("rip");
-           return null;
+            return null;
         } catch (Exception e) {
             System.out.println("Error occurred while registering user: " + e.getMessage());
             return null;

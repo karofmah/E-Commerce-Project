@@ -9,12 +9,12 @@
   
       <div class="field-container">
         <label for="brief-description">Brief Description:</label>
-        <input type="text" id="brief-description" v-model="item.briefDescription" />
+        <input type="text" id="brief-description" v-model="briefDescription" />
       </div>
   
       <div class="field-container">
         <label for="category">Category:</label>
-        <select id="category" v-model="item.category">
+        <select id="category" v-model="category">
           <option value="electronics">Electronics</option>
           <option value="vehicle">Vehicle</option>
           <option value="real_estate">Real Estate</option>
@@ -23,7 +23,7 @@
   
       <div class="field-container">
         <label for="full-description">Full Description:</label>
-        <textarea id="full-description" v-model="item.fullDescription"></textarea>
+        <textarea id="full-description" v-model="fullDescription"></textarea>
       </div>
   
       <div class="field-container">
@@ -36,7 +36,7 @@
   
       <div class="field-container">
         <label for="price">Price:</label>
-        <input type="number" id="price" v-model="item.price" />
+        <input type="number" id="price" v-model="price" />
       </div>
   
       <button @click="submit">Submit</button>
@@ -66,22 +66,20 @@
   export default {
     data() {
       return {
-        item: {
             displayMap: null,
             displayedImage: null,
             images: [],
             briefDescription: "brief",
             category: "",
             fullDescription: "full",
-            latitude: 5.5,
-            longitude: 4.5,
-            price: 100,
-        },
-        errorMessage: null,
-        map: null,
-        marker: null,
-        markerLayer: null,
-        listed: ""
+            latitude: null,
+            longitude: null,
+            price: null,
+            errorMessage: null,
+            map: null,
+            marker: null,
+            markerLayer: null,
+            listed: ""
       };
     },
     setup(){
@@ -91,6 +89,8 @@
     mounted() {
       this.initMap();
       this.initDisplayMap();
+      console.log(this.tokenStore.jwtToken)
+      console.log(this.tokenStore.loggedInUser)
     },
     methods: {
         changeRoute(string){
@@ -99,9 +99,9 @@
 
         //ALt under her til neste kommentar trenger du kun for å displaye hvor på kartet det er
         async updateDisplayMap() {
-            if (this.item.latitude !== null && this.item.longitude !== null) {
+            if (this.latitude !== null && this.longitude !== null) {
             const marker = new Feature({
-            geometry: new Point(fromLonLat([this.item.longitude, this.item.latitude])),
+            geometry: new Point(fromLonLat([this.longitude, this.latitude])),
             });
 
             marker.setStyle(
@@ -122,7 +122,7 @@
             });
 
             this.displayMap.addLayer(markerLayer);
-            this.displayMap.getView().setCenter(fromLonLat([this.item.longitude, this.item.latitude]));
+            this.displayMap.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
             this.displayMap.getView().setZoom(13);
             }
         },
@@ -161,11 +161,11 @@
         const files = this.$refs.images.files;
         if (files.length > 10) {
             alert("You can only upload a maximum of 10 images.");
-            this.item.images = []; // Set this.item.images instead of this.images
+            this.images = []; // Set this.images instead of this.images
             return;
         }
 
-        this.item.images = await Promise.all(
+        this.images = await Promise.all(
             Array.from(files).map((file) => {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -199,11 +199,11 @@
         }
 
         const { lat, lon } = data[0];
-        this.item.latitude = parseFloat(lat);
-        this.item.longitude = parseFloat(lon);
+        this.latitude = parseFloat(lat);
+        this.longitude = parseFloat(lon);
 
         // Update the map view and add a marker at the coordinates.
-        this.map.getView().setCenter(fromLonLat([this.item.longitude, this.item.latitude]));
+        this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
         this.map.getView().setZoom(13);
   
         if (this.marker) {
@@ -211,7 +211,7 @@
         }
   
         this.marker = new Feature({
-          geometry: new Point(fromLonLat([this.item.longitude, this.item.latitude])),
+          geometry: new Point(fromLonLat([this.longitude, this.latitude])),
         });
   
         this.marker.setStyle(
@@ -240,27 +240,27 @@
       validateForm() {
       this.errorMessage = null;
 
-      /*if (this.item.images.length === 0) {
+      /*if (this.images.length === 0) {
         this.errorMessage = 'Please upload at least one image.';
         return false;
       }*/
-      if (!this.item.briefDescription) {
+      if (!this.briefDescription) {
         this.errorMessage = 'Please enter a brief description.';
         return false;
       }
-      if (!this.item.category) {
+      if (!this.category) {
         this.errorMessage = 'Please select a category.';
         return false;
       }
-      if (!this.item.fullDescription) {
+      if (!this.fullDescription) {
         this.errorMessage = 'Please enter a full description.';
         return false;
       }
-      if (!this.item.latitude || !this.item.longitude) {
+      if (!this.latitude || !this.longitude) {
         this.errorMessage = 'Please provide a valid location.';
         return false;
       }
-      if (!this.item.price) {
+      if (!this.price) {
         this.errorMessage = 'Please enter a price.';
         return false;
       }
@@ -272,29 +272,36 @@
         console.log(this.item);
 
         // Display the first image in the testBase64 img tag
-        if (this.item.images.length > 0) {
+        if (this.images.length > 0) {
             const testBase64Img = document.getElementById("testBase64");
-            testBase64Img.src = this.item.images[0];
+            testBase64Img.src = this.images[0];
         }
 
         await this.updateDisplayMap();
 
-        if (!this.validateForm()) {
+        if (this.validateForm()) {
         return;
         }else{
-            const location = {
-                latitude: this.item.latitude,
-                longitude: this.item.longitude
-            }
+            
             const user = this.tokenStore.loggedInUser;
 
             const newItem = {
-                seller : user,
-                briefDescription: this.item.briefDescription,
-                fullDescription: this.item.fullDescription,
-                category: this.item.category,
-                location : location,
-                price : this.item.price
+              seller:{
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              username: user.username,
+              password: user.password,
+              role: user.role
+            },
+                  briefDescription: this.briefDescription,
+                  fullDescription: this.fullDescription,
+                  category: "ELECTRONICS",
+                  location: {
+                      latitude:this.latitude,
+                      longitude: this.longitude
+              },
+              price: 10000
             }
             console.log(newItem)
             
@@ -308,7 +315,7 @@
             console.log('HELLO')
             console.log(this.tokenStore.jwtToken)
 
-            this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem))).data
+            this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data
             if(this.listed != null){
                 this.changeRoute('Home')
             }else{
