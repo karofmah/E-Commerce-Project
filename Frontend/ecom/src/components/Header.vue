@@ -55,7 +55,7 @@ export default {
 
 <style scoped>
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
   background: radial-gradient(#f7fee7,#84cc16);
   display: flex;
@@ -67,6 +67,7 @@ export default {
   opacity: 1;
   width: 100%;
   height: 100vh;
+  z-index: 3;
 }
 
 .header.is-scrolled {

@@ -23,6 +23,7 @@
     width: 100%;
     height: 40%;
     padding: 1em;
+    position: relative;
 }
 
 .info-box{

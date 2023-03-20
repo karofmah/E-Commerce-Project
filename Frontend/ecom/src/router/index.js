@@ -12,7 +12,7 @@ import UserInfoView from '../views/UserInfoView.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home',
         component: HomeView
     },
@@ -22,7 +22,7 @@ const routes = [
         component: ItemView
     },
     {
-        path: '/cart',
+        path: '/',
         name: 'Cart',
         component: CartView
     },

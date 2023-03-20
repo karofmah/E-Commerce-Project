@@ -2,7 +2,7 @@
 
 a {
     text-decoration: none;
-    /* color: var(--color-red); */
+    color: var(--color-blue-light);
     transition: 0.4s;
 }
 
@@ -18,8 +18,7 @@ a {
   
   ::-webkit-scrollbar-thumb {
     background: var(--bg-color-light);
-    border: 0.1em solid gray;
-    /* border: 0.1em solid var(--color-red); */
+    border: 0.1em solid var(--color-blue-light);
     border-radius: 100vw;
     transition: 0.2s ease-in;
   }
@@ -34,8 +33,7 @@ a {
     font-weight: 500;
     font-family: inherit;
     color: #0f0f0f;
-    /* background-color: var(--color-green); */
-    background-color: gray;
+    background-color: var(--color-blue-light);
     transition: border-color 0.25s;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
   }
@@ -45,9 +43,9 @@ a {
   }
 
   button:hover {
-    /* border-color: var(--color-red); */
+    border-color: var(--color-blue);
     scale: 1.04;
-    /* color: var(--color-red); */
+    color: var(--color-blue);
   }
 
   button:active {
@@ -62,7 +60,7 @@ a {
   }
 
   input:focus-within {
-    /* border-color: var(--color-red); */
+    border-color: var(--color-blue);
     scale: 1.04;
   }
 
@@ -70,10 +68,8 @@ a {
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  box-shadow: 0 0 0 30px gray inset !important;
-  -webkit-box-shadow: 0 0 0 30px gray inset !important;
-  /* box-shadow: 0 0 0 30px var(--color-green) inset !important;
-  -webkit-box-shadow: 0 0 0 30px var(--color-green) inset !important; */
+  box-shadow: 0 0 0 30px var(--color-blue-light) inset !important;
+  -webkit-box-shadow: 0 0 0 30px var(--color-blue-light) inset !important;
 }
 
 input,
@@ -87,8 +83,7 @@ input::-webkit-input-placeholder {
 }
 
 input:focus::-webkit-input-placeholder {
-    /* color: var(--color-red); */
-    color: gray;
+    color: var(--color-blue);
   }
 
   input[type="number"] {
@@ -113,14 +108,13 @@ input:focus::-webkit-input-placeholder {
 
   hr{
     border: 1px solid gray;
-    /* border: 1px solid var(--color-red); */
+    border: 1px solid var(--color-blue-light);
   }
 
   nav {
     width: 100%;
     font-size: 20px;
     text-align: right;
-    /* margin-top: 2rem; */
   }
   
   nav a.router-link-exact-active {
