@@ -38,8 +38,8 @@
 export default{
     data(){
         return{
-            email: '',
-            password: '',
+            email: 'karofm@ntnu.no',
+            password: 'pw',
             error: '',
 
         }

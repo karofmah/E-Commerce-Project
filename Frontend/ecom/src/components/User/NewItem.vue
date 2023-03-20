@@ -67,12 +67,12 @@
             displayMap: null,
             displayedImage: null,
             images: [],
-            briefDescription: "",
+            briefDescription: "brief",
             category: "",
-            fullDescription: "",
-            latitude: null,
-            longitude: null,
-            price: null,
+            fullDescription: "full",
+            latitude: 5.5,
+            longitude: 4.5,
+            price: 100,
         },
         errorMessage: null,
         map: null,
@@ -228,10 +228,10 @@
       validateForm() {
       this.errorMessage = null;
 
-      if (this.item.images.length === 0) {
+      /*if (this.item.images.length === 0) {
         this.errorMessage = 'Please upload at least one image.';
         return false;
-      }
+      }*/
       if (!this.item.briefDescription) {
         this.errorMessage = 'Please enter a brief description.';
         return false;
