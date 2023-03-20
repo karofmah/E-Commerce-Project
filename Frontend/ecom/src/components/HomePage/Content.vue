@@ -14,16 +14,15 @@ let contents = ref([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
     .container{
         display: flex;
         flex-flow: row wrap;
-        margin: auto;
-        width: 80%;
+        /* width: 85%; */
         background-color: rgba(176, 176, 176, .2);
         border-radius: 8px;
+        gap: 10px;
     }
 
     .content{
-        display: block;
-        height: 35vh;
-        max-width: 15vw;
+        max-height: 1.5em;
+        min-width: 40vw;
         margin: 10px;
         background-color: rgba(176, 176, 176, .5);
         border-radius: 8px;

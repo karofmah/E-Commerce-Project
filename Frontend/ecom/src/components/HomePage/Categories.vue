@@ -17,11 +17,11 @@ let categories = ref(["cat1","cat2","cat3","cat4","cat5","cat6","cat7","cat8", "
 <style scoped>
     .container{
         display: flex;
-        flex-flow: column wrap;
+        flex-flow: row wrap;
         background-color: rgba(176, 176, 176, .2);
         border-radius: 8px;
         margin: 0 0 0 0;
-        width: 18%;
+        width: 10em;
     }
     .categories{
         display: flex;

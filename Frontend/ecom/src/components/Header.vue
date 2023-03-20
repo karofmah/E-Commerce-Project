@@ -74,11 +74,11 @@ export default {
 }
 
 .logo {
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .logo h1{
-    font-size: 60px;
+  font-size: 60px;
 }
 
 .logo img {
