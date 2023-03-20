@@ -13,6 +13,16 @@ const routes = [
     {
         path: '/',
         name: 'Home',
+        component: HomeView
+    },
+    {
+        path: '/Item',
+        name: 'Item',
+        component: ItemView
+    },
+    {
+        path: '/Cart',
+        name: 'Cart',
         component: CartView
     },
     {

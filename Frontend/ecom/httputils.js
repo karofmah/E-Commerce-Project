@@ -5,7 +5,7 @@ export const getJwtToken = (email, password) => {
             "Content-type": "application/json",
         },
     };
-    return axios.post("http://localhost:9090/api/users/login/token", JSON.stringify({email,password}), config);
+    return axios.post("http://localhost:9090/login/token", JSON.stringify({email,password}), config);
 }
 export const getUserInfo = (email,token) => {
     const config = {
@@ -14,5 +14,5 @@ export const getUserInfo = (email,token) => {
             "Authorization" : "Bearer " + token
         },
     };
-    return axios.get("http://localhost:9090/api/users/login/user?email=" +email,config);
+    return axios.get("http://localhost:9090/login/user?email=" +email,config);
 }
