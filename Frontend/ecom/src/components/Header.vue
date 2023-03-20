@@ -8,7 +8,7 @@
       <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
       <a @click="handleItemClick('Messages')" href="">Meldinger</a>
       <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
-        <a @click="changeRoute('UserProfile')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
+        <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
       </template>
       <template v-else>
         <a @click="changeRoute('Login')" href="">Logg inn</a>

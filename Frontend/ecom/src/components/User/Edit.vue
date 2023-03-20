@@ -1,268 +1,183 @@
 <template>
-    <div class=" wrapper">
-        <div class="main-container">
-            <h1>Endre bruker</h1>
-            <div class="email">
-                <input placeholder="Ny epost" type="email" v-model="email">
-                <input placeholder="Nåværende passord" type="password" v-model="passwordEmail">
-                <button @click="changeEmail()">Endre epostadresse</button>
+    <div class="wrapper">
+      <div class="main-container">
+        <h1>Endre bruker</h1>
+        <form @submit.prevent="handleSubmit">
+          <div class="form-group">
+            <label for="email">E-postadresse</label>
+            <input id="email" type="email" v-model="email" />
+          </div>
+  
+          <div class="form-group">
+            <label for="username">Brukernavn</label>
+            <input id="username" type="text" v-model="username" />
+            <button type="submit" :disabled="!username">Endre</button>
+          </div>
+  
+          <div class="form-group">
+            <label for="forname">Fornavn</label>
+            <input id="forname" type="text" v-model="forname" />
+            <button type="submit" :disabled="!forname">Endre</button>
+          </div>
+  
+          <div class="form-group">
+            <label for="surname">Etternavn</label>
+            <input id="surname" type="text" v-model="surname" />
+            <button type="submit" :disabled="!surname">Endre</button>
+          </div>
+  
+          <div class="form-group">
+            <label for="newPassword">Nytt passord</label>
+            <input id="newPassword" type="password" v-model="newPassword" />
+            <button type="submit" :disabled="!newPassword">Endre</button>
+          </div>
+  
+          <div v-if="!password">
+            <button type="submit" :disabled="!isFormValidWithoutPassword">Lagre endringer uten passordendring</button>
+          </div>
+  
+          <div v-if="password">
+            <div class="form-group">
+              <label for="oldPassword">Gammelt passord</label>
+              <input id="oldPassword" type="password" v-model="oldPassword" required />
             </div>
-            <br>
-            <div class="username">
-                <input placeholder="Ditt brukernavn" type="text" v-model="username">
-                <input placeholder="Nåværende passord" type="password" v-model="passwordUsername">
-                <button @click="changeUsername()">Endre brukernavn</button>
-            </div>
-            <br>
-            <div class="password">
-                <input placeholder="Nåværende passord" type="password" v-model="passwordOld">
-                <input placeholder="Nytt passord" type="password" v-model="newPassword">
-                <button @click="changePassword()">Endre passord</button>
-            </div>
-            <br>
-            <div class="forname">
-                <input placeholder="Nytt fornavn" type="text" v-model="forname">
-                <input placeholder="Nåværende passord" type="password" v-model="passwordOld">
-                <button @click="changeForname()">Endre fornavn</button>
-            </div>
-            <br>
-            <div class="surname">
-                <input placeholder="Etternavn" type="text" v-model="surname">
-                <input placeholder="Nåværende passord" type="password" v-model="passwordSurname">
-                <button @click="changeSurname()">Endre etternavn</button>
-            </div>
-            <div>
-                <br>
-                <br>
-                <button @click="changeRoute('Home')">Tilbake til start</button>
-            </div>
-            <br>
-            <p>{{ error }}</p>
-        </div>
+  
+            <button type="submit" :disabled="!isFormValidWithPassword">Lagre endringer med passordendring</button>
+          </div>
+  
+        </form>
+  
+        <br />
+        <button @click="changeRoute('Home')">Tilbake til start</button>
+        <br />
+        <p>{{ error }}</p>
+      </div>
     </div>
-</template>
+  </template>
 
 
 
 <script>
 import { useTokenStore } from "../../stores/userToken";
+import axios from "axios";
 
-export default{
-        data() {
-        return {
-            email: "",
-            username: "",
-            forname: "",
-            surname: "",
-            passwordEmail: "",
-            passwordUsername: "",
-            passwordOld: "",
-            passwordForname: "",
-            passwordSurname: "",
-            newPassword: "",
-            error: "",
-        };
-    },setup(){
-        const tokenStore = useTokenStore();
-        return { tokenStore };
+export default {
+  data() {
+    return {
+      email: this.tokenStore.loggedInUser.email,
+      username: this.tokenStore.loggedInUser.username,
+      forname: this.tokenStore.loggedInUser.firstName,
+      surname: this.tokenStore.loggedInUser.lastName,
+      password: "",
+      oldPassword: "",
+      newPassword: "",
+      error: "",
+    };
+  },
+  setup() {
+    const tokenStore = useTokenStore();
+    return { tokenStore };
+  },
+  computed: {
+    isFormValidWithoutPassword() {
+      return (
+        this.email ||
+        this.username ||
+        this.forname ||
+        this.surname ||
+        this.newPassword
+      );
     },
-    methods: {
-        changeRoute(string){
-        this.$router.push({name:string})
-        },
-        async changeEmail(){
-            if(this.tokenStore.loggedInUser.password === this.passwordEmail){
-                const user = {
-                    username: this.tokenStore.loggedInUser.username,
-                    password: this.tokenStore.loggedInUser.password,
-                    email: this.email,
-                    forname: this.tokenStore.loggedInUser.forname,
-                    surname: this.tokenStore.loggedInUser.surname,
-                }
-                const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
+    isFormValidWithPassword() {
+      return (
+        this.email ||
+        this.username ||
+        this.forname ||
+        this.surname ||
+        (this.newPassword && this.password === this.tokenStore.loggedInUser.password)
+      );
+    },
+  },
+  methods: {
+    async handleSubmit() {
+    const user = {
+    username: this.tokenStore.loggedInUser.username,
+    password: this.oldPassword,
+    email: this.email || this.tokenStore.loggedInUser.email,
+    forname: this.forname || this.tokenStore.loggedInUser.forname,
+    surname: this.surname || this.tokenStore.loggedInUser.surname,
+    new_password: this.newPassword,
+  };
 
-            let response = await(await (axios.post("http://localhost:8080/Updateemail", user,config)))
-            this.username = response.data.username;
-            this.password = response.data.password;
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + this.tokenStore.jwtToken,
+    },
+  };
 
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-
-
-            }else{
-                this.error = 'Feil passord'
-            }
-            
-        },
-        async changeUsername(){
-            if(this.tokenStore.loggedInUser.password === this.passwordUsername){
-                const user = {
-                    username: this.username,
-                    password: this.tokenStore.loggedInUser.password,
-                    email: this.tokenStore.loggedInUser.email,
-                    forname: this.tokenStore.loggedInUser.forname,
-                    surname: this.tokenStore.loggedInUser.surname,
-                }
-                const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
-
-            let response = await(await (axios.post("http://localhost:8080/Updateusername", user,config)))
-            this.username = response.data.username;
-            this.password = response.data.password;
-
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-            
-
-            }else{
-                this.error = 'Feil passord'
-            }
-        },
-        async changePassword(){
-            if(this.tokenStore.loggedInUser.password === this.passwordOld){
-                const user = {
-                    username: this.tokenStore.loggedInUser.username,
-                    password: this.newPassword,
-                    email: this.tokenStore.loggedInUser.email,
-                    forname: this.tokenStore.loggedInUser.forname,
-                    surname: this.tokenStore.loggedInUser.surname,
-                }
-                const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
-
-            let response = await(await (axios.post("http://localhost:8080/Updatepassword", user,config)))
-            this.username = response.data.username;
-            this.password = response.data.password;
-
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-
-
-            }else{
-                this.error = 'Feil passord'
-            }
-        },
-        async changeForname(){
-            if(this.tokenStore.loggedInUser.password === this.passwordForname){
-                const user = {
-                    username: this.tokenStore.loggedInUser.username,
-                    password: this.tokenStore.loggedInUser.password,
-                    email: this.tokenStore.loggedInUser.email,
-                    forname: this.forname,
-                    surname: this.tokenStore.loggedInUser.surname,
-                }
-                const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
-
-            let response = await(await (axios.post("http://localhost:8080/Updateforname", user,config)))
-            this.username = response.data.username;
-            this.password = response.data.password;
-
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-
-
-            }else{
-                this.error = 'Feil passord'
-            }
-        },
-        async changeSurname(){
-            if(this.tokenStore.loggedInUser.password === this.passwordSurname){
-                const user = {
-                    username: this.tokenStore.loggedInUser.username,
-                    password: this.tokenStore.loggedInUser.password,
-                    email: this.tokenStore.loggedInUser.email,
-                    forname: this.tokenStore.loggedInUser.forname,
-                    surname: this.surname,
-                }
-                const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
-
-
-            let response = await(await (axios.post("http://localhost:8080/Updatesurname", user,config)))
-            this.username = response.data.username;
-            this.password = response.data.password;
-
-            await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-
-
-            }else{
-                this.error = 'Feil passord'
-            }
-        }
+  try {
+    if (this.newPassword && this.oldPassword !== this.tokenStore.loggedInUser.password) {
+      throw new Error("Gammelt passord stemmer ikke");
     }
 
+    let endpoint = null;
 
-}
+    if (this.email) {
+      endpoint = "Updateemail";
+    } else if (this.username) {
+      endpoint = "Updateusername";
+    } else if (this.forname) {
+      endpoint = "Updateforname";
+    } else if (this.surname) {
+      endpoint = "Updatesurname";
+    } else if (this.newPassword) {
+      endpoint = "Updatepassword";
+    }
+
+    if (endpoint) {
+      let response = await axios.post(
+        `http://localhost:8080/${endpoint}`,
+        user,
+        config
+      );
+
+      if (response.data.email) {
+        this.email = response.data.email;
+      }
+
+      if (response.data.username) {
+        this.username = response.data.username;
+      }
+
+      if (response.data.forname) {
+        this.forname = response.data.forname;
+      }
+
+      if (response.data.surname) {
+        this.surname = response.data.surname;
+      }
+
+      if (response.data.password) {
+        this.password = response.data.password;
+      }
+
+      await this.tokenStore.getTokenAndSaveInStore(
+        this.username,
+        this.password
+      );
+    }
+
+    this.oldPassword = "";
+    this.newPassword = "";
+    this.error = "";
+  } catch (error) {
+    this.error = error.message;
+  }
+},
+changeRoute(string) {
+  this.$router.push({ name: string });
+},
+},
+};
 </script>
-
-
-
-<style scoped>
-
-.wrapper{
-    display: flex;
-    flex-direction: column;
-    place-items: center;
-    justify-content: center;
-    align-items: center;
-    width: 100vw; 
-    height: 100vh;
-}
-
-.main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #cbd5e1;
-    width: 80%;
-    height: 67%;
-    border-radius: 15px;
-}
-
-
-.email{
-    display: flex;
-    flex-direction: column;
-}
-
-.username{
-    display: flex;
-    flex-direction: column;
-}
-
-.password{
-    display: flex;
-    flex-direction: column;
-}
-
-.forname{
-    display: flex;
-    flex-direction: column;
-}
-
-.surname{
-    display: flex;
-    flex-direction: column;
-}
-
-
-</style>
