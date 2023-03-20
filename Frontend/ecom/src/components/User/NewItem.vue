@@ -308,7 +308,7 @@
             console.log('HELLO')
             console.log(this.tokenStore.jwtToken)
 
-            this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data
+            this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem))).data
             if(this.listed != null){
                 this.changeRoute('Home')
             }else{

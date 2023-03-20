@@ -26,7 +26,7 @@ public class UserService {
 
     //generate random and save in database every time
     public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofSeconds(5);
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(5);
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {

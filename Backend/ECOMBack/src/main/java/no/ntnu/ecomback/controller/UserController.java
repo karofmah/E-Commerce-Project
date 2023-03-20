@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @EnableAutoConfiguration
