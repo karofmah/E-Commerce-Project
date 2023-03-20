@@ -21,18 +21,16 @@
     }
     .catAndCont{
         display: flex;
-        flex-flow: column wrap;
+        flex-flow: row wrap;
         width: 100%;
         transform: translateY(10em);
     }
     #header{
         z-index: 2;
     }
-    #categories{
-        position: absolute;
-    }
     #content{
-        margin: 0 20%;
+        flex: 1;
+        margin: 0 1em;
     }
     #footer{
         transform: translateY(10em);

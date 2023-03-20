@@ -6,6 +6,7 @@ import EditView from '../views/EditView.vue'
 import NewItemView from '../views/NewItemView.vue'
 import ItemView from '../views/ItemView.vue'
 import CartView from '../views/CartView.vue'
+import UserInfoView from '../views/UserInfoView.vue'
 
 
 
@@ -14,6 +15,16 @@ const routes = [
         path: '/',
         name: 'Home',
         component: HomeView
+    },
+    {
+        path: '/item',
+        name: 'Item',
+        component: ItemView
+    },
+    {
+        path: '/cart',
+        name: 'Cart',
+        component: CartView
     },
     {
         path: '/login',
@@ -26,20 +37,20 @@ const routes = [
         component: RegisterView
     },
     {
-        path: '/Edit',
+        path: '/edit',
         name: 'Edit',
         component: EditView
     },
     {
-        path: '/NewItem',
+        path: '/newItem',
         name: 'NewItem',
         component: NewItemView
     },
     {
-        path: '/item',
-        name: 'Item',
-        component: ItemView
-    },
+        path: '/userInfo',
+        name: 'UserInfo',
+        component: UserInfoView 
+    }
 
 ]
 

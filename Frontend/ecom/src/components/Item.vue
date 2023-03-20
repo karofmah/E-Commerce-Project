@@ -7,12 +7,12 @@ const props = defineProps({
   },
 });
 
-let specs = ref("");
 let description = ref("");
+let specs = ref("");
 let descOrSpecBool = ref(true);
 
-specs = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint eius reprehenderit harum dignissimos at minus magni labore natus assumenda, blanditiis adipisci nihil eligendi saepe dolorem deleniti explicabo iste modi mollitia!";
-description = "!aitillom idom etsi obacilpxe itineled merolod epeas idnegile lihin icsipida siitidnalb ,adnemussa sutan erobal ingam sunim ta somissingid murah tiredneherper suie tniS .tile gnicisipida ,rutetcesnoc tema tis rolod muspi meroL";
+description = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint eius reprehenderit harum dignissimos at minus magni labore natus assumenda, blanditiis adipisci nihil eligendi saepe dolorem deleniti explicabo iste modi mollitia!";
+specs = "!aitillom idom etsi obacilpxe itineled merolod epeas idnegile lihin icsipida siitidnalb ,adnemussa sutan erobal ingam sunim ta somissingid murah tiredneherper suie tniS .tile gnicisipida ,rutetcesnoc tema tis rolod muspi meroL";
 
 function descOrSpec(key) {
     switch (key) {
@@ -54,8 +54,8 @@ function descOrSpec(key) {
             <a href="#0" @click="descOrSpec(1)">Spesification</a>
         </nav>
         <br>
-        <h3 :hidden="descOrSpecBool">{{ description }}</h3>
-        <h3 :hidden="!descOrSpecBool">{{ specs }}</h3>
+        <h3 :hidden="!descOrSpecBool">{{ description }}</h3>
+        <h3 :hidden="descOrSpecBool">{{ specs }}</h3>
     </div>
   </div>
 </template>
