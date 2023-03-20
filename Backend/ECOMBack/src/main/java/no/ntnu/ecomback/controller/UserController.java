@@ -4,13 +4,17 @@ import no.ntnu.ecomback.model.LoginRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 @RestController
+@EnableAutoConfiguration
 @RequestMapping("/api/users")
 @CrossOrigin("http://localhost:5173/")
 public class UserController {
@@ -25,7 +29,7 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user){
         return userService.registerUser(user);
     }
-    @RequestMapping("/login/token")
+    @PostMapping("/login/token")
     public String getToken(@RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
         return userService.getToken(loginRequest);
     }

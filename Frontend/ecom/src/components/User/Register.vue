@@ -40,11 +40,11 @@ import axios, { Axios } from 'axios';
 export default{
 data(){
     return{
-        username: '',
-        password: '',
-        email: '',
-        firstName: '',
-        lastName: '',
+        username: 'karofm',
+        password: 'pw',
+        email: 'karofm@ntnu.no',
+        firstName: 'Karo',
+        lastName: 'Mahmoud',
         error: '',
         access: '',
         role: 'NORMAL_USER'
@@ -65,7 +65,7 @@ data(){
         }
         console.log(user)
 
-        this.access = await(await (axios.post("http://localhost:9090/api/users/register",user))).data 
+        this.access = await(await (axios.post("http://localhost:8080/api/users/register",user))).data 
         if(this.access.data !== null){
             this.error = 'Ny bruker var registert'
             this.changeRoute('Login')
