@@ -48,17 +48,20 @@
   </template>
 
   <script>
-  import Map from 'ol/Map';
-  import View from 'ol/View';
-  import TileLayer from 'ol/layer/Tile';
-  import OSM from 'ol/source/OSM';
-  import 'ol/ol.css';
-  import { fromLonLat } from 'ol/proj';
-  import { Icon, Style } from 'ol/style';
-  import Point from 'ol/geom/Point';
-  import Feature from 'ol/Feature';
-  import VectorSource from 'ol/source/Vector';
-  import VectorLayer from 'ol/layer/Vector';
+    import axios, { Axios } from 'axios';
+    import { useTokenStore } from "../../stores/userToken";
+    import {getUserInfo} from "/httputils.js"
+    import Map from 'ol/Map';
+    import View from 'ol/View';
+    import TileLayer from 'ol/layer/Tile';
+    import OSM from 'ol/source/OSM';
+    import 'ol/ol.css';
+    import { fromLonLat } from 'ol/proj';
+    import { Icon, Style } from 'ol/style';
+    import Point from 'ol/geom/Point';
+    import Feature from 'ol/Feature';
+    import VectorSource from 'ol/source/Vector';
+    import VectorLayer from 'ol/layer/Vector';
   
   export default {
     data() {
@@ -78,43 +81,51 @@
         map: null,
         marker: null,
         markerLayer: null,
+        listed: ""
       };
+    },
+    setup(){
+        const tokenStore = useTokenStore();
+        return { tokenStore };
     },
     mounted() {
       this.initMap();
       this.initDisplayMap();
     },
     methods: {
+        changeRoute(string){
+        this.$router.push({name:string})
+      },
 
         //ALt under her til neste kommentar trenger du kun for å displaye hvor på kartet det er
         async updateDisplayMap() {
-    if (this.item.latitude !== null && this.item.longitude !== null) {
-    const marker = new Feature({
-      geometry: new Point(fromLonLat([this.item.longitude, this.item.latitude])),
-    });
+            if (this.item.latitude !== null && this.item.longitude !== null) {
+            const marker = new Feature({
+            geometry: new Point(fromLonLat([this.item.longitude, this.item.latitude])),
+            });
 
-    marker.setStyle(
-      new Style({
-        image: new Icon({
-          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-          anchor: [0.5, 1],
-        }),
-      })
-    );
+            marker.setStyle(
+            new Style({
+                image: new Icon({
+                src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+                anchor: [0.5, 1],
+                }),
+            })
+            );
 
-    const markerSource = new VectorSource({
-      features: [marker],
-    });
+            const markerSource = new VectorSource({
+            features: [marker],
+            });
 
-    const markerLayer = new VectorLayer({
-      source: markerSource,
-    });
+            const markerLayer = new VectorLayer({
+            source: markerSource,
+            });
 
-    this.displayMap.addLayer(markerLayer);
-    this.displayMap.getView().setCenter(fromLonLat([this.item.longitude, this.item.latitude]));
-    this.displayMap.getView().setZoom(13);
-  }
-},
+            this.displayMap.addLayer(markerLayer);
+            this.displayMap.getView().setCenter(fromLonLat([this.item.longitude, this.item.latitude]));
+            this.displayMap.getView().setZoom(13);
+            }
+        },
         initDisplayMap() {
             this.displayMap = new Map({
                 target: this.$refs.displayMap,
@@ -150,6 +161,7 @@
         const files = this.$refs.images.files;
         if (files.length > 10) {
             alert("You can only upload a maximum of 10 images.");
+            this.item.images = []; // Set this.item.images instead of this.images
             return;
         }
 
@@ -164,8 +176,8 @@
             });
             })
         );
-      },
-      async handleLocation(event) {
+        },
+        async handleLocation(event) {
         const location = event.target.value;
 
         // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
@@ -257,10 +269,6 @@
     },
       async submit() {
 
-        if (!this.validateForm()) {
-        return;
-        }
-
         console.log(this.item);
 
         // Display the first image in the testBase64 img tag
@@ -270,6 +278,45 @@
         }
 
         await this.updateDisplayMap();
+
+        if (!this.validateForm()) {
+        return;
+        }else{
+            const location = {
+                latitude: this.item.latitude,
+                longitude: this.item.longitude
+            }
+            const user = this.tokenStore.loggedInUser;
+
+            const newItem = {
+                seller : user,
+                briefDescription: this.item.briefDescription,
+                fullDescription: this.item.fullDescription,
+                category: this.item.category,
+                location : location,
+                price : this.item.price
+            }
+            console.log(newItem)
+            
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
+                },
+            };
+
+            console.log('HELLO')
+            console.log(this.tokenStore.jwtToken)
+
+            this.listed = await(await (axios.post("http://localhost:9090/add",newItem,config))).data
+            if(this.listed != null){
+                this.changeRoute('Home')
+            }else{
+                this.errorMessage = "There was an error while trying to list item"
+            }
+        }
+
+        
       },
     },
   };

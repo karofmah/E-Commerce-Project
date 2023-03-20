@@ -65,7 +65,11 @@ data(){
         }
         console.log(user)
 
+<<<<<<< HEAD
         this.access = await(await (axios.post("http://localhost:8080/api/users/register",user))).data 
+=======
+        this.access = await(await (axios.post("http://localhost:9090/register",user))).data 
+>>>>>>> b9a99ce7ee29c84a43a79d512fd2951b1f024414
         if(this.access.data !== null){
             this.error = 'Ny bruker var registert'
             this.changeRoute('Login')
