@@ -237,54 +237,8 @@
           this.markerLayer.getSource().addFeature(this.marker);
         }
       },
-      validateForm() {
-      this.errorMessage = null;
-
-      /*if (this.images.length === 0) {
-        this.errorMessage = 'Please upload at least one image.';
-        return false;
-      }*/
-      if (!this.briefDescription) {
-        this.errorMessage = 'Please enter a brief description.';
-        return false;
-      }
-      if (!this.category) {
-        this.errorMessage = 'Please select a category.';
-        return false;
-      }
-      if (!this.fullDescription) {
-        this.errorMessage = 'Please enter a full description.';
-        return false;
-      }
-      if (!this.latitude || !this.longitude) {
-        this.errorMessage = 'Please provide a valid location.';
-        return false;
-      }
-      if (!this.price) {
-        this.errorMessage = 'Please enter a price.';
-        return false;
-      }
-
-      return true;
-    },
       async submit() {
-
-        console.log(this.item);
-
-        // Display the first image in the testBase64 img tag
-        if (this.images.length > 0) {
-            const testBase64Img = document.getElementById("testBase64");
-            testBase64Img.src = this.images[0];
-        }
-
-        await this.updateDisplayMap();
-
-        if (this.validateForm()) {
-        return;
-        }else{
-            
             const user = this.tokenStore.loggedInUser;
-
             const newItem = {
               seller:{
               email: user.email,
@@ -301,9 +255,8 @@
                       latitude:this.latitude,
                       longitude: this.longitude
               },
-              price: 10000
+              price: this.price
             }
-            console.log(newItem)
             
             const config = {
                 headers: {
@@ -312,22 +265,17 @@
                 },
             };
 
-            console.log('HELLO')
-            console.log(this.tokenStore.jwtToken)
 
             this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data
             if(this.listed != null){
                 this.changeRoute('Home')
             }else{
                 this.errorMessage = "There was an error while trying to list item"
-            }
-        }
-
-        
-      },
+           }
+       },
     },
   };
-  </script>
+</script>
   
 <style scoped>
 
