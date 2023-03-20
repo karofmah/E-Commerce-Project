@@ -8,7 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import no.ntnu.ecomback.service.UserService;
+import no.ntnu.ecomback.service.TokenService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
-import static no.ntnu.ecomback.controller.TokenController.keyStr;
+
 
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
@@ -66,7 +66,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     public String validateTokenAndGetUserId(final String token) {
         try {
-            final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
+            final Algorithm hmac512 = Algorithm.HMAC512(TokenService.keyStr);
             final JWTVerifier verifier = JWT.require(hmac512).build();
             return verifier.verify(token).getSubject();
         } catch (final JWTVerificationException verificationEx) {

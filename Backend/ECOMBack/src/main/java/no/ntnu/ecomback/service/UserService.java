@@ -18,16 +18,13 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    //generate random and save in database every time
-
-
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-
     public ResponseEntity<User> registerUser(User user) {
+
         try {
             List<User> users = new ArrayList<>(userRepository.findAll());
 
@@ -45,30 +42,22 @@ public class UserService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public boolean checkUserCredentials(final String email,final String password) {
-        for(User user : userRepository.findAll()){
 
-            if(user.getEmail().equals(email)
-            && user.getPassword().equals(password)) {
-                return true;
-            }
-        }
-        return false;
+
+    public boolean checkUserCredentials(final String email,final String password) {
+
+        return userRepository.findAll()
+                .stream()
+                .anyMatch(user-> user.getEmail().equals(email) &&
+                                user.getPassword().equals(password));
+
     }
     public Optional<User> getUser(String email){
-        try {
-
-
-            for (User user : userRepository.findAll()) {
-                if (user.getEmail().equals(email)) {
-                    return userRepository.findById(email);
-                }
-            }
-            return Optional.empty();
-        }catch(Exception e){
-            System.out.println("Error occurred while : " + e.getMessage());
-            return Optional.empty();
-        }
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .or(Optional::empty);
     }
     public User updateUser(UpdateRequest updateRequest){
 
@@ -82,10 +71,7 @@ public class UserService {
             if(_user.getPassword().equals(updateRequest.getCurrentPassword())){
                 _user.setPassword(updateRequest.getNewPassword());
             }
-            /*else{
-                System.out.println();
-                _user.setPassword(updateRequest.getCurrentPassword());
-            }*/
+
 
             return userRepository.save(_user);
         } else {
