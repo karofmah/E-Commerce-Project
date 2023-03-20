@@ -25,8 +25,7 @@ public class UserService {
     private UserRepository userRepository;
 
     //generate random and save in database every time
-    public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofSeconds(5);
+
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -34,27 +33,6 @@ public class UserService {
     }
 
 
-    public String getToken(final LoginRequest loginRequest) throws NoSuchAlgorithmException {
-
-
-        if (checkUserCredentials(loginRequest.getEmail(),loginRequest.getPassword())) {
-            return generateToken(loginRequest.getEmail());
-        }
-
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access denied, wrong credentials....");
-    }
-
-    public String generateToken(final String email) {
-        final Instant now = Instant.now();
-        final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
-
-        return JWT.create()
-                .withSubject(email)
-                .withIssuer("idatt2105_token_issuer_app")
-                .withIssuedAt(now)
-                .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
-                .sign(hmac512);
-    }
     public ResponseEntity<User> registerUser(User user) {
         try {
             List<User> users = new ArrayList<>(userRepository.findAll());

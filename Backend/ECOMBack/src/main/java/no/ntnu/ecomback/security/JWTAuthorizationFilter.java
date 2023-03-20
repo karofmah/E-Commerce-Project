@@ -20,6 +20,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+import static no.ntnu.ecomback.controller.TokenController.keyStr;
+
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
@@ -64,7 +66,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     public String validateTokenAndGetUserId(final String token) {
         try {
-            final Algorithm hmac512 = Algorithm.HMAC512(UserService.keyStr);
+            final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
             final JWTVerifier verifier = JWT.require(hmac512).build();
             return verifier.verify(token).getSubject();
         } catch (final JWTVerificationException verificationEx) {
