@@ -77,6 +77,7 @@ function descOrSpec(key) {
         align-items: center;
         overflow-x: scroll;
         scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
         max-width: 35%;
         max-height: 26em;
     }

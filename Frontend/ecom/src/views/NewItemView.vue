@@ -1,11 +1,12 @@
+<script setup>
+    import NewItem from '../components/User/NewItem.vue';
+    import Header from '../components/Header.vue'
+    import Footer from '../components/Footer.vue'
+</script>
+
 <template>
-    <NewItem></NewItem>
+    <Header />
+    <NewItem />
+    <Footer />
 </template>
 
-
-<script setup>
-import NewItem from '../components/User/NewItem.vue';
-
-
-
-</script>

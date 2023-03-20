@@ -27,6 +27,9 @@
 
   --bg-field-dark: #0f0f0f98;
 
+  --color-blue: #556EE6;
+  --color-blue-light: #778BEB;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

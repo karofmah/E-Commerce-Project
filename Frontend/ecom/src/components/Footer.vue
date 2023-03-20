@@ -1,28 +1,29 @@
 <template>
-     <div class="wrapperbottom">
+     <div class="container">
         <div class="logo">
-            <h1>hello</h1>
+            <img src="../assets/plus-square-fill.svg" alt="Logo">
         </div>
-        <div class="opphavsrett">
-            <p>hello</p>
+        <div class="copyright">
+            <p>This is copyright© info</p>
         </div>
         <div class="info-box">
-            <p>hello</p>
-            
+            <p>This is info about program</p>
         </div>
     </div>
 </template>
 
 
 <style scoped>
-.wrapperbottom{
+.container{
     background-color: #191f2b;
     display: flex;
     flex-direction: row;
-    justify-content: space-between; /* added to space out elements */
-    align-items: center; /* added to vertically center elements */
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     height: 40%;
+    padding: 1em;
+    position: relative;
 }
 
 .info-box{
@@ -35,7 +36,7 @@
     align-items: center; 
 }
 
-.opphavsrett{
+.copyright{
     color: white;
     font-size: 18px;
     width: 33%;
@@ -49,6 +50,7 @@
     display: flex; 
     justify-content: flex-start; 
     align-items: flex-start;
+    flex-direction: column;
 }
 
 .logo img{

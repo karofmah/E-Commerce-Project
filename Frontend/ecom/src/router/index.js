@@ -12,17 +12,17 @@ import UserInfoView from '../views/UserInfoView.vue'
 
 const routes = [
     {
-        path: '/Home',
+        path: '/home',
         name: 'Home',
         component: HomeView
     },
     {
-        path: '/Item',
+        path: '/item',
         name: 'Item',
         component: ItemView
     },
     {
-        path: '/Cart',
+        path: '/',
         name: 'Cart',
         component: CartView
     },
@@ -37,17 +37,17 @@ const routes = [
         component: RegisterView
     },
     {
-        path: '/Edit',
+        path: '/edit',
         name: 'Edit',
         component: EditView
     },
     {
-        path: '/NewItem',
+        path: '/newItem',
         name: 'NewItem',
         component: NewItemView
     },
     {
-        path: '/',
+        path: '/userInfo',
         name: 'UserInfo',
         component: UserInfoView 
     }

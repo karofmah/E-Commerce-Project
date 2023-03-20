@@ -1,9 +1,12 @@
+<script setup>
+    import Login from '../components/User/Login.vue';
+    import Header from '../components/Header.vue'
+    import Footer from '../components/Footer.vue'
+</script>
+
 <template>
-    <Login></Login>
+    <Header />
+    <Login/>
+    <Footer />
 </template>
 
-
-<script setup>
-import Login from '../components/User/Login.vue';
-
-</script>

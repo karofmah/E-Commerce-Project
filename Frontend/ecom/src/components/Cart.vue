@@ -25,7 +25,7 @@ function calcTotalPrice() {
 }
 
 onMounted(() => {
-    calcTotalPrice()
+  calcTotalPrice()
 })
 </script>
 
