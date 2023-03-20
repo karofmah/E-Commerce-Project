@@ -248,6 +248,7 @@
               password: user.password,
               role: user.role
             },
+                  images : this.images,
                   briefDescription: this.briefDescription,
                   fullDescription: this.fullDescription,
                   category: "ELECTRONICS",

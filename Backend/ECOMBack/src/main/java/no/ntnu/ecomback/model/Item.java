@@ -2,6 +2,9 @@ package no.ntnu.ecomback.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The Item class represents an item (advert) published in the e-commerce application.
  */
@@ -50,6 +53,13 @@ public class Item {
      */
     @Column
     private int price;
+
+    /**
+     *
+     */
+    @ElementCollection
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private List<String> images = new ArrayList<>();
 
     /**
      * Instantiates a new Item.
@@ -181,5 +191,27 @@ public class Item {
      */
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", seller=" + seller +
+                ", briefDescription='" + briefDescription + '\'' +
+                ", fullDescription='" + fullDescription + '\'' +
+                ", category=" + category +
+                ", location=" + location +
+                ", price=" + price +
+                ", images=" + images +
+                '}';
     }
 }

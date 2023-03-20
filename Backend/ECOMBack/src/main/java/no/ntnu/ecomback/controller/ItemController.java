@@ -26,13 +26,14 @@ public class ItemController {
 
     @PostMapping("/add")
     public Item addItem(@RequestBody Item item){
+        System.out.println(item);
         return itemService.addItem(item);
     }
 
     @GetMapping("/getItems")
     public ResponseEntity<List<Item>> getItems() {
         try {
-            List<Item> items = new ArrayList<>();
+            List<Item> items = itemService.getItems();
 
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (Exception e) {
