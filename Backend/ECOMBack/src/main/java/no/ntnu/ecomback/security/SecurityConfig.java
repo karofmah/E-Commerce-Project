@@ -21,8 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/token").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/api/items/**").permitAll()
-                .requestMatchers("/api/items").permitAll()
+               
 
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
