@@ -15,13 +15,14 @@
 
 <style scoped>
 .container{
-    background-color: #191f2b;
+    /* background-color: #191f2b; */
+    background-color: var(--color-blue);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 40%;
+    height: 10em;
     padding: 1em;
     position: relative;
 }
@@ -54,7 +55,8 @@
 }
 
 .logo img{
-    height: 12rem;
+    height: 5rem;
+    filter: invert(100%);
 }
 
 

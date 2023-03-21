@@ -1,7 +1,7 @@
 <template>
     <div class=" wrapper">
         <div class="main-container">
-            <h1>Endre bruker</h1>
+            <br><h1>Endre bruker</h1>
             <div class="email">
                 <input placeholder="Ny epost" type="email" v-model="email">
                 <input placeholder="Nåværende passord" type="password" v-model="passwordEmail">
@@ -224,7 +224,8 @@ export default{
     justify-content: center;
     align-items: center;
     width: 100vw; 
-    height: 100vh;
+    height: 100%;
+    margin: 3em 0;
 }
 
 .main-container {
@@ -234,7 +235,7 @@ export default{
     align-items: center;
     background-color: #cbd5e1;
     width: 80%;
-    height: 67%;
+    height: 90%;
     border-radius: 15px;
 }
 

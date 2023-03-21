@@ -81,6 +81,9 @@ function descOrSpec(key) {
         max-width: 35%;
         max-height: 26em;
     }
+    .images::-webkit-scrollbar-track {
+        border-radius: 100vw;
+    }
 
     .shopping{
         display: flex;

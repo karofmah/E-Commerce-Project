@@ -86,7 +86,7 @@ export default{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #cbd5e1;
+  background-color: var(--color-blue-lighter);
   width: 65%;
   height: 75%;
   border-radius: 15px;

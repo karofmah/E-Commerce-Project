@@ -1,6 +1,6 @@
 <template>
     <div class="new-item">
-      <h1>Add New Item</h1>
+      <br><h1>Add New Item</h1>
   
       <div class="field-container">
         <label for="images">Upload Images (Max 10):</label>
@@ -9,7 +9,7 @@
   
       <div class="field-container">
         <label for="brief-description">Brief Description:</label>
-        <input type="text" id="brief-description" v-model="briefDescription" />
+        <input type="text" id="brief-description" placeholder="Input brief description" v-model="briefDescription" />
       </div>
   
       <div class="field-container">
@@ -44,6 +44,7 @@
   
       <img id="testBase64" :src="displayedImage" alt="">
       <div id="displayMap" ref="displayMap" class="map"></div>
+      <br>
     </div>
   </template>
 
@@ -297,7 +298,9 @@ margin: 0 auto;
 .field-container {
 display: flex;
 flex-direction: column;
-width: 100%;
+align-items: center;
+justify-content: center;
+width: 45%;
 }
 
 .location-container {
