@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router';
 
 let user = defineProps({
     ID: Number
@@ -29,6 +30,7 @@ function favOrMy(key) {
     }
 }
 
+
 const itemsToDisplay = computed(() => {
     if (favOrMyBool.value) {
         return favorites.value;
@@ -52,7 +54,7 @@ const itemsToDisplay = computed(() => {
             </div>
             <br>
             <div class="userButtons">
-                <button id="edit">Edit</button>
+                <RouterLink to="/edit"><button id="edit">Edit</button></RouterLink>
                 <button id="logOut">Log Out</button>
             </div>
         </div>

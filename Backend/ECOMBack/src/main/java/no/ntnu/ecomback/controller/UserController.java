@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.controller;
 
+import no.ntnu.ecomback.model.UpdateRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,10 @@ public class UserController {
     public Optional<User> getUser(@RequestParam String email){
         return userService.getUser(email);
     }
+
+    @PutMapping("/update")
+    public User updateUser(@RequestBody UpdateRequest updateRequest) {
+        return userService.updateUser(updateRequest);
+    }
 }
+
