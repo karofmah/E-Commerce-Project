@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @EnableAutoConfiguration
@@ -51,5 +52,9 @@ public class ItemController {
     @GetMapping("")
     public List<Item> getItemsByUserEmail(@RequestParam String email){
         return itemService.getItemsByUserEmail(email);
+    }
+    @GetMapping("{id}")
+    public Optional<Item> getItemById(@PathVariable long id){
+        return itemService.getItemById(id);
     }
 }

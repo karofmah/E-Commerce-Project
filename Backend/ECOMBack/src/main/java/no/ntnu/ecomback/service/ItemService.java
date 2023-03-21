@@ -2,7 +2,6 @@ package no.ntnu.ecomback.service;
 
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
-import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.repository.UserRepository;
@@ -42,28 +41,31 @@ public class ItemService {
             System.out.println("rip");
             return null;
         } catch (Exception e) {
-            System.out.println("Error occurred while registering user: " + e.getMessage());
+            System.out.println("Error occurred while adding item: " + e.getMessage());
             return null;
         }
     }
 
     public Item updateItem(UpdateItemRequest updateItemRequest){
+        try{
+            Optional<Item> itemById = itemRepository.findById(updateItemRequest.getId());
 
-        Optional<Item> itemById = itemRepository.findById(updateItemRequest.getId());
+            if (itemById.isPresent()) {
+                Item _item = itemById.get();
+                _item.setBriefDescription(updateItemRequest.getBriefDescription());
+                _item.setFullDescription(updateItemRequest.getFullDescription());
+                _item.setCategory(updateItemRequest.getCategory());
+                _item.setLocation(updateItemRequest.getLocation());
+                _item.setPrice(updateItemRequest.getPrice());
+                _item.setImages(updateItemRequest.getImages());
 
-        if (itemById.isPresent()) {
-            Item _item = itemById.get();
-            _item.setBriefDescription(updateItemRequest.getBriefDescription());
-            _item.setFullDescription(updateItemRequest.getFullDescription());
-            _item.setCategory(updateItemRequest.getCategory());
-            _item.setLocation(updateItemRequest.getLocation());
-            _item.setPrice(updateItemRequest.getPrice());
-            _item.setImages(updateItemRequest.getImages());
-
-            return itemRepository.save(_item);
-        } else {
+                return itemRepository.save(_item);
+            }
+        }catch (Exception e){
+            System.out.println("Error updating item: " + e.getMessage());
             return null;
         }
+        return null;
     }
     public ResponseEntity <HttpStatus> deleteItem(long id) {
         try {
@@ -75,10 +77,9 @@ public class ItemService {
     }
     public List<Item> getItems(){
         try {
-            List<Item> items = new ArrayList<>(itemRepository.findAll());
-            return items;
+            return new ArrayList<>(itemRepository.findAll());
         } catch (Exception e) {
-            System.out.println("Error getting items: " + e.getMessage());
+            System.out.println("Error getting all items: " + e.getMessage());
             return null;
         }
 
@@ -96,5 +97,13 @@ public class ItemService {
                 myItems = null;
             }
             return myItems;
+    }
+    public Optional<Item> getItemById(long id){
+        try{
+            return itemRepository.findById(id);
+        }catch (Exception e){
+            System.out.println("Error while getting item: " + e.getMessage());
+            return Optional.empty();
+        }
     }
 }
