@@ -16,7 +16,7 @@
       <div class="link-pair">
         <img src="../assets/person-fill.svg" class="icon" alt="Log in">
         <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
-          <a @click="changeRoute('UserProfile')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
+          <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
         </template>
         <template v-else>
           <a @click="changeRoute('Login')" href="">Logg inn</a>
