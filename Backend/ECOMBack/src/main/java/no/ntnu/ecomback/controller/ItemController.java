@@ -1,6 +1,7 @@
 package no.ntnu.ecomback.controller;
 
 import no.ntnu.ecomback.model.Item;
+import no.ntnu.ecomback.model.UpdateItemRequest;
 import no.ntnu.ecomback.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,8 +31,8 @@ public class ItemController {
     }
 
     @PutMapping("/update")
-    public Item updateItem(@RequestBody Item item){
-        return itemService.updateItem(item);
+    public Item updateItem(@RequestBody UpdateItemRequest updateItemRequest){
+        return itemService.updateItem(updateItemRequest);
     }
     @GetMapping("/getItems")
     public ResponseEntity<List<Item>> getItems() {

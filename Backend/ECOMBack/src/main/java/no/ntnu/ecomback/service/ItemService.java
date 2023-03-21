@@ -1,6 +1,7 @@
 package no.ntnu.ecomback.service;
 
 import no.ntnu.ecomback.model.Item;
+import no.ntnu.ecomback.model.UpdateItemRequest;
 import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
@@ -43,18 +44,18 @@ public class ItemService {
         }
     }
 
-    public Item updateItem(Item item){
+    public Item updateItem(UpdateItemRequest updateItemRequest){
 
-        Optional<Item> itemById = itemRepository.findById(item.getId());
+        Optional<Item> itemById = itemRepository.findById(updateItemRequest.getId());
 
         if (itemById.isPresent()) {
             Item _item = itemById.get();
-            _item.setBriefDescription(item.getBriefDescription());
-            _item.setFullDescription(item.getFullDescription());
-            _item.setCategory(item.getCategory());
-            _item.setLocation(item.getLocation());
-            _item.setImages(item.getImages());
-
+            _item.setBriefDescription(updateItemRequest.getBriefDescription());
+            _item.setFullDescription(updateItemRequest.getFullDescription());
+            _item.setCategory(updateItemRequest.getCategory());
+            _item.setLocation(updateItemRequest.getLocation());
+            _item.setPrice(updateItemRequest.getPrice());
+            _item.setImages(updateItemRequest.getImages());
 
             return itemRepository.save(_item);
         } else {
