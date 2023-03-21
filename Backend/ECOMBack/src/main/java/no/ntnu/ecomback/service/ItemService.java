@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.service;
 
+import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
 import no.ntnu.ecomback.model.User;
@@ -108,9 +109,19 @@ public class ItemService {
     }
     public List<Item> getItemsByKeyword(String keyword){
         try{
-            return itemRepository.findByBriefDescriptionContaining(keyword);
+            return itemRepository.
+                    findByBriefDescriptionContainingOrFullDescriptionContainingOrCategoryContaining(keyword,keyword,keyword);
         }catch (Exception e){
-            System.out.println("Error while finding items by brief description: " + e.getMessage());
+            System.out.println("Error while finding items by description: " + e.getMessage());
+            return null;
+        }
+    }
+    public List<Item> getItemsByCategory(Category category){
+        try{
+
+            return itemRepository.findByCategory(category);
+        }catch (Exception e){
+            System.out.println("Error while finding items by category: "+ e.getMessage());
             return null;
         }
     }

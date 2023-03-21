@@ -21,8 +21,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/token").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/api/items/getItems").permitAll()
-                .requestMatchers("/api/items/{id}").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
