@@ -1,51 +1,113 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { ref, onMounted, watch, defineProps } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import 'ol/ol.css';
+import { fromLonLat } from 'ol/proj';
+import { Icon, Style } from 'ol/style';
+import Point from 'ol/geom/Point';
+import Feature from 'ol/Feature';
+import VectorSource from 'ol/source/Vector';
+import VectorLayer from 'ol/layer/Vector';
 
-const props = defineProps({
-  imgs: {
-    type: Array,
-  },
-});
+const route = useRoute();
+const itemId = ref(route.params.id);
+
+let item = ref({});
+
+async function getItemsById(id) {
+  item.value = await axios.get(`http://localhost:9090/api/items/${id}`).then(res => res.data);
+}
 
 let description = ref("");
 let specs = ref("");
 let descOrSpecBool = ref(true);
 
-description = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint eius reprehenderit harum dignissimos at minus magni labore natus assumenda, blanditiis adipisci nihil eligendi saepe dolorem deleniti explicabo iste modi mollitia!";
-specs = "!aitillom idom etsi obacilpxe itineled merolod epeas idnegile lihin icsipida siitidnalb ,adnemussa sutan erobal ingam sunim ta somissingid murah tiredneherper suie tniS .tile gnicisipida ,rutetcesnoc tema tis rolod muspi meroL";
-
 function descOrSpec(key) {
-    switch (key) {
-        case 0:
-            descOrSpecBool = true;
-            break;
-        case 1:
-            descOrSpecBool = false;
-            break;
-        default:
-            throw new Error('Something whent wrong');
-    }
+  switch (key) {
+    case 0:
+      descOrSpecBool.value = true;
+      break;
+    case 1:
+      descOrSpecBool.value = false;
+      break;
+    default:
+      throw new Error('Something went wrong');
+  }
 }
 
+watch(route, async (newRoute) => {
+  itemId.value = newRoute.params.id;
+  await getItemsById(itemId.value);
+});
+
+onMounted(async () => {
+  await getItemsById(itemId.value);
+
+  const map = new Map({
+    target: 'map-container',
+    layers: [
+      new TileLayer({
+        source: new OSM(),
+      }),
+    ],
+    view: new View({
+      center: fromLonLat([0, 0]),
+      zoom: 2,
+    }),
+  });
+
+  if (item.value.location) {
+    const { latitude, longitude } = item.value.location;
+    const marker = new Feature({
+      geometry: new Point(fromLonLat([longitude, latitude])),
+    });
+
+    marker.setStyle(
+      new Style({
+        image: new Icon({
+          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+          anchor: [0.5, 1],
+        }),
+      })
+    );
+
+    const markerSource = new VectorSource({
+      features: [marker],
+    });
+
+    const markerLayer = new VectorLayer({
+      source: markerSource,
+    });
+
+    map.addLayer(markerLayer);
+    map.getView().setCenter(fromLonLat([longitude, latitude]));
+    map.getView().setZoom(13);
+  }
+});
 </script>
+
 
 <template>
   <div class="container">
     <div class="images">
-        <img v-for="img in imgs" :src="`src/assets/${img}`" :alt="img">
+        <img v-for="img in item.images" :src="img" :alt="img">
     </div>
 
     <div class="shopping">
         <div>
-            <h1>Product title</h1>
-            <h2>100kr</h2>
-            <h3>This product is on sale for the rest of the month</h3>
+            <h1>{{ item.briefDescription }}</h1>
+            <h2>{{ item.price }}</h2>
         </div>
         <button>Add to cart</button>
     </div>
 
     <div class="map">
-        <img src="../assets/examplemap.png" id="examplemap" alt="examplemap">
+        <div id="map-container" class="map-container"></div>
     </div>
 
     <div class="info">
@@ -54,13 +116,18 @@ function descOrSpec(key) {
             <a href="#0" @click="descOrSpec(1)">Spesification</a>
         </nav>
         <br>
-        <h3 :hidden="!descOrSpecBool">{{ description }}</h3>
-        <h3 :hidden="descOrSpecBool">{{ specs }}</h3>
+        <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
+        <h3 :hidden="descOrSpecBool"></h3>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+    .map-container {
+        width: 80%;
+        height: 100%;
+    }
     .container{
         display: flex;
         flex-flow: row wrap;
