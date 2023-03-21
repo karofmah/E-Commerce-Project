@@ -34,6 +34,10 @@ public class ItemController {
     public Item updateItem(@RequestBody UpdateItemRequest updateItemRequest){
         return itemService.updateItem(updateItemRequest);
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteItem(@PathVariable long id){
+        return itemService.deleteItem(id);
+    }
     @GetMapping("/getItems")
     public ResponseEntity<List<Item>> getItems() {
         try {
