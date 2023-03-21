@@ -1,6 +1,6 @@
 package no.ntnu.ecomback.controller;
 
-import no.ntnu.ecomback.model.UpdateRequest;
+import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public User updateUser(@RequestBody UpdateRequest updateRequest) {
-        return userService.updateUser(updateRequest);
+    public User updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        return userService.updateUser(updateUserRequest);
     }
 }
 

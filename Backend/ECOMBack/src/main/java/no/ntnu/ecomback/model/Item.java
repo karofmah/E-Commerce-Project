@@ -93,10 +93,6 @@ public class Item {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     /**
      * Gets seller.
      * @return the seller
@@ -105,13 +101,6 @@ public class Item {
         return seller;
     }
 
-    /**
-     * Sets seller
-     * @param seller the seller of the item
-     */
-    public void setSeller(User seller) {
-        this.seller = seller;
-    }
 
     /**
      * Gets brief description.

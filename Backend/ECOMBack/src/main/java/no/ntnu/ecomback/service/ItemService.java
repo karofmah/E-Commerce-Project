@@ -1,6 +1,7 @@
 package no.ntnu.ecomback.service;
 
 import no.ntnu.ecomback.model.Item;
+import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -41,7 +43,24 @@ public class ItemService {
         }
     }
 
+    public Item updateItem(Item item){
 
+        Optional<Item> itemById = itemRepository.findById(item.getId());
+
+        if (itemById.isPresent()) {
+            Item _item = itemById.get();
+            _item.setBriefDescription(item.getBriefDescription());
+            _item.setFullDescription(item.getFullDescription());
+            _item.setCategory(item.getCategory());
+            _item.setLocation(item.getLocation());
+            _item.setImages(item.getImages());
+
+
+            return itemRepository.save(_item);
+        } else {
+            return null;
+        }
+    }
     public List<Item> getItems(){
         try {
 

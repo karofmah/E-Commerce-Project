@@ -1,6 +1,6 @@
 package no.ntnu.ecomback.service;
 
-import no.ntnu.ecomback.model.UpdateRequest;
+import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,17 +59,17 @@ public class UserService {
                 .findFirst()
                 .or(Optional::empty);
     }
-    public User updateUser(UpdateRequest updateRequest){
+    public User updateUser(UpdateUserRequest updateUserRequest){
 
-        Optional<User> userByEmail = userRepository.findById(updateRequest.getEmail());
+        Optional<User> userByEmail = userRepository.findById(updateUserRequest.getEmail());
 
         if (userByEmail.isPresent()) {
             User _user = userByEmail.get();
-            _user.setFirstName(updateRequest.getFirstName());
-            _user.setLastName(updateRequest.getLastName());
+            _user.setFirstName(updateUserRequest.getFirstName());
+            _user.setLastName(updateUserRequest.getLastName());
             System.out.println(_user.getPassword());
-            if(_user.getPassword().equals(updateRequest.getCurrentPassword())){
-                _user.setPassword(updateRequest.getNewPassword());
+            if(_user.getPassword().equals(updateUserRequest.getCurrentPassword())){
+                _user.setPassword(updateUserRequest.getNewPassword());
             }
 
 

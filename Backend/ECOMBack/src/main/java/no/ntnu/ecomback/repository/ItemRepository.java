@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item,Long> {
     @Override
-    <S extends Item> S save(S entity);
+    <S extends Item> S save(S Item);
 
     @Override
     <S extends Item> List<S> findAll(Example<S> example);

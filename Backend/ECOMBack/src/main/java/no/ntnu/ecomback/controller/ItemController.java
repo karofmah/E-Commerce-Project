@@ -29,6 +29,10 @@ public class ItemController {
         return itemService.addItem(item);
     }
 
+    @PutMapping("/update")
+    public Item updateItem(@RequestBody Item item){
+        return itemService.updateItem(item);
+    }
     @GetMapping("/getItems")
     public ResponseEntity<List<Item>> getItems() {
         try {
