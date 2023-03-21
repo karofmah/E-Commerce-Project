@@ -25,9 +25,9 @@
       <div class="field-container">
         <label for="category">Category:</label>
         <select id="category" v-model="category">
-          <option value="electronics">Electronics</option>
-          <option value="vehicle">Vehicle</option>
-          <option value="real_estate">Real Estate</option>
+          <option value="ELECTRONICS">Electronics</option>
+          <option value="VEHICLE">Vehicle</option>
+          <option value="REAL_ESTATE">Real Estate</option>
         </select>
       </div>
   
