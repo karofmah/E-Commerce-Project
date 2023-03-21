@@ -106,4 +106,12 @@ public class ItemService {
             return Optional.empty();
         }
     }
+    public List<Item> getItemsByKeyword(String keyword){
+        try{
+            return itemRepository.findByBriefDescriptionContaining(keyword);
+        }catch (Exception e){
+            System.out.println("Error while finding items by brief description: " + e.getMessage());
+            return null;
+        }
+    }
 }
