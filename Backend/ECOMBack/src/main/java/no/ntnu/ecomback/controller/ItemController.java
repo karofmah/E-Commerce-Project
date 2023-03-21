@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.controller;
 
+import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
 import no.ntnu.ecomback.service.ItemService;
@@ -43,7 +44,7 @@ public class ItemController {
     public ResponseEntity<List<Item>> getItems() {
         try {
             List<Item> items = itemService.getItems();
-
+            System.out.println(new ResponseEntity<>(items, HttpStatus.OK));
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,8 +58,12 @@ public class ItemController {
     public Optional<Item> getItemById(@PathVariable long id){
         return itemService.getItemById(id);
     }
-    @GetMapping("/get")
+    @GetMapping("/get/keyword")
     public List<Item> getItemsByKeyword(@RequestParam String keyword){
         return itemService.getItemsByKeyword(keyword);
+    }
+    @GetMapping("/get/category")
+    public List<Item> getItemsByCategory(@RequestParam Category category){
+        return itemService.getItemsByCategory(category);
     }
 }

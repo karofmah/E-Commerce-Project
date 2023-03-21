@@ -22,6 +22,8 @@
     .catAndCont{
         display: flex;
         flex-flow: row wrap;
+        justify-content: center;
+        align-items: start;
         width: 100%;
         margin: 2em 0;
     }
