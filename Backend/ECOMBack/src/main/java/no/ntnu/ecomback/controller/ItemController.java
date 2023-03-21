@@ -48,4 +48,8 @@ public class ItemController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("")
+    public List<Item> getItemsByUserEmail(@RequestParam String email){
+        return itemService.getItemsByUserEmail(email);
+    }
 }

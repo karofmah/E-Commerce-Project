@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -74,14 +75,26 @@ public class ItemService {
     }
     public List<Item> getItems(){
         try {
-
             List<Item> items = new ArrayList<>(itemRepository.findAll());
-
-            System.out.println("rip");
             return items;
         } catch (Exception e) {
-            System.out.println("Error occurred while registering user: " + e.getMessage());
+            System.out.println("Error getting items: " + e.getMessage());
             return null;
         }
+
+    }
+    public List<Item> getItemsByUserEmail(String email){
+
+            List<Item> myItems;
+            try {
+                myItems = itemRepository.findAll()
+                        .stream()
+                        .filter(i -> i.getSeller().getEmail().equals(email))
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                System.out.println("Error getting items: " + e.getMessage());
+                myItems = null;
+            }
+            return myItems;
     }
 }
