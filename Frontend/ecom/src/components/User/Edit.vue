@@ -1,59 +1,41 @@
 <template>
-    <div class="wrapper">
-      <div class="main-container">
-        <h1>Endre bruker</h1>
-        <form @submit.prevent="handleSubmit">
-          <div class="form-group">
-            <label for="email">E-postadresse</label>
-            <input id="email" type="email" v-model="email" />
-          </div>
-  
-          <div class="form-group">
-            <label for="username">Brukernavn</label>
-            <input id="username" type="text" v-model="username" />
-            <button type="submit" :disabled="!username">Endre</button>
-          </div>
-  
-          <div class="form-group">
-            <label for="forname">Fornavn</label>
-            <input id="forname" type="text" v-model="forname" />
-            <button type="submit" :disabled="!forname">Endre</button>
-          </div>
-  
-          <div class="form-group">
-            <label for="surname">Etternavn</label>
-            <input id="surname" type="text" v-model="surname" />
-            <button type="submit" :disabled="!surname">Endre</button>
-          </div>
-  
-          <div class="form-group">
-            <label for="newPassword">Nytt passord</label>
-            <input id="newPassword" type="password" v-model="newPassword" />
-            <button type="submit" :disabled="!newPassword">Endre</button>
-          </div>
-  
-          <div v-if="!password">
-            <button type="submit" :disabled="!isFormValidWithoutPassword">Lagre endringer uten passordendring</button>
-          </div>
-  
-          <div v-if="password">
-            <div class="form-group">
-              <label for="oldPassword">Gammelt passord</label>
-              <input id="oldPassword" type="password" v-model="oldPassword" required />
-            </div>
-  
-            <button type="submit" :disabled="!isFormValidWithPassword">Lagre endringer med passordendring</button>
-          </div>
-  
-        </form>
-  
-        <br />
-        <button @click="changeRoute('Home')">Tilbake til start</button>
-        <br />
-        <p>{{ error }}</p>
-      </div>
+  <div class="wrapper">
+    <div class="main-container">
+      <h1>Endre bruker</h1>
+      <form @submit.prevent="handleSubmit">
+        
+        <div class="form-group">
+          <label for="firstName">Fornavn</label>
+          <input id="firstName" type="text" v-model="firstName" />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Etternavn</label>
+          <input id="lastName" type="text" v-model="lastName" />
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword" >Nytt passord</label>
+          <input id="newPassword" type="password" v-model="newPassword" />
+        </div>
+
+        <div class="form-group">
+          <label for="currentPassword">Gammelt passord</label>
+          <input id="currentPassword" type="password" v-model="currentPassword" />
+        </div>
+
+        <div>
+          <button type="submit">Lagre endringer</button>
+        </div>
+      </form>
+
+      <br />
+      <button @click="changeRoute('Home')">Tilbake til start</button>
+      <br />
+      <p>{{ error }}</p>
     </div>
-  </template>
+  </div>
+</template>
 
 
 
@@ -62,121 +44,89 @@ import { useTokenStore } from "../../stores/userToken";
 import axios from "axios";
 
 export default {
-  data() {
-    return {
-      email: this.tokenStore.loggedInUser.email,
-      username: this.tokenStore.loggedInUser.username,
-      forname: this.tokenStore.loggedInUser.firstName,
-      surname: this.tokenStore.loggedInUser.lastName,
-      password: "",
-      oldPassword: "",
-      newPassword: "",
-      error: "",
-    };
-  },
-  setup() {
-    const tokenStore = useTokenStore();
-    return { tokenStore };
-  },
-  computed: {
-    isFormValidWithoutPassword() {
-      return (
-        this.email ||
-        this.username ||
-        this.forname ||
-        this.surname ||
-        this.newPassword
-      );
-    },
-    isFormValidWithPassword() {
-      return (
-        this.email ||
-        this.username ||
-        this.forname ||
-        this.surname ||
-        (this.newPassword && this.password === this.tokenStore.loggedInUser.password)
-      );
-    },
-  },
-  methods: {
-    async handleSubmit() {
-    const user = {
-    username: this.tokenStore.loggedInUser.username,
-    password: this.oldPassword,
-    email: this.email || this.tokenStore.loggedInUser.email,
-    forname: this.forname || this.tokenStore.loggedInUser.forname,
-    surname: this.surname || this.tokenStore.loggedInUser.surname,
-    new_password: this.newPassword,
+data() {
+  return {
+    email: this.tokenStore.loggedInUser.email,
+    firstName: this.tokenStore.loggedInUser.firstName,
+    lastName: this.tokenStore.loggedInUser.lastName,
+    newPassword: "",
+    currentPassword: "",
+    error: "",
   };
+},
+setup() {
+  const tokenStore = useTokenStore();
+  return { tokenStore };
+},
+methods: {
 
-  const config = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: "Bearer " + this.tokenStore.jwtToken,
-    },
-  };
+  async handleSubmit() {
 
-  try {
-    if (this.newPassword && this.oldPassword !== this.tokenStore.loggedInUser.password) {
-      throw new Error("Gammelt passord stemmer ikke");
-    }
+  if(!(this.currentPassword.length == 0 && this.newPassword.length == 0)){
 
-    let endpoint = null;
-
-    if (this.email) {
-      endpoint = "Updateemail";
-    } else if (this.username) {
-      endpoint = "Updateusername";
-    } else if (this.forname) {
-      endpoint = "Updateforname";
-    } else if (this.surname) {
-      endpoint = "Updatesurname";
-    } else if (this.newPassword) {
-      endpoint = "Updatepassword";
-    }
-
-    if (endpoint) {
-      let response = await axios.post(
-        `http://localhost:8080/${endpoint}`,
-        user,
-        config
-      );
-
-      if (response.data.email) {
-        this.email = response.data.email;
-      }
-
-      if (response.data.username) {
-        this.username = response.data.username;
-      }
-
-      if (response.data.forname) {
-        this.forname = response.data.forname;
-      }
-
-      if (response.data.surname) {
-        this.surname = response.data.surname;
-      }
-
-      if (response.data.password) {
-        this.password = response.data.password;
-      }
-
-      await this.tokenStore.getTokenAndSaveInStore(
-        this.username,
-        this.password
-      );
-    }
-
-    this.oldPassword = "";
-    this.newPassword = "";
-    this.error = "";
-  } catch (error) {
-    this.error = error.message;
+  if (this.newPassword !== "" && this.newPassword.length < 6) {
+    this.error = "Nytt passord må være minst 6 tegn.";
+    return;
   }
+
+  if (this.currentPassword !== this.tokenStore.loggedInUser.password) {
+    this.error = "Gammelt passord er feil.";
+    return;
+  }
+
+  if(this.currentPassword.length !== this.tokenStore.loggedInUser.password){
+    this.error = "Gammelt passord kan ikke være blank";
+  }
+
+}
+
+const updateRequest = {
+  email: this.email,
+  firstName: this.firstName,
+  lastName: this.lastName,
+  newPassword: this.newPassword,
+  currentPassword: this.currentPassword
+};
+
+const config = {
+  headers: {
+    "Content-type": "application/json",
+    Authorization: "Bearer " + this.tokenStore.jwtToken,
+  },
+};
+
+try {
+  const response = await axios.put("http://localhost:9090/api/users/update", updateRequest, config);
+  const updatedUser = response.data;
+
+  // Oppdater tokenstore med den oppdaterte brukerinformasjonen
+  await this.tokenStore.getTokenAndSaveInStore(updatedUser.email, updatedUser.password);
+
+  // Vis suksessmelding og gå tilbake til UserInfo-siden
+  this.error = "Brukerinformasjonen ble oppdatert.";
+  this.changeRoute("UserInfo");
+} catch (error) {
+  if (error.response) {
+    if (error.response.status === 401) {
+      // Hvis tokenet er ugyldig, logg ut brukeren
+      this.tokenStore.logout();
+      this.changeRoute("Home");
+      this.error = "Du er logget ut. Logg inn på nytt for å fortsette.";
+    } else if (error.response.status === 400) {
+      // Hvis det var et problem med forespørselen, vis feilmelding
+      this.error = "Det oppstod en feil: " + error.response.data.error;
+    } else {
+      // Hvis det var en annen type feil, vis generell feilmelding
+      this.error = "Det oppstod en feil. Prøv igjen senere.";
+    }
+  } else {
+    // Hvis det ikke var noen respons, vis generell feilmelding
+    this.error = "Det oppstod en feil. Prøv igjen senere.";
+  }
+}
 },
 changeRoute(string) {
-  this.$router.push({ name: string });
+this.$router.push({ name: string });
 },
 },
 };

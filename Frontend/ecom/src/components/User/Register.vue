@@ -1,7 +1,7 @@
 <template>
     <div class=" wrapper">
         <div class="main-container">
-            <h1>Ny bruker</h1>
+            <br><h1>Ny bruker</h1>
             <br>
             <div class="email">
                 <input placeholder="Epostadresse" type="email" v-model="email">
@@ -27,7 +27,7 @@
                 <button @click="register()">Register ny bruker</button>
             </div>
             <p>{{ error }}</p>
-            
+            <br>
         </div>
     </div>
 </template>
@@ -91,7 +91,8 @@ place-items: center;
 justify-content: center;
 align-items: center;
 width: 100vw; 
-height: 100vh;
+height: 100%;
+margin: 2em 0;
 }
 
 .main-container {
@@ -99,9 +100,9 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-background-color: #cbd5e1;
+background-color: var(--color-blue-lighter);
 width: 65%;
-height: 50%;
+height: 85%;
 border-radius: 15px;
 }
 

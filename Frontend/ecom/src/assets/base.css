@@ -29,6 +29,10 @@
 
   --color-blue: #556EE6;
   --color-blue-light: #778BEB;
+  --color-blue-lighter: #cbd5e1;
+
+  --blue-complementary: #FA7B1A;
+  --blue-light-complementary: #FC9140;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -71,4 +75,19 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--vt-c-black);
+    --color-background-soft: var(--vt-c-black-soft);
+    --color-background-mute: var(--vt-c-black-mute);
+
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+
+    --color-heading: var(--vt-c-text-dark-1);
+    --color-text: var(--vt-c-text-dark-2);
+  }
+} */

@@ -8,6 +8,25 @@ let items = ref([
   ['Item4', 400, 4],
   ['Item5', 500, 5],
   ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
+  ['Item6', 600, 6],
 
 ])
 
@@ -43,8 +62,8 @@ onMounted(() => {
     <div class="pay">
       <h1>Check Out</h1>
       <h2>Total Price:</h2>
-      <h1>{{ totalPrice }}</h1>
-      <button @click="calcTotalPrice()">Pay</button>
+      <h1 id="totalPrice">{{ totalPrice }}</h1>
+      <button>Pay</button>
     </div>
   </div>
 </template>
@@ -54,10 +73,9 @@ onMounted(() => {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: top;
   margin: 3em auto;
-  width: 85%;
-  min-height: 32em;
+  width: 90%;
 }
 
 .cart,
@@ -74,13 +92,22 @@ onMounted(() => {
 .cart {
   width: 45em;
   margin-right: 3em;
+  float: left;
 }
 
 .pay {
-  position: fixed;
   height: 25em;
-  margin: 48em;
-  width: 30em;
+  /* margin: 48em 48em; */
+  background-color: var(--color-blue);
+  color: var(--vt-c-white-mute);
+  flex: 1;
+}
+
+#totalPrice{
+  background: linear-gradient(to right, var(--blue-light-complementary), var(--blue-complementary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 hr {

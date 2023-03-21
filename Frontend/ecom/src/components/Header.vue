@@ -1,18 +1,27 @@
 <template>
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
-      <h1>LOGO</h1>
+      <h1 style="">LOGO</h1>
     </div>
 
     <div class="links">
-      <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
-      <a @click="handleItemClick('Messages')" href="">Meldinger</a>
-      <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
-        <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
-      </template>
-      <template v-else>
-        <a @click="changeRoute('Login')" href="">Logg inn</a>
-      </template>
+      <div class="link-pair">
+        <img src="../assets/bag-plus.svg" class="icon" alt="New Ad">
+        <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
+      </div>
+      <div class="link-pair">
+        <img src="../assets/chat-left-dots.svg" class="icon" alt="Message">
+        <a @click="handleItemClick('Messages')" href="">Meldinger</a>
+      </div>
+      <div class="link-pair">
+        <img src="../assets/person-fill.svg" class="icon" alt="Log in">
+        <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
+          <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
+        </template>
+        <template v-else>
+          <a @click="changeRoute('Login')" href="">Logg inn</a>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +66,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  background: radial-gradient(#f7fee7,#84cc16);
+  background: var(--color-blue);
   display: flex;
   flex-direction: row;
   place-items: center;
@@ -66,7 +75,6 @@ export default {
   transition: opacity 0.5s ease;
   opacity: 1;
   width: 100%;
-  height: 100vh;
   z-index: 3;
 }
 
@@ -75,7 +83,7 @@ export default {
 }
 
 .logo {
-  color: #0f172a;
+  color: var(--vt-c-white-mute);
 }
 
 .logo h1{
@@ -87,16 +95,30 @@ export default {
 }
 
 .links {
+  display: flex;
   padding-right: 5%;
 }
 
+.link-pair{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon{
+  width: 2em;
+  margin-right: 1.7em;
+  filter: invert(100%) sepia(0) saturate(0) hue-rotate(0deg);
+}
+
 .links a {
-  color: #0f172a;
+  color: var(--vt-c-white-soft);
   text-decoration: none;
   border-radius: 15px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   margin-right: 25px;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .links a:hover {

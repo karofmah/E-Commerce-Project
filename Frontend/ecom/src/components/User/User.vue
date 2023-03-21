@@ -85,10 +85,12 @@ const itemsToDisplay = computed(() => {
     }
 
     .user{
-        position: fixed;
+        position: relative;
         display: flex;
         flex-flow: column wrap;
         align-items: center;
+        background-color: var(--color-blue);
+        color: var(--vt-c-white-mute);
         height: 35em;
         width: 40%;
         margin: 0 3em 3em 0em;
@@ -101,7 +103,7 @@ const itemsToDisplay = computed(() => {
         height: 12em;
         width: 12em;
         padding: 5px;
-        background-color: red;
+        background-color: var(--blue-complementary);
         border-radius: 50%;
         margin: 1em;
     }
@@ -124,10 +126,15 @@ const itemsToDisplay = computed(() => {
         border-radius: 50px;
     }
 
+    #logOut{
+        background-color: var(--blue-complementary);
+    }
+
     .contentWrapper{
         min-height: 30em;
         min-width: 40em;
-        margin: 0 38em;
+        flex: 1;
+        /* margin: 0 38em; */
         padding: 1em 3em;
         box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
         border-radius: 15px;
@@ -152,7 +159,7 @@ const itemsToDisplay = computed(() => {
         margin: 3px;
         height: 10em;
         width: 10em;
-        background-color: red;
+        background-color: var(--color-blue);
         border-radius: 15px;
     }
 
