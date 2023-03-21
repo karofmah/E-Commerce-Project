@@ -10,6 +10,8 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     @Override
     <S extends Item> S save(S Item);
 
+    List<Item> findByBriefDescriptionContaining(String keyword);
+
     @Override
     <S extends Item> List<S> findAll(Example<S> example);
 }

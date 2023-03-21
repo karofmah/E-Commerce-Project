@@ -57,4 +57,8 @@ public class ItemController {
     public Optional<Item> getItemById(@PathVariable long id){
         return itemService.getItemById(id);
     }
+    @GetMapping("/get")
+    public List<Item> getItemsByKeyword(@RequestParam String keyword){
+        return itemService.getItemsByKeyword(keyword);
+    }
 }
