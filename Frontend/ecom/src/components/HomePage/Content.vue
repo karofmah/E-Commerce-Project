@@ -1,14 +1,29 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 import ContentItemTemplate from './ContentItemTemplate.vue';
 
-let contents = ref([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+let items = ref([]);
+let router = useRouter();
+
+async function getItems() {
+  items.value = await axios.get("http://localhost:9090/api/items/getItems").then(res => res.data);
+}
+
+function handleItemClick(linkItem) {
+  router.push({ name: 'Item', params: { id: linkItem.id } });
+}
+
+onMounted(async () => {
+  await getItems();
+});
 </script>
 
 <template>
-    <div class="container">
-        <ContentItemTemplate v-for="content in contents" :ID="content" :displayStyle="0"/>
-    </div>
+	<div class="container">
+		<ContentItemTemplate v-for="item in items" :key="item.id" :item="item" :displayStyle="0" @click="handleItemClick(item)" />
+	</div>
 </template>
 
 <style scoped>
