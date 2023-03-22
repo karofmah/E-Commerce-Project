@@ -8,6 +8,7 @@ import ItemView from '../views/ItemView.vue';
 import CartView from '../views/CartView.vue';
 import UserView from '../views/UserView.vue';
 import UpdateItemView from '../views/UpdateItemView.vue';
+import MessageView from '../views/MessageView.vue';
 import { useTokenStore } from '../stores/userToken';
 import axios from 'axios';
 
@@ -51,6 +52,11 @@ const routes = [
     path: '/userInfo',
     name: 'UserInfo',
     component: UserView,
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    component: MessageView
   },
   {
     path: '/update-item/:id',
