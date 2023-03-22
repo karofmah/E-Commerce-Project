@@ -27,7 +27,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<User> registerUser(User user) {
+    public User registerUser(User user) {
 
         try {
             List<User> users = new ArrayList<>(userRepository.findAll());
@@ -35,15 +35,15 @@ public class UserService {
             for (User u : users) {
                 if (Objects.equals(u.getEmail(), user.getEmail())) {
                     _logger.info("User already exists");
-                    return new ResponseEntity<>(HttpStatus.OK);
+                    return null;
                 }
             }
             _logger.info("User registered successfully");
             User savedUser = userRepository.save(user);
-            return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
+            return savedUser;
         } catch (Exception e) {
             _logger.info("Error occurred while registering user: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
 

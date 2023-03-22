@@ -11,6 +11,7 @@ public class Location {
     private double longitude;
 
 
+
     /**
      * Gets latitude.
      * @return the latitude

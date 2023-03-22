@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 /**
  * The User class represents a user of the e-commerce application.
@@ -11,6 +12,7 @@ public class User {
     /**
      * The email address of the user.
      */
+    @JsonProperty("email")
     @Id
     private String email;
 
@@ -163,5 +165,17 @@ public class User {
      */
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
