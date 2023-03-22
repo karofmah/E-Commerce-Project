@@ -1,20 +1,20 @@
 <template>
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
-      <h1 style="">LOGO</h1>
+      <a @click="changeRoute('Home')" href=""><h1 style="">LOGO</h1></a>
     </div>
 
     <div class="links">
       <div class="link-pair">
-        <img src="../assets/bag-plus.svg" class="icon" alt="New Ad">
+        <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
         <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
       </div>
       <div class="link-pair">
-        <img src="../assets/chat-left-dots.svg" class="icon" alt="Message">
+        <img @click="handleItemClick('Messages')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
         <a @click="handleItemClick('Messages')" href="">Meldinger</a>
       </div>
       <div class="link-pair">
-        <img src="../assets/person-fill.svg" class="icon" alt="Log in">
+        <img @click="changeRoute('UserInfo')" src="../assets/person-fill.svg" class="icon" alt="Log in">
         <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
           <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
         </template>
@@ -86,6 +86,10 @@ export default {
   color: var(--vt-c-white-mute);
 }
 
+.logo a {
+  color: var(--vt-c-white-mute);
+}
+
 .logo h1{
   font-size: 60px;
 }
@@ -110,6 +114,10 @@ export default {
   width: 2em;
   margin-right: 1.7em;
   filter: invert(100%) sepia(0) saturate(0) hue-rotate(0deg);
+}
+
+.icon:hover {
+  cursor: pointer;
 }
 
 .links a {
