@@ -38,26 +38,32 @@
 export default{
     data(){
         return{
-            email: 'karofm@ntnu.no',
-            password: 'pw',
+            email: '',
+            password: '',
             error: '',
 
         }
     },setup(){
         const tokenStore = useTokenStore();
         return { tokenStore };
+    },mounted(){
+        console.log('HeiHEi' + this.tokenStore.loggedInUser)
     },
     methods: { 
         changeRoute(string){
         this.$router.push({name:string})
         },
         async login(){
+            if (!this.email || !this.password) {
+                this.error = 'Epost og password er nødvendige felt';
+                return;
+            }
             await this.tokenStore.getTokenAndSaveInStore(this.email, this.password);
             console.log(this.tokenStore.jwtToken)
             if(this.tokenStore.jwtToken || this.tokenStore.jwtToken){
             this.changeRoute('Home')
             } else {
-            this.error = "Login failed!"
+            this.error = "Logg in feilet. Har du rett email og passord?"
             }
         }
     }

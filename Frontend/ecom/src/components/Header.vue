@@ -1,9 +1,8 @@
 <template>
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
-      <a @click="changeRoute('Home')" href=""><h1 style="">LOGO</h1></a>
+      <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt=""></a>
     </div>
-
     <div class="links">
       <div class="link-pair">
         <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
@@ -26,9 +25,12 @@
   </div>
 </template>
 
+
 <script>
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import { useTokenStore } from "../stores/userToken";
+import { useRouter } from "vue-router";
+import { watch } from 'vue';
 
 export default {
   data() {
@@ -38,6 +40,18 @@ export default {
   },
   setup() {
     const tokenStore = useTokenStore();
+    const router = useRouter();
+
+    watch(
+      () => tokenStore.jwtToken,
+      () => {
+        if (tokenStore.jwtToken === null) {
+          // Redirect to the Login page if jwtToken becomes null
+          router.push("Login");
+        }
+      }
+    );
+
     return { tokenStore };
   },
   methods: {
@@ -45,7 +59,7 @@ export default {
       this.scrollPosition = window.scrollY;
     },
     handleItemClick(routeName) {
-      if (this.tokenStore.jwtToken && this.tokenStore.jwtToken !== null) {
+      if (this.tokenStore.jwtToken !== null) {
         this.changeRoute(routeName);
       } else {
         this.changeRoute('Login');
@@ -63,6 +77,10 @@ export default {
 
 
 <style scoped>
+
+
+
+
 .header {
   position: sticky;
   top: 0;
@@ -95,7 +113,7 @@ export default {
 }
 
 .logo img {
-  height: 15rem;
+  height: 10rem;
 }
 
 .links {

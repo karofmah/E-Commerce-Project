@@ -22,12 +22,10 @@ public class SecurityConfig {
                 .requestMatchers("/token").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
                 .requestMatchers("/api/items/getItems").permitAll()
-
-
                 .requestMatchers("/api/items/get/category").permitAll()
                 .requestMatchers("/api/items/{id}").permitAll()
                 .requestMatchers("/api/categories/getCategories").permitAll()
-
+                .requestMatchers("/api/items/get/keyword").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

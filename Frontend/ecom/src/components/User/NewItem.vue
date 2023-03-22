@@ -1,9 +1,9 @@
 <template>
   <div class="new-item">
-    <br /><h1>Add New Item</h1>
+    <br /><h1>Legg til ny annonse</h1>
 
     <div class="existing-images">
-      <h2>Existing Images:</h2>
+      <h2>Nåværende bilder:</h2>
       <div class="images-container">
         <div
           v-for="(image, index) in images"
@@ -26,7 +26,7 @@
     </div>
 
     <div class="field-container">
-      <label for="images">Upload Images (Max 10):</label>
+      <label for="images">Last opp bilder (Max 10):</label>
       <input
         type="file"
         id="images"
@@ -37,7 +37,7 @@
     </div>
 
     <div class="field-container">
-      <label for="brief-description">Brief Description:</label>
+      <label for="brief-description">Kort beskrivelse:</label>
       <input
         type="text"
         id="brief-description"
@@ -46,7 +46,7 @@
     </div>
 
     <div class="field-container">
-      <label for="category">Category:</label>
+      <label for="category">Kategori:</label>
       <select id="category" v-model="category">
         
         <option
@@ -60,24 +60,24 @@
     </div>
 
     <div class="field-container">
-      <label for="full-description">Full Description:</label>
+      <label for="full-description">Full beskrivelse:</label>
       <textarea id="full-description" v-model="fullDescription"></textarea>
     </div>
 
     <div class="field-container">
       <div class="location-container">
-        <label for="location">Location:</label>
+        <label for="location">Plassering:</label>
         <input type="text" id="location" @change="handleLocation" />
       </div>
       <div id="map" ref="map" class="map"></div>
     </div>
 
     <div class="field-container">
-      <label for="price">Price:</label>
+      <label for="price">Pris:</label>
       <input type="number" id="price" v-model="price" />
     </div>
 
-    <button @click="submit">Submit</button>
+    <button @click="submit">Legg ut annonse</button>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     <br /><br />
   </div>
@@ -164,7 +164,7 @@
       async handleImages() {
         const files = this.$refs.images.files;
         if (files.length > 10) {
-          alert("You can only upload a maximum of 10 images.");
+          alert("Du kan max laste opp 10 bilder");
           return;
         }
 
@@ -194,13 +194,13 @@
         );
 
         if (!response.ok) {
-        console.error("Error fetching geocoding data");
+        console.error("Feil under henting av geokodingsdata");
         return;
         }
 
         const data = await response.json();
         if (!data || data.length === 0) {
-        console.error("No location data found");
+        console.error("Ingen plasseringsdata funnet");
         return;
         }
 
@@ -246,7 +246,7 @@
       async submit() {
   // Check if any required fields are empty
   if (!this.images.length || !this.briefDescription || !this.fullDescription || !this.latitude || !this.longitude || !this.price || !this.category) {
-    this.errorMessage = "Please fill in all required fields";
+    this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
     return;
   }
 
@@ -285,7 +285,7 @@
   if(this.listed != null){
     this.changeRoute('Home');
   } else {
-    this.errorMessage = "There was an error while trying to list item";
+    this.errorMessage = "Det oppsto en feil under forsøk på å liste elementet";
   }
 },
     },

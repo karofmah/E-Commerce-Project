@@ -38,12 +38,9 @@ function favOrMy(key) {
     }
 }
 
-function logOut(){
-    tokenStore.jwtToken = null;
-    tokenStore.loggedInUser = null;
-    if(tokenStore.jwtToken == null){
-        router.push('Login');
-    }
+function logOut() {
+  tokenStore.logOut();
+  router.push("Login");
 }
 
 function handleItemClick(itemId) {
@@ -69,9 +66,9 @@ onMounted(async () => {
             <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
             <h1>{{ tokenStore.loggedInUser.email }}</h1>
             <div class="userFields">
-                <h3>{{ tokenStore.loggedInUser.firstName }}</h3>
+                <h3>{{ "Fornavn: " +  tokenStore.loggedInUser.firstName }}</h3>
                 <hr>
-                <h3>{{ tokenStore.loggedInUser.lastName }}</h3>
+                <h3>{{ "Etternavn: " + tokenStore.loggedInUser.lastName }}</h3>
                 <hr>
             </div>
             <br>
@@ -90,7 +87,11 @@ onMounted(async () => {
                     <div class="item" @click="handleItemClick(favorite)">{{ favorite }}</div>
                 </div>
                 <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
-                    <div class="item" @click="handleItemClick(item.id)">{{ item }}</div>
+                <div class="item" @click="handleItemClick(item.id)">
+                    <img :src="item.images?.[0]" alt="Item image" />
+                    <h3>{{ item.briefDescription }}</h3>
+                    <h4>{{ item.price }}</h4>
+                </div>
                 </div>
             </div>
         </div>
@@ -120,6 +121,27 @@ onMounted(async () => {
         padding: 1em 3em;
         box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
         border-radius: 15px;
+    }
+
+    .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    height: 6em; /* Adjust this value to make the images smaller */
+    width: 6em; /* Adjust this value to make the images smaller */
+    background-color: var(--color-blue);
+    border-radius: 15px;
+    }
+
+    .item img {
+    max-height: 100%;
+    max-width: 100%;
+    }
+
+    .item:hover{
+        cursor: pointer;
     }
 
     #userImg{

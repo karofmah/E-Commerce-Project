@@ -115,12 +115,11 @@ public class ItemService {
             return Optional.empty();
         }
     }
-    public List<Item> getItemsByKeyword(String keyword){
-        try{
+    public List<Item> getItemsByKeyword(String keyword) {
+        try {
             _logger.info("Getting items");
-            return itemRepository.
-                    findByBriefDescriptionContainingOrFullDescriptionContainingOrCategoryContaining(keyword,keyword,keyword);
-        }catch (Exception e){
+            return itemRepository.findByKeyword(keyword);
+        } catch (Exception e) {
             _logger.warn("Error while getting items by description: " + e.getMessage());
             return null;
         }
