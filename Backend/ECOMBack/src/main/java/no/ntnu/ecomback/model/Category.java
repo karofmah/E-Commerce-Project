@@ -1,21 +1,38 @@
 package no.ntnu.ecomback.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 /**
- * The Category enum represents the different categories that a user of the e-commerce application can have.
+ * The Category class represents the different categories that a user of the e-commerce application can have.
  */
-public enum Category {
+@Entity
+@Table
+public class Category {
     /**
-     * An electronics category.
+     * The name of the category
      */
-    ELECTRONICS,
+    @Id
+    private String categoryName;
 
-    /**
-     * A vehicle category.
-     */
-    VEHICLE,
+    public Category() {
+    }
 
-    /**
-     * A real estate category.
-     */
-    REAL_ESTATE
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    @Override
+    public String toString() {
+        return categoryName;
+    }
 }
