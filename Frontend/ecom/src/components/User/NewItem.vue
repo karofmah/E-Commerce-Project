@@ -137,12 +137,9 @@
           })
         );
       },
-        deleteImage(index) {
-          this.images.splice(index, 1);
-          const imagesContainer = document.querySelector(".images-container");
-          const imageWrapper = imagesContainer.querySelectorAll(".image-wrapper")[index];
-          imagesContainer.removeChild(imageWrapper);
-        },
+      deleteImage(index) {
+    this.images.splice(index, 1);
+    },
         async handleLocation(event) {
         const location = event.target.value;
 
@@ -276,7 +273,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(255, 0, 0, 0.7);
   color: white;
   border: none;
   padding: 3px 8px;
