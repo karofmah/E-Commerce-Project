@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onUpdated, nextTick } from 'vue'
 
-let contacts = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+let contacts = ref([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 let currentChat = ref(0)
 let chat = ref([])
+let chatInput = ref("")
 
 chat.value = [
   [
@@ -28,7 +29,7 @@ chat.value = [
     ['About your product, can you tell me more?', 0],
     ["Sure! It's a high-quality item with great features.", 1],
     ['How long is the warranty?', 0],
-    ['It comes with a 2-year warranty.', 1]
+    ['It comes with a 2-year warranty. Which for this product is worthwhile', 1]
   ],
   [
     ['Hello there', 1],
@@ -38,7 +39,30 @@ chat.value = [
     ['Can you explain the product features?', 1],
     ['Certainly! It has a powerful processor and a long-lasting battery.', 0],
     ['What about the camera?', 1],
-    ['It has a 12MP camera.', 0]
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
+    ['It has a 12MP camera.', 0],
   ],
   [
     ['Hello', 0],
@@ -70,7 +94,7 @@ chat.value = [
     ["What's the storage capacity?", 1],
     ['It comes with 128GB of storage.', 0],
     ['Is it expandable?', 1],
-    ['Yes, you can expand it up to 512GB with a microSD card.', 0]
+    ['Yes, you can expand it up to 512GB with a microSD card. Which is enough storage', 0]
   ],
   [
     ['Hey', 0],
@@ -81,12 +105,23 @@ chat.value = [
     ['No there is no damage', 1],
     ['You are free to check it out before buying', 1],
     ['Thanks i will do that', 0]
+  ],
+  [
+    ['Hey', 0],
+    ['Hello', 1],
+    ['I was wondering if you could sell me your product for a discount f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f ', 0],
+    ["I willing to let go of it for 250", 1],
+    ['How about 230', 0],
+    ['240 is the lowest i will go', 1],
+    ['Any more and i might as well give it to you for free', 1],
+    ['I will take it for 240', 0]
   ]
 ]
 
 function openChat(contactValue){
-    const index = contacts.value.findIndex(c => c === contactValue);
-    currentChat.value = index;
+    const index = contacts.value.findIndex(c => c === contactValue)
+    currentChat.value = index
+		chatInput.value = ""
 }
 
 let searchText = ref('')
@@ -97,8 +132,36 @@ const filteredContacts = computed(() => {
   }
 
   return contacts.value.filter((contact) => {
-    return `Contact${contact - 1} name`.toLowerCase().includes(searchText.value.toLowerCase())
+    return `Contact${contact} name`.toLowerCase().includes(searchText.value.toLowerCase())
   })
+})
+
+function getLastMessage(contact){
+	let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
+	return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
+}
+
+function addChat(input) {
+	if (input != "") {
+		chat.value[currentChat.value].push([input, 0])
+		chatInput.value = ""
+		scrollToBottom()
+	}
+}
+
+function scrollToBottom() {
+  nextTick(() => {
+    let chatInstances = document.querySelector(".chatInstances");
+    let lastChatInstance = chatInstances.lastElementChild;
+      
+    if (lastChatInstance) {
+      lastChatInstance.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  });
+}
+
+onUpdated(() => {
+	scrollToBottom()
 })
 </script>
 
@@ -115,8 +178,8 @@ const filteredContacts = computed(() => {
         <div class="contact" v-for="contact in filteredContacts" @click="openChat(contact)">
             <img src="../assets/person-fill.svg" alt="Person img">
             <div>
-                <h2>Contact{{ contact - 1 }} name</h2>
-                <h3>Last message between you and contact{{ contact }}</h3>
+                <h2>Contact{{ contact }} name</h2>
+                <h3>{{ getLastMessage(contact) }}</h3>
             </div>
         </div>
     </div>
@@ -137,6 +200,7 @@ const filteredContacts = computed(() => {
           {{ chatInstance[0] }}
         </div>
       </div>
+	  <input type="text" id="chatInput" placeholder="Send a Chat" autocomplete="off" v-model="chatInput" @keydown.enter="addChat(chatInput)"/>
     </div>
   </div>
 </template>
@@ -168,10 +232,10 @@ const filteredContacts = computed(() => {
 }
 
 #search {
-  background: url('../assets/search.svg') no-repeat left;
+  background: url('../assets/search.svg') no-repeat 1.5% 50%;
   background-size: 20px;
   color: var(--color-blue);
-  padding-left: 2em;
+  padding-left: 2.5em;
   width: 93%;
   margin: 1em;
 }
@@ -214,32 +278,38 @@ const filteredContacts = computed(() => {
   height: 4em;
   margin: 0.5em 0 0.5em 0.5em;
   border-radius: 50px;
-  background-color: var(--blue-complementary);
+  background-color: var(--color-blue-light);
 }
 
 .chat img {
   height: 2em;
   margin: 0.5em 0 0.5em 0.5em;
   border-radius: 50px;
-  background-color: var(--blue-complementary);
+  background-color: var(--color-blue-light);
 }
 
 .chat {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
   height: 100%;
   flex: 1;
+  justify-content: space-between;
   padding: 2em;
   border-radius: 0 15px 15px 0;
   box-shadow: 2px 5px 15px 4px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
 }
 
 .chatInstances {
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
+	justify-content: start;
+  line-height: 1;
   padding: 0.5rem 0.875rem;
   position: relative;
   word-wrap: break-word;
-  height: 95%;
+	height: 100%;
   overflow-y: auto;
 }
 
@@ -247,21 +317,13 @@ const filteredContacts = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  min-height: fit-content;
   width: fit-content;
   max-width: 55%;
-  min-height: fit-content;
-  padding: 0 2em;
+  padding: .7em 2em;
+	font-size: medium;
   border-radius: 50px;
   margin-top: 1em;
-}
-
-#chatInstance::before,
-#chatInstance::after {
-  bottom: -0.1rem;
-  content: '';
-  height: 1rem;
-  position: absolute;
 }
 
 .chatSend {
@@ -270,46 +332,27 @@ const filteredContacts = computed(() => {
   color: #fff;
 }
 
-.chatSend::before {
-  border-bottom-left-radius: 0.8rem 0.7rem;
-  border-right: 1rem solid var(--color-blue-light);
-  right: -0.35rem;
-  transform: translate(0, -0.1rem);
-}
-
-.chatSend::after {
-  background-color: #fff;
-  border-bottom-left-radius: 0.5rem;
-  right: -38.1px;
-  transform: translate(-30px, -2px);
-  width: 10px;
-}
-
-.chatSend ~ .chatSend:last-child {
-  margin-bottom: 0.5rem;
-}
+/* .chatSend ~ .chatSend:last-child {
+  margin-bottom: .5em;
+} */
 
 .chatReceive {
   margin-right: auto;
+	background-color: #e5e5ea;
+	color: #000;
 }
 
-.chatReceive {
-  background-color: #e5e5ea;
-  color: #000;
+#chatInput {
+  background: url('../assets/send.svg') no-repeat 97% 55%;
+  background-size: 20px;
+  color: var(--color-blue);
+	margin-top: 1em;
+  padding-left: 2em;
+  width: 100%;
+	animation: 1s linear;
 }
 
-.chatReceive:before {
-  border-bottom-right-radius: 0.8rem 0.7rem;
-  border-left: 1rem solid #e5e5ea;
-  left: -0.35rem;
-  transform: translate(0, -0.1rem);
-}
-
-.chatReceive::after {
-  background-color: #fff;
-  border-bottom-right-radius: 0.5rem;
-  left: 20px;
-  transform: translate(-30px, -2px);
-  width: 10px;
+#chatInput::-webkit-input-placeholder {
+  color: var(--color-blue);
 }
 </style>
