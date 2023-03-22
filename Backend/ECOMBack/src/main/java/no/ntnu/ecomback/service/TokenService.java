@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import no.ntnu.ecomback.model.LoginRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,9 @@ import java.time.Instant;
 
 @Service
 public class TokenService {
-
+    private static final Logger _logger =
+            LoggerFactory.getLogger(TokenService.class);
+    //Generate random in database
     public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
     private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(5);
 
@@ -31,9 +35,11 @@ public class TokenService {
         String password = loginRequest.getPassword();
 
         if (userService.checkUserCredentials(email, password)) {
+            _logger.info("Token is generating");
             return generateToken(email);
+        }else{
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access denied, wrong credentials....");
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access denied, wrong credentials....");
     }
 
 
