@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, watch, defineProps } from 'vue';
+import { ref, onMounted, watch, defineProps, computed } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -13,15 +14,54 @@ import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
+import { useTokenStore } from '../stores/userToken';
 
+const tokenStore = useTokenStore()
 const route = useRoute();
+const router = useRouter();
 const itemId = ref(route.params.id);
+
 
 let item = ref({});
 
 async function getItemsById(id) {
   item.value = await axios.get(`http://localhost:9090/api/items/${id}`).then(res => res.data);
+  console.log('Hello' + item.value.seller.email)
 }
+
+const isUserSeller = computed(() => {
+  if (item.value && item.value.seller) {
+    return tokenStore.loggedInUser.email === item.value.seller.email;
+  } else {
+    return false;
+  }
+});
+
+
+function goToEditItem() {
+  router.push({ name: 'UpdateItem', params: { id: itemId.value } });
+}
+
+async function deleteItem() {
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + tokenStore.jwtToken,
+    },
+  };
+
+  if (window.confirm("Are you sure you want to delete this item?")) {
+    const response = await axios.delete(
+      `http://localhost:9090/api/items/delete/${item.value.id}`,
+      config
+    );
+    if (response.status === 204) {
+      router.push({ name: "Home" });
+    }
+  }
+}
+
+
 
 let description = ref("");
 let specs = ref("");
@@ -47,7 +87,6 @@ watch(route, async (newRoute) => {
 
 onMounted(async () => {
   await getItemsById(itemId.value);
-
   const map = new Map({
     target: 'map-container',
     layers: [
@@ -100,10 +139,12 @@ onMounted(async () => {
 
     <div class="shopping">
         <div>
-            <h1>{{ item.briefDescription }}</h1>
-            <h2>{{ item.price }}</h2>
+          <h1>{{ item.briefDescription }}</h1>
+          <h2>{{ item.price }}</h2>
         </div>
-        <button>Add to cart</button>
+        <button v-if="isUserSeller" @click="goToEditItem">Endre annonse</button>
+        <button v-if="isUserSeller" @click="deleteItem">Slett annonse</button>
+        <button v-else>Legg i handlekurv</button>
     </div>
 
     <div class="map">

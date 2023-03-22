@@ -1,6 +1,18 @@
 <template>
     <div class="new-item">
       <br><h1>Add New Item</h1>
+
+      
+      <div class="existing-images">
+        <h2>Existing Images:</h2>
+        <div class="images-container">
+          <div v-for="(image, index) in images" :key="index" class="image-wrapper">
+            <img :src="image" alt="Uploaded image" class="uploaded-image" />
+            <button @click="deleteImage(index)" class="remove-image-btn">Remove</button>
+          </div>
+        </div>
+      </div>
+ 
   
       <div class="field-container">
         <label for="images">Upload Images (Max 10):</label>
@@ -9,7 +21,7 @@
   
       <div class="field-container">
         <label for="brief-description">Brief Description:</label>
-        <input type="text" id="brief-description" placeholder="Input brief description" v-model="briefDescription" />
+        <input type="text" id="brief-description"  v-model="briefDescription" />
       </div>
   
       <div class="field-container">
@@ -41,9 +53,7 @@
   
       <button @click="submit">Submit</button>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-  
-      <img id="testBase64" :src="displayedImage" alt="">
-      <div id="displayMap" ref="displayMap" class="map"></div>
+      <br>
       <br>
     </div>
   </template>
@@ -70,9 +80,9 @@
             displayMap: null,
             displayedImage: null,
             images: [],
-            briefDescription: "brief",
+            briefDescription: "",
             category: "",
-            fullDescription: "full",
+            fullDescription: "",
             latitude: null,
             longitude: null,
             price: null,
@@ -89,61 +99,11 @@
     },
     mounted() {
       this.initMap();
-      this.initDisplayMap();
-      console.log(this.tokenStore.jwtToken)
-      console.log(this.tokenStore.loggedInUser)
     },
     methods: {
         changeRoute(string){
         this.$router.push({name:string})
       },
-
-        //ALt under her til neste kommentar trenger du kun for å displaye hvor på kartet det er
-        async updateDisplayMap() {
-            if (this.latitude !== null && this.longitude !== null) {
-            const marker = new Feature({
-            geometry: new Point(fromLonLat([this.longitude, this.latitude])),
-            });
-
-            marker.setStyle(
-            new Style({
-                image: new Icon({
-                src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-                anchor: [0.5, 1],
-                }),
-            })
-            );
-
-            const markerSource = new VectorSource({
-            features: [marker],
-            });
-
-            const markerLayer = new VectorLayer({
-            source: markerSource,
-            });
-
-            this.displayMap.addLayer(markerLayer);
-            this.displayMap.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
-            this.displayMap.getView().setZoom(13);
-            }
-        },
-        initDisplayMap() {
-            this.displayMap = new Map({
-                target: this.$refs.displayMap,
-                layers: [
-                new TileLayer({
-                    source: new OSM(),
-                }),
-                ],
-                view: new View({
-                center: fromLonLat([0, 0]),
-                zoom: 2,
-                }),
-            });
-        },
-
-//Alt under her er kun det du trenger i denne componenten
-
       initMap() {
         this.map = new Map({
           target: this.$refs.map,
@@ -161,22 +121,27 @@
       async handleImages() {
         const files = this.$refs.images.files;
         if (files.length > 10) {
-            alert("You can only upload a maximum of 10 images.");
-            this.images = []; // Set this.images instead of this.images
-            return;
+          alert("You can only upload a maximum of 10 images.");
+          return;
         }
 
         this.images = await Promise.all(
-            Array.from(files).map((file) => {
+          Array.from(files).map((file) => {
             return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => {
+              const reader = new FileReader();
+              reader.onload = () => {
                 resolve(reader.result);
-                };
-                reader.readAsDataURL(file);
+              };
+              reader.readAsDataURL(file);
             });
-            })
+          })
         );
+      },
+        deleteImage(index) {
+          this.images.splice(index, 1);
+          const imagesContainer = document.querySelector(".images-container");
+          const imageWrapper = imagesContainer.querySelectorAll(".image-wrapper")[index];
+          imagesContainer.removeChild(imageWrapper);
         },
         async handleLocation(event) {
         const location = event.target.value;
@@ -239,47 +204,84 @@
         }
       },
       async submit() {
-            const user = this.tokenStore.loggedInUser;
-            const newItem = {
-              seller:{
-              email: user.email,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              username: user.username,
-              password: user.password,
-              role: user.role
-            },
-                  images : this.images,
-                  briefDescription: this.briefDescription,
-                  fullDescription: this.fullDescription,
-                  category: this.category,
-                  location: {
-                      latitude:this.latitude,
-                      longitude: this.longitude
-              },
-              price: this.price
-            }
+  // Check if any required fields are empty
+  if (!this.images.length || !this.briefDescription || !this.category || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
+    this.errorMessage = "Please fill in all required fields";
+    return;
+  }
+
+  const user = this.tokenStore.loggedInUser;
+  const newItem = {
+    seller:{
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      password: user.password,
+      role: user.role
+    },
+    images : this.images,
+    briefDescription: this.briefDescription,
+    fullDescription: this.fullDescription,
+    category: this.category,
+    location: {
+      latitude:this.latitude,
+      longitude: this.longitude
+    },
+    price: this.price
+  };
             
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                },
-            };
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      "Authorization" : "Bearer " + this.tokenStore.jwtToken
+    },
+  };
 
-
-            this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data
-            if(this.listed != null){
-                this.changeRoute('Home')
-            }else{
-                this.errorMessage = "There was an error while trying to list item"
-           }
-       },
+  this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data;
+  if(this.listed != null){
+    this.changeRoute('Home');
+  } else {
+    this.errorMessage = "There was an error while trying to list item";
+  }
+},
     },
   };
 </script>
   
 <style scoped>
+
+.existing-images {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-wrapper {
+  position: relative;
+  max-width: 150px;
+}
+
+.uploaded-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 3px 8px;
+  cursor: pointer;
+}
 
 .error-message {
   color: red;

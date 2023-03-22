@@ -53,8 +53,8 @@ public class ItemService {
 
     public Item updateItem(UpdateItemRequest updateItemRequest){
         try{
+            System.out.println(updateItemRequest.getId() + "Id of item");
             Optional<Item> itemById = itemRepository.findById(updateItemRequest.getId());
-
             if (itemById.isPresent()) {
                 Item _item = itemById.get();
                 _item.setBriefDescription(updateItemRequest.getBriefDescription());

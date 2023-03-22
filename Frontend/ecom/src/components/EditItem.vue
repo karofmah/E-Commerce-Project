@@ -74,16 +74,13 @@ export default {
     data() {
     return {
         images: [
-      "https://via.placeholder.com/150",
-      "https://placekitten.com/150/150",
-      "https://via.placeholder.com/200",
         ],
-      briefDescription: "Example Brief Description",
-      category: "electronics",
-      fullDescription: "Example Full Description",
-      latitude: 42.7128,
-      longitude: -74.0060,
-      price: 1000,
+      briefDescription: "",
+      category: "",
+      fullDescription: "",
+      latitude: null,
+      longitude: null,
+      price: null,
       errorMessage: null,
       map: null,
       marker: null,
@@ -110,6 +107,10 @@ export default {
 },
 
   methods: {
+    changeRoute(string){
+        this.$router.push({name:string})
+      },
+    
     deleteImage(index) {
     this.images.splice(index, 1);
     },
@@ -136,8 +137,8 @@ export default {
 },
 async loadItemData() {
   try {
-    // Get item data from the backend using itemId
-    const response = await axios.get(`http://localhost:9090/api/items/${this.itemId}`);
+    const itemId = this.$route.params.id;
+    const response = await axios.get(`http://localhost:9090/api/items/${itemId}`);
 
     if (response.status === 200) {
       const itemData = response.data;
@@ -266,9 +267,10 @@ async handleLocation(event) {
   this.updateMapWithLocation(this.latitude, this.longitude);
 },
 async submit() {
+  const itemId = this.$route.params.id;
   const user = this.tokenStore.loggedInUser;
   const updatedItem = {
-    itemId: this.itemId,
+    id: itemId,
     seller: {
       email: user.email,
       firstName: user.firstName,
@@ -298,13 +300,15 @@ price: this.price,
 
   try {
     const response = await axios.put(
-      `http://localhost:9090/api/items/update/${this.itemId}`,
+      `http://localhost:9090/api/items/update`,
       updatedItem,
       config
     );
 
+    console.log(response)
+
     if (response.status === 200) {
-      this.changeRoute("Home");
+      this.changeRoute('Home');
     } else {
       this.errorMessage = "There was an error while trying to update the item";
     }
