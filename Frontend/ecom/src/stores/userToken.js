@@ -19,6 +19,7 @@ actions: {
             console.log(data)
             if(data != null && data != '' && data != undefined){
                 this.jwtToken = data;
+                console.log(this.jwtToken)
                 let userResponse = await getUserInfo(email,this.jwtToken);
                 this.loggedInUser = userResponse.data
                 console.log(this.loggedInUser)

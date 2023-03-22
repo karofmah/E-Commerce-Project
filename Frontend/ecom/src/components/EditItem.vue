@@ -7,7 +7,7 @@
         <div class="images-container">
             <div v-for="(image, index) in images" :key="index" class="image-wrapper">
             <img :src="image" alt="Uploaded image" class="uploaded-image" />
-            <button @click="deleteImage(index)" class="remove-image-btn">Remove</button>
+            <img src="@/assets/cross.png" alt="Remove" class="remove-image-btn" @click="deleteImage(index)" />
             </div>
         </div>
         </div>
@@ -23,13 +23,18 @@
       </div>
   
       <div class="field-container">
-        <label for="category">Category:</label>
-        <select id="category" v-model="category">
-          <option value="ELECTRONICS">Electronics</option>
-          <option value="VEHICLE">Vehicle</option>
-          <option value="REAL_ESTATE">Real Estate</option>
-        </select>
-      </div>
+      <label for="category">Category:</label>
+      <select id="category" v-model="category">
+        
+        <option
+          v-for="category in categories"
+          :key="category.categoryName"
+          :value="category.categoryName"
+        >
+          {{ category.categoryName }}
+        </option>
+      </select>
+    </div>
   
       <div class="field-container">
         <label for="full-description">Full Description:</label>
@@ -74,21 +79,19 @@ export default {
     data() {
     return {
         images: [
-      "https://via.placeholder.com/150",
-      "https://placekitten.com/150/150",
-      "https://via.placeholder.com/200",
         ],
-      briefDescription: "Example Brief Description",
-      category: "electronics",
-      fullDescription: "Example Full Description",
-      latitude: 42.7128,
-      longitude: -74.0060,
-      price: 1000,
+      briefDescription: "",
+      category: [],
+      fullDescription: "",
+      latitude: null,
+      longitude: null,
+      price: null,
       errorMessage: null,
       map: null,
       marker: null,
       markerLayer: null,
-      locationString: ""
+      locationString: "",
+      categories: []
     };
   },
   setup() {
@@ -107,9 +110,31 @@ export default {
 
   // Reverse geocode the coordinates to get the location name
   await this.reverseGeocode(this.latitude, this.longitude);
+
+
+  const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + this.tokenStore.jwtToken,
+        },
+      };
+
+      axios.get('http://localhost:9090/api/categories/getCategories',config)
+      .then(response => {
+        this.categories = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+
 },
 
   methods: {
+    changeRoute(string){
+        this.$router.push({name:string})
+      },
+    
     deleteImage(index) {
     this.images.splice(index, 1);
     },
@@ -136,14 +161,14 @@ export default {
 },
 async loadItemData() {
   try {
-    // Get item data from the backend using itemId
-    const response = await axios.get(`http://localhost:9090/api/items/${this.itemId}`);
+    const itemId = this.$route.params.id;
+    const response = await axios.get(`http://localhost:9090/api/items/${itemId}`);
 
     if (response.status === 200) {
       const itemData = response.data;
       this.images = itemData.images;
       this.briefDescription = itemData.briefDescription;
-      this.category = itemData.category;
+      this.category = itemData.category.categoryName; // set the category value
       this.fullDescription = itemData.fullDescription;
       this.latitude = itemData.location.latitude;
       this.longitude = itemData.location.longitude;
@@ -266,27 +291,34 @@ async handleLocation(event) {
   this.updateMapWithLocation(this.latitude, this.longitude);
 },
 async submit() {
+  if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
+  this.errorMessage = "Please fill in all required fields";
+  return;
+}
+
+
   const user = this.tokenStore.loggedInUser;
   const updatedItem = {
-    itemId: this.itemId,
-    seller: {
+    seller:{
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
       password: user.password,
-role: user.role,
-},
-images: this.images,
-briefDescription: this.briefDescription,
-category: this.category,
-fullDescription: this.fullDescription,
-location: {
-latitude: this.latitude,
-longitude: this.longitude,
-},
-price: this.price,
-};
+      role: user.role
+    },
+    images : this.images,
+    briefDescription: this.briefDescription,
+    fullDescription: this.fullDescription,
+    category: {
+      categoryName: this.category
+    },
+    location: {
+      latitude:this.latitude,
+      longitude: this.longitude
+    },
+    price: this.price
+  };
 
 
   const config = {
@@ -298,13 +330,15 @@ price: this.price,
 
   try {
     const response = await axios.put(
-      `http://localhost:9090/api/items/update/${this.itemId}`,
+      `http://localhost:9090/api/items/update`,
       updatedItem,
       config
     );
 
+    console.log(response)
+
     if (response.status === 200) {
-      this.changeRoute("Home");
+      this.changeRoute('Home');
     } else {
       this.errorMessage = "There was an error while trying to update the item";
     }
@@ -347,18 +381,16 @@ price: this.price,
 
 .remove-image-btn {
   position: absolute;
-  top: 0;
-  right: 0;
-  background-color: rgba(255, 0, 0, 0.7);
-  color: #fff;
+  top: 5px;
+  right: 5px;
+  color: white;
   border: none;
-  border-radius: 50%;
-  padding: 4px 8px;
-  font-size: 14px;
+  padding: 8px;
   cursor: pointer;
+  font-size: 16px;
+  width: 50px;
+  height: 50px;
 }
 
-.remove-image-btn:hover {
-  background: #d32f2f;
-}
+
 </style>

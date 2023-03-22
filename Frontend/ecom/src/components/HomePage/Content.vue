@@ -3,21 +3,39 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import ContentItemTemplate from './ContentItemTemplate.vue';
+import { useCategoryStore } from '../../stores/categoryStore';
+import { watch } from 'vue';
 
 let items = ref([]);
 let router = useRouter();
+const categoryStore = useCategoryStore();
 
 async function getItems() {
   items.value = await axios.get("http://localhost:9090/api/items/getItems").then(res => res.data);
+}
+
+async function getItemsByCategory(categorie){
+  items.value = await axios.get("http://localhost:9090/api/items/get/category", { params: { category: categorie.categoryName } }).then(res => res.data);
 }
 
 function handleItemClick(linkItem) {
   router.push({ name: 'Item', params: { id: linkItem.id } });
 }
 
-onMounted(async () => {
-  await getItems();
-});
+watch(
+  () => categoryStore.selectedCategory,
+  async (newCategory) => {
+    if (newCategory && newCategory.categoryName !== 'all') {
+      await getItemsByCategory(newCategory);
+    } else {
+      await getItems(); // Fetch all items when the categoryName is 'all' (All Categories)
+    }
+  },
+  { immediate: true }
+);
+
+
+
 </script>
 
 <template>

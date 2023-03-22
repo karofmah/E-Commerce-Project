@@ -1,34 +1,37 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { RouterLink } from 'vue-router';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../../stores/userToken';
+import axios from 'axios';
 
 const tokenStore = useTokenStore()
 let router = useRouter();
 
-let user = defineProps({
-    ID: Number
-});
-
-let email = ref("email@email.com-" + user.ID);
-let username = ref("Username-" + user.ID);
-let firstname = ref("Firstname-" + user.ID);
-let lastname = ref("Lastname-" + user.ID);
-
 let favorites = ref([1,2,3,4,5,6,7,8,9,10]);
-let myItems = ref([10,9,8,7,6,5,4,3,2,1]);
+let myItems = ref([]);
 let favOrMyBool = ref(true);
+
+async function getMyItems() {
+  const userEmail = tokenStore.loggedInUser.email;
+
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + tokenStore.jwtToken,
+    },
+  };
+
+  myItems.value = await axios.get("http://localhost:9090/api/items?email="+ userEmail,config).then(res => res.data);
+  console.log(myItems.value)
+}
 
 function favOrMy(key) {
     switch (key) {
         case 0:
             favOrMyBool.value = true;
-            console.log("case0" + favOrMyBool.value);
             break;
         case 1:
             favOrMyBool.value = false;
-            console.log("case1" + favOrMyBool.value);
             break;
         default:
             throw new Error('Something went wrong');
@@ -43,6 +46,9 @@ function logOut(){
     }
 }
 
+function handleItemClick(itemId) {
+  router.push({ name: 'Item', params: { id: itemId } });
+}
 
 const itemsToDisplay = computed(() => {
     if (favOrMyBool.value) {
@@ -52,6 +58,9 @@ const itemsToDisplay = computed(() => {
     }
 });
 
+onMounted(async () => {
+  await getMyItems();
+});
 </script>
 
 <template>
@@ -77,16 +86,17 @@ const itemsToDisplay = computed(() => {
                 <a href="#0" @click="favOrMy(1)">My Items</a>
             </nav>
             <div class="content">
-                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in itemsToDisplay">
-                    <div class="item">{{ favorite }}</div>
+                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in itemsToDisplay" :key="favorite">
+                    <div class="item" @click="handleItemClick(favorite)">{{ favorite }}</div>
                 </div>
-                <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay">
-                    <div class="item">{{ item }}</div>
+                <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
+                    <div class="item" @click="handleItemClick(item.id)">{{ item }}</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <style scoped>
     .container{

@@ -44,7 +44,6 @@ public class ItemController {
     public ResponseEntity<List<Item>> getItems() {
         try {
             List<Item> items = itemService.getItems();
-            System.out.println(new ResponseEntity<>(items, HttpStatus.OK));
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
