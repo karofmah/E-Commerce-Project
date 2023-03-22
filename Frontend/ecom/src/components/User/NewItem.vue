@@ -1,62 +1,88 @@
 <template>
-    <div class="new-item">
-      <br><h1>Add New Item</h1>
+  <div class="new-item">
+    <br /><h1>Add New Item</h1>
 
-      
-      <div class="existing-images">
-        <h2>Existing Images:</h2>
-        <div class="images-container">
-          <div v-for="(image, index) in images" :key="index" class="image-wrapper">
-            <img :src="image" alt="Uploaded image" class="uploaded-image" />
-            <button @click="deleteImage(index)" class="remove-image-btn">Remove</button>
-          </div>
+    <div class="existing-images">
+      <h2>Existing Images:</h2>
+      <div class="images-container">
+        <div
+          v-for="(image, index) in images"
+          :key="index"
+          class="image-wrapper"
+        >
+          <img
+            :src="image"
+            alt="Uploaded image"
+            class="uploaded-image"
+          />
+          <img
+            src="@/assets/cross.png"
+            alt="Remove"
+            class="remove-image-btn"
+            @click="deleteImage(index)"
+          />
         </div>
       </div>
- 
-  
-      <div class="field-container">
-        <label for="images">Upload Images (Max 10):</label>
-        <input type="file" id="images" ref="images" multiple @change="handleImages" />
-      </div>
-  
-      <div class="field-container">
-        <label for="brief-description">Brief Description:</label>
-        <input type="text" id="brief-description"  v-model="briefDescription" />
-      </div>
-  
-      <div class="field-container">
-        <label for="category">Category:</label>
-        <select id="category" v-model="category">
-          <option value="ELECTRONICS">Electronics</option>
-          <option value="VEHICLE">Vehicle</option>
-          <option value="REAL_ESTATE">Real Estate</option>
-        </select>
-      </div>
-  
-      <div class="field-container">
-        <label for="full-description">Full Description:</label>
-        <textarea id="full-description" v-model="fullDescription"></textarea>
-      </div>
-  
-      <div class="field-container">
-        <div class="location-container">
-          <label for="location">Location:</label>
-          <input type="text" id="location" @change="handleLocation" />
-        </div>
-        <div id="map" ref="map" class="map"></div>
-      </div>
-  
-      <div class="field-container">
-        <label for="price">Price:</label>
-        <input type="number" id="price" v-model="price" />
-      </div>
-  
-      <button @click="submit">Submit</button>
-      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-      <br>
-      <br>
     </div>
-  </template>
+
+    <div class="field-container">
+      <label for="images">Upload Images (Max 10):</label>
+      <input
+        type="file"
+        id="images"
+        ref="images"
+        multiple
+        @change="handleImages"
+      />
+    </div>
+
+    <div class="field-container">
+      <label for="brief-description">Brief Description:</label>
+      <input
+        type="text"
+        id="brief-description"
+        v-model="briefDescription"
+      />
+    </div>
+
+    <div class="field-container">
+      <label for="category">Category:</label>
+      <select id="category" v-model="category">
+        
+        <option
+          v-for="category in categories"
+          :key="category.categoryName"
+          :value="category.categoryName"
+        >
+          {{ category.categoryName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="field-container">
+      <label for="full-description">Full Description:</label>
+      <textarea id="full-description" v-model="fullDescription"></textarea>
+    </div>
+
+    <div class="field-container">
+      <div class="location-container">
+        <label for="location">Location:</label>
+        <input type="text" id="location" @change="handleLocation" />
+      </div>
+      <div id="map" ref="map" class="map"></div>
+    </div>
+
+    <div class="field-container">
+      <label for="price">Price:</label>
+      <input type="number" id="price" v-model="price" />
+    </div>
+
+    <button @click="submit">Submit</button>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <br /><br />
+  </div>
+</template>
+
 
   <script>
     import axios, { Axios } from 'axios';
@@ -81,7 +107,7 @@
             displayedImage: null,
             images: [],
             briefDescription: "",
-            category: "",
+            category: [],
             fullDescription: "",
             latitude: null,
             longitude: null,
@@ -90,15 +116,32 @@
             map: null,
             marker: null,
             markerLayer: null,
-            listed: ""
+            listed: "",
+            categories: []
       };
     },
     setup(){
         const tokenStore = useTokenStore();
         return { tokenStore };
     },
-    mounted() {
+    async mounted() {
       this.initMap();
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + this.tokenStore.jwtToken,
+        },
+      };
+
+      axios.get('http://localhost:9090/api/categories/getCategories',config)
+      .then(response => {
+        this.categories = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
     },
     methods: {
         changeRoute(string){
@@ -202,10 +245,11 @@
       },
       async submit() {
   // Check if any required fields are empty
-  if (!this.images.length || !this.briefDescription || !this.category || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
+  if (!this.images.length || !this.briefDescription || !this.fullDescription || !this.latitude || !this.longitude || !this.price || !this.category) {
     this.errorMessage = "Please fill in all required fields";
     return;
   }
+
 
   const user = this.tokenStore.loggedInUser;
   const newItem = {
@@ -220,7 +264,9 @@
     images : this.images,
     briefDescription: this.briefDescription,
     fullDescription: this.fullDescription,
-    category: this.category,
+    category: {
+      categoryName: this.category
+    },
     location: {
       latitude:this.latitude,
       longitude: this.longitude
@@ -271,13 +317,15 @@
 
 .remove-image-btn {
   position: absolute;
-  top: 0;
-  right: 0;
-  background-color: rgba(255, 0, 0, 0.7);
+  top: 5px;
+  right: 5px;
   color: white;
   border: none;
-  padding: 3px 8px;
+  padding: 8px;
   cursor: pointer;
+  font-size: 16px;
+  width: 50px;
+  height: 50px;
 }
 
 .error-message {

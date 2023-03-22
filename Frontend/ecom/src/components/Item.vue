@@ -30,7 +30,9 @@ async function getItemsById(id) {
 }
 
 const isUserSeller = computed(() => {
-  if (item.value && item.value.seller) {
+  if (!tokenStore.loggedInUser) {
+    return false; 
+  } else if (item.value && item.value.seller) {
     return tokenStore.loggedInUser.email === item.value.seller.email;
   } else {
     return false;
