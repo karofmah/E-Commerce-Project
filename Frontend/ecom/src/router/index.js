@@ -8,6 +8,7 @@ import ItemView from '../views/ItemView.vue'
 import CartView from '../views/CartView.vue'
 import UserView from '../views/UserView.vue'
 import UpdateItemView from '../views/UpdateItemView.vue'
+import MessageView from '../views/MessageView.vue'
 
 
 const routes = [
@@ -52,9 +53,14 @@ const routes = [
         component: UserView 
     },
     {
-        path: '/EditItem',
+        path: '/editItem',
         name: 'EditItem',
         component: UpdateItemView 
+    },
+    {
+        path: '/message',
+        name: 'Message',
+        component: MessageView
     }
 
 ]
