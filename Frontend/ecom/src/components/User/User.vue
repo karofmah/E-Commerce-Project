@@ -1,6 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { useTokenStore } from '../../stores/userToken';
+
+const tokenStore = useTokenStore()
+let router = useRouter();
 
 let user = defineProps({
     ID: Number
@@ -30,6 +35,14 @@ function favOrMy(key) {
     }
 }
 
+function logOut(){
+    tokenStore.jwtToken = null;
+    tokenStore.loggedInUser = null;
+    if(tokenStore.jwtToken == null){
+        router.push('Login');
+    }
+}
+
 
 const itemsToDisplay = computed(() => {
     if (favOrMyBool.value) {
@@ -45,17 +58,17 @@ const itemsToDisplay = computed(() => {
     <div class="container">
         <div class="user">
             <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
-            <h1>{{ username }}</h1>
+            <h1>{{ tokenStore.loggedInUser.email }}</h1>
             <div class="userFields">
-                <h3>{{ firstname }} {{ lastname }}</h3>
+                <h3>{{ tokenStore.loggedInUser.firstName }}</h3>
                 <hr>
-                <h3>{{ email }}</h3>
+                <h3>{{ tokenStore.loggedInUser.lastName }}</h3>
                 <hr>
             </div>
             <br>
             <div class="userButtons">
                 <RouterLink to="/edit"><button id="edit">Edit</button></RouterLink>
-                <button id="logOut">Log Out</button>
+                <button @click="logOut()" id="logOut">Log Out</button>
             </div>
         </div>
         <div class="contentWrapper">
