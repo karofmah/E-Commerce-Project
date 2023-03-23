@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin("http://localhost:5173/")
-<<<<<<< HEAD
 
-=======
->>>>>>> 8e474c9d99b00de11c77176c9d49f0a68eb46b3b
 @RestController
 @RequestMapping("/api/bookmark")
 public class BookmarkController {

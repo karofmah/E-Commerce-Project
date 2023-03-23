@@ -16,10 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-<<<<<<< HEAD
 
-=======
->>>>>>> 8e474c9d99b00de11c77176c9d49f0a68eb46b3b
 @RequestMapping("/api/items")
 @CrossOrigin("http://localhost:5173/")
 public class ItemController {
