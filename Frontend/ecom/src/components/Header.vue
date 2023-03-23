@@ -21,6 +21,10 @@
           <a @click="changeRoute('Login')" href="">Logg inn</a>
         </template>
       </div>
+      <div v-if="tokenStore.loggedInUser && tokenStore.loggedInUser.role === 'ADMINISTRATOR'" class="link-pair">
+      <img @click="changeRoute('admin')" src="../assets/person-fill.svg" class="icon" alt="Admin">
+      <a @click="changeRoute('admin')" href="">Admin</a>
+    </div>
     </div>
   </div>
 </template>
