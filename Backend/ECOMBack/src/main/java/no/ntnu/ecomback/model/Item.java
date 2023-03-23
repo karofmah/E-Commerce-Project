@@ -40,7 +40,7 @@ public class Item {
     /**
      * The category of item
      */
-    @ManyToOne
+    @ManyToOne()
     private Category category;
 
     /**

@@ -37,14 +37,8 @@ public class ItemService {
 
     public Item addItem(Item item){
         try {
-            for (User u:userRepository.findAll()) {
-                if(u.getEmail().equals(item.getSeller().getEmail())){
-                    _logger.info("Item added");
-                    return itemRepository.save(item);
-                }
-            }
-            _logger.info("Seller does not exist ");
-            return null;
+            _logger.info("Adding item");
+            return itemRepository.save(item);
         } catch (Exception e) {
             _logger.warn("Error occurred while adding item: " + e.getMessage());
             return null;
@@ -118,7 +112,7 @@ public class ItemService {
     public List<Item> getItemsByKeyword(String keyword) {
         try {
             _logger.info("Getting items");
-            return itemRepository.findByKeyword(keyword);
+            return itemRepository.findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContaining(keyword,keyword,keyword);
         } catch (Exception e) {
             _logger.warn("Error while getting items by description: " + e.getMessage());
             return null;

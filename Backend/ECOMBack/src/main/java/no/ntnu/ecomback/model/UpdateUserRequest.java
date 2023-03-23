@@ -1,9 +1,10 @@
-package no.ntnu.ecomback.model;
-
 /**
 
  UpdateUserRequest is a class that represents a request to update a user's information.
  */
+package no.ntnu.ecomback.model;
+
+
 public class UpdateUserRequest {
 
     /**

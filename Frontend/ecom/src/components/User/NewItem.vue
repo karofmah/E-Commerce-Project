@@ -127,14 +127,9 @@
     async mounted() {
       this.initMap();
 
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: "Bearer " + this.tokenStore.jwtToken,
-        },
-      };
+      
 
-      axios.get('http://localhost:9090/api/categories/getCategories',config)
+      axios.get('http://localhost:9090/api/categories/getCategories')
       .then(response => {
         this.categories = response.data;
       })
