@@ -140,7 +140,7 @@ async function initialize() {
     <div class="chat">
       <div class="header">
         <img src="../assets/person-fill.svg" alt="Person img" />
-        <h1> {{ /*contacts[currentChat].firstName + " " + contacts[currentChat].lastName*/ currentChat }} </h1>
+        <h1 v-if="contacts[currentChat]"> {{ contacts[currentChat].firstName + " " + contacts[currentChat].lastName }} </h1>
       </div>
       <hr />
       <div class="chatInstances">
