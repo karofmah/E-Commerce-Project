@@ -1,6 +1,8 @@
 <script setup>
 import { useTokenStore } from '@/stores/userToken';
 import {onMounted, watch} from "vue";
+import { ref } from 'vue';
+const intervalId = ref(null);
 const store = useTokenStore();
 
 
@@ -11,12 +13,15 @@ onMounted(() => {
   }
 });
 async function refreshToken() {
-  setInterval(async () => {
-    if(store.loggedInUser) {
-      console.log("refreshing token")
-      return await store.getTokenAndSaveInStore(store.loggedInUser.email, store.loggedInUser.password)
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+  }
+
+  intervalId.value = setInterval(async () => {
+    if (store.loggedInUser) {
+      return await store.getTokenAndSaveInStore(store.loggedInUser.email, store.loggedInUser.password);
     }
-  }, 1000 * 60 * 5)
+  }, 1000 * 60 * 5);
 }
 
 

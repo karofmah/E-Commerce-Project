@@ -1,10 +1,10 @@
 <template>
      <div class="container">
         <div class="logo">
-            <img src="../assets/plus-square-fill.svg" alt="Logo">
+            <img src="../assets/logo.png" alt="Logo">
         </div>
         <div class="copyright">
-            <p>This is copyright© info</p>
+            <div>Logo created by <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
         </div>
         <div class="info-box">
             <p>This is info about program</p>
@@ -55,8 +55,7 @@
 }
 
 .logo img{
-    height: 5rem;
-    filter: invert(100%);
+    height: 8rem;
 }
 
 
