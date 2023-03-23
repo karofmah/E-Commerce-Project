@@ -47,14 +47,13 @@ const starFill = ref(starFillImg);
 let favoriteBool = ref(false)
 function getFavorite() {
   favoriteBool.value = (!favoriteBool.value)
-  switch (favoriteBool.value) {
-    case true:
-      //Add favorite
-      break;
-    
-    case false:
-      //Delete favorite
-      break;
+  const favIcon = document.querySelector("#favIcon");
+  if (favoriteBool.value) {
+    //AddFavorite
+    favIcon.classList.add("star-spin");
+  }else{
+    //RemoveFavorite
+    favIcon.classList.remove("star-spin");
   }
 }
 
@@ -236,6 +235,25 @@ onMounted(async () => {
       right: -10em;
       height: 2em;
       cursor: pointer;
+    }
+
+    .star-spin{
+      animation: starSpin .6s linear;
+    }
+
+    @keyframes starSpin{
+      0%{
+        scale: 1;
+        rotate: 0deg;
+      }
+      50%{
+        scale: 1.3;
+        rotate: 180deg;
+      }
+      100%{
+        scale: 1;
+        rotate: 360deg;
+      }
     }
 
     .map{
