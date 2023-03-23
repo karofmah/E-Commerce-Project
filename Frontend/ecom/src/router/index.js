@@ -114,7 +114,7 @@ const routes = [
         next({ name: 'Home' });
       }
     },
-  }
+  },
 ];
 
 const router = createRouter({
