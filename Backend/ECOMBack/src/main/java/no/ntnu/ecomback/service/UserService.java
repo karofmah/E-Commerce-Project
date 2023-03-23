@@ -104,4 +104,12 @@ public class UserService {
         return null;
 
     }
+
+    public List<User> getAllUsers() {
+        try {
+            return new ArrayList<>(userRepository.findAll());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
