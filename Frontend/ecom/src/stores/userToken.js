@@ -1,33 +1,33 @@
 import { defineStore } from "pinia";
-import {getJwtToken,getUserInfo} from "/httputils.js"
+import { getJwtToken, getUserInfo } from "/httputils.js";
 
 export const useTokenStore = defineStore("token", {
-state: () => ({
+  state: () => ({
     jwtToken: null,
     loggedInUser: null,
-}),
-persist: {
+  }),
+  persist: {
     storage: sessionStorage,
-},
+  },
 
-actions: {
+  actions: {
     async getTokenAndSaveInStore(email, password) {
-        console.log('FUCK')
-        try{
-            let response = await getJwtToken(email, password);
-            let data = response.data;
-            console.log(data)
-            if(data != null && data != '' && data != undefined){
-                this.jwtToken = data;
-                console.log(this.jwtToken)
-                let userResponse = await getUserInfo(email,this.jwtToken);
-                this.loggedInUser = userResponse.data
-                console.log(this.loggedInUser)
-            }
-        } catch (err){
-            console.log('FUCK DEN GIKK INN I ERROR')
-            console.log(err)
+      try {
+        let response = await getJwtToken(email, password);
+        let data = response.data;
+        if (data != null && data != "" && data != undefined) {
+          this.jwtToken = data;
+          let userResponse = await getUserInfo(email, this.jwtToken);
+          this.loggedInUser = userResponse.data;
         }
-    }
-},
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    logOut() {
+      this.jwtToken = null;
+      this.loggedInUser = null;
+    },
+  },
 });

@@ -35,7 +35,7 @@ onMounted(async () => {
         :class="{ selected: categoryStore.selectedCategory?.categoryName === 'all' }"
         @click="handleAllCategoriesClick"
       >
-        <h3>All Categories</h3>
+        <h3>Alle kategorier</h3>
       </div>
       <div
         class="categories"
@@ -53,10 +53,11 @@ onMounted(async () => {
     .container{
         display: flex;
         flex-flow: row wrap;
-        background-color: rgba(176, 176, 176, .2);
         border-radius: 8px;
         margin: 0 0 0 0;
         width: 10em;
+        height: 15vh;
+        
     }
     .categories{
         display: flex;
@@ -66,9 +67,14 @@ onMounted(async () => {
         opacity: 0.9;
         width: 10vw;
         margin: 5px;
-       
+        height: 8vh;
         border-radius: 8px;
         text-align: center;
+        
+    }
+
+    .categories:hover{
+        cursor: pointer;
     }
 
     .selected {

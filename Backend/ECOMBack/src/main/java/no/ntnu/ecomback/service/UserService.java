@@ -104,4 +104,21 @@ public class UserService {
         return null;
 
     }
+
+    public List<User> getAllUsers() {
+        try {
+            return new ArrayList<>(userRepository.findAll());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean deleteUser(String email) {
+        try {
+            userRepository.deleteById(email);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

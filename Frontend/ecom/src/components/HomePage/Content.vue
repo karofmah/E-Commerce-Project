@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import ContentItemTemplate from './ContentItemTemplate.vue';
 import { useCategoryStore } from '../../stores/categoryStore';
+import { getKeyword } from '../../stores/searchStore'; // import the getKeyword function
 import { watch } from 'vue';
 
 let items = ref([]);
@@ -14,27 +15,37 @@ async function getItems() {
   items.value = await axios.get("http://localhost:9090/api/items/getItems").then(res => res.data);
 }
 
-async function getItemsByCategory(categorie){
-  items.value = await axios.get("http://localhost:9090/api/items/get/category", { params: { category: categorie.categoryName } }).then(res => res.data);
+async function getItemsByCategory(category){
+  items.value = await axios.get("http://localhost:9090/api/items/get/category", { params: { category: category.categoryName } }).then(res => res.data);
+}
+
+async function getItemsBySearch(keyword){
+  items.value = await axios.get("http://localhost:9090/api/items/get/keyword", { params: { keyword: keyword } }).then(res => res.data);
 }
 
 function handleItemClick(linkItem) {
   router.push({ name: 'Item', params: { id: linkItem.id } });
 }
 
+// watch for changes in the selected category
 watch(
-  () => categoryStore.selectedCategory,
-  async (newCategory) => {
-    if (newCategory && newCategory.categoryName !== 'all') {
-      await getItemsByCategory(newCategory);
+  () => ({ category: categoryStore.selectedCategory, keyword: getKeyword() }),
+  async ({ category, keyword }) => {
+    if (keyword !== '') {
+      await getItemsBySearch(keyword);
+    } else if (category && category.categoryName !== 'all') {
+      await getItemsByCategory(category);
     } else {
-      await getItems(); // Fetch all items when the categoryName is 'all' (All Categories)
+      await getItems();
     }
   },
   { immediate: true }
 );
 
-
+// fetch the items on component mount
+onMounted(async () => {
+  await getItems();
+});
 
 </script>
 

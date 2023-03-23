@@ -9,4 +9,5 @@ import "./assets/main.css";
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState)
 
+
 createApp(App).use(pinia).use(router).mount('#app')

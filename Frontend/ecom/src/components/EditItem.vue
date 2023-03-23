@@ -1,9 +1,9 @@
 <template>
     <div class="new-item">
-      <h1>Update Item</h1>
+      <h1>Oppdater annonse</h1>
   
       <div class="existing-images">
-        <h2>Existing Images:</h2>
+        <h2>Eksisterende bilder:</h2>
         <div class="images-container">
             <div v-for="(image, index) in images" :key="index" class="image-wrapper">
             <img :src="image" alt="Uploaded image" class="uploaded-image" />
@@ -13,17 +13,17 @@
         </div>
   
       <div class="field-container">
-        <label for="images">Upload Images (Max 10):</label>
+        <label for="images">Last opp bilder (maks 10):</label>
         <input type="file" id="images" ref="images" multiple @change="handleImages" />
       </div>
   
       <div class="field-container">
-        <label for="brief-description">Brief Description:</label>
+        <label for="brief-description">Kort beskrivelse:</label>
         <input type="text" id="brief-description" v-model="briefDescription" />
       </div>
   
       <div class="field-container">
-      <label for="category">Category:</label>
+      <label for="category">Kategori:</label>
       <select id="category" v-model="category">
         
         <option
@@ -37,24 +37,25 @@
     </div>
   
       <div class="field-container">
-        <label for="full-description">Full Description:</label>
+        <label for="full-description">
+            Full beskrivelse:</label>
         <textarea id="full-description" v-model="fullDescription"></textarea>
       </div>
   
       <div class="field-container">
         <div class="location-container">
-          <label for="location">Location:</label>
+          <label for="location">Plassering:</label>
           <input type="text" id="location" v-model="locationString" @change="handleLocation" />
         </div>
         <div id="map" ref="map" class="map"></div>
       </div>
   
       <div class="field-container">
-        <label for="price">Price:</label>
+        <label for="price">Pris:</label>
         <input type="number" id="price" v-model="price" />
       </div>
   
-      <button @click="submit">Submit</button>
+      <button @click="submit">Oppdater annonse</button>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </template>
@@ -244,7 +245,7 @@ async handleImages() {
   const totalImages = files.length + this.images.length;
 
   if (totalImages > 10) {
-    alert("You can only upload a maximum of 10 images.");
+    alert("Du kan kun laste opp maksimalt 10 bilder");
     return;
   }
 
@@ -292,7 +293,7 @@ async handleLocation(event) {
 },
 async submit() {
   if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
-  this.errorMessage = "Please fill in all required fields";
+  this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
   return;
 }
 

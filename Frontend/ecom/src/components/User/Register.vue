@@ -40,21 +40,24 @@ import axios, { Axios } from 'axios';
 export default{
 data(){
     return{
-        username: 'karofm',
-        password: 'pw',
-        email: 'karofm@ntnu.no',
-        firstName: 'Karo',
-        lastName: 'Mahmoud',
+        username: '',
+        password: '',
+        email: '',
+        firstName: '',
+        lastName: '',
         error: '',
         access: '',
         role: 'NORMAL_USER'
-
     }
 },methods: {
     changeRoute(string){
         this.$router.push({name:string})
     },
     async register(){
+        if (!this.email || !this.username || !this.password || !this.firstName || !this.lastName) {
+            this.error = 'Alle feltene må være utfylt';
+            return;
+        }
         const user = {
             username: this.username,
             password: this.password,
