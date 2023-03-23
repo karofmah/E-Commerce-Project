@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/token")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8e474c9d99b00de11c77176c9d49f0a68eb46b3b
 @CrossOrigin
 public class TokenController {
 

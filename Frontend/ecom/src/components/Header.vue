@@ -9,8 +9,8 @@
         <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
       </div>
       <div class="link-pair">
-        <img @click="handleItemClick('Messages')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
-        <a @click="handleItemClick('Messages')" href="">Meldinger</a>
+        <img @click="handleItemClick('Message')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
+        <a @click="handleItemClick('Message')" href="">Meldinger</a>
       </div>
       <div class="link-pair">
         <img @click="changeRoute('UserInfo')" src="../assets/person-fill.svg" class="icon" alt="Log in">
@@ -21,6 +21,10 @@
           <a @click="changeRoute('Login')" href="">Logg inn</a>
         </template>
       </div>
+      <div v-if="tokenStore.loggedInUser && tokenStore.loggedInUser.role === 'ADMINISTRATOR'" class="link-pair">
+      <img @click="changeRoute('admin')" src="../assets/person-fill.svg" class="icon" alt="Admin">
+      <a @click="changeRoute('admin')" href="">Admin</a>
+    </div>
     </div>
   </div>
 </template>

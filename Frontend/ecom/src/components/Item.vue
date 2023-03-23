@@ -8,13 +8,16 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat } from 'ol/proj'; 
 import { Icon, Style } from 'ol/style';
 import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import { useTokenStore } from '../stores/userToken';
+
+import starImg from '../assets/star.svg';
+import starFillImg from '../assets/star-fill.svg';
 
 const tokenStore = useTokenStore()
 const route = useRoute();
@@ -24,7 +27,7 @@ const itemId = ref(route.params.id);
 
 let item = ref({});
 
-async function getItemsById(id) {
+async function getItemById(id) {
   item.value = await axios.get(`http://localhost:9090/api/items/${id}`).then(res => res.data);
   console.log('Hello' + item.value.seller.email)
 }
@@ -39,6 +42,20 @@ const isUserSeller = computed(() => {
   }
 });
 
+const star = ref(starImg);
+const starFill = ref(starFillImg);
+let favoriteBool = ref(false)
+function getFavorite() {
+  favoriteBool.value = (!favoriteBool.value)
+  const favIcon = document.querySelector("#favIcon");
+  if (favoriteBool.value) {
+    //AddFavorite
+    favIcon.classList.add("star-spin");
+  }else{
+    //RemoveFavorite
+    favIcon.classList.remove("star-spin");
+  }
+}
 
 function goToEditItem() {
   router.push({ name: 'UpdateItem', params: { id: itemId.value } });
@@ -84,11 +101,11 @@ function descOrSpec(key) {
 
 watch(route, async (newRoute) => {
   itemId.value = newRoute.params.id;
-  await getItemsById(itemId.value);
+  await getItemById(itemId.value);
 });
 
 onMounted(async () => {
-  await getItemsById(itemId.value);
+  await getItemById(itemId.value);
   const map = new Map({
     target: 'map-container',
     layers: [
@@ -143,30 +160,37 @@ onMounted(async () => {
         <div>
           <h1>{{ item.briefDescription }}</h1>
           <h2>{{ item.price }}</h2>
+          <h3 v-if="item.seller">Seller: {{ item.seller.firstName }} {{ item.seller.lastName }}</h3>
         </div>
+        <br>
         <button v-if="isUserSeller" @click="goToEditItem">Endre annonse</button>
+        <br>
         <button v-if="isUserSeller" @click="deleteItem">Slett annonse</button>
+        <button v-else>Chat <img src="../assets/chat-dots-fill.svg" alt=""></button>
         <button v-else>Legg i handlekurv</button>
+    </div>
+
+    <img :src="favoriteBool ? starFill : star" id="favIcon" alt="favIcon" @click="getFavorite()">
+
+    <div class="info">
+        <nav>
+            <a href="#0" @click="descOrSpec(0)">Description</a>
+            <a href="#0" @click="descOrSpec(1)">Spesifications</a>
+        </nav>
+        <br>
+        <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
+        <h3 :hidden="descOrSpecBool" v-if="item.category">Category: {{ item.category.categoryName }}</h3>
     </div>
 
     <div class="map">
         <div id="map-container" class="map-container"></div>
     </div>
 
-    <div class="info">
-        <nav>
-            <a href="#0" @click="descOrSpec(0)">Description</a>
-            <a href="#0" @click="descOrSpec(1)">Spesification</a>
-        </nav>
-        <br>
-        <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
-        <h3 :hidden="descOrSpecBool"></h3>
-    </div>
+    
   </div>
 </template>
 
 <style scoped>
-
     .map-container {
         width: 80%;
         height: 100%;
@@ -203,6 +227,33 @@ onMounted(async () => {
         width: fit-content;
         flex: 1;
         max-height: 30%;
+    }
+
+    #favIcon{
+      position: absolute;
+      top: 1em;
+      right: -10em;
+      height: 2em;
+      cursor: pointer;
+    }
+
+    .star-spin{
+      animation: starSpin .6s linear;
+    }
+
+    @keyframes starSpin{
+      0%{
+        scale: 1;
+        rotate: 0deg;
+      }
+      50%{
+        scale: 1.3;
+        rotate: 180deg;
+      }
+      100%{
+        scale: 1;
+        rotate: 360deg;
+      }
     }
 
     .map{

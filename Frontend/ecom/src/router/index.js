@@ -9,6 +9,7 @@ import CartView from '../views/CartView.vue';
 import UserView from '../views/UserView.vue';
 import UpdateItemView from '../views/UpdateItemView.vue';
 import MessageView from '../views/MessageView.vue';
+import AdminView from '../views/AdminView.vue'
 import { useTokenStore } from '../stores/userToken';
 import axios from 'axios';
 
@@ -89,6 +90,27 @@ const routes = [
         }
       } catch (error) {
         console.error('Error checking item ownership:', error);
+        next({ name: 'Home' });
+      }
+    },
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView,
+    beforeEnter: async (to, from, next) => {
+      const tokenStore = useTokenStore();
+  
+      if (!tokenStore.loggedInUser) {
+        next({ name: 'Home' });
+        return;
+      }
+  
+      const loggedInUserRole = tokenStore.loggedInUser.role;
+  
+      if (loggedInUserRole === 'ADMINISTRATOR') {
+        next();
+      } else {
         next({ name: 'Home' });
       }
     },

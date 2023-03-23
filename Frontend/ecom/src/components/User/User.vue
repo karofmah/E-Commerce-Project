@@ -7,7 +7,7 @@ import axios from 'axios';
 const tokenStore = useTokenStore()
 let router = useRouter();
 
-let favorites = ref([1,2,3,4,5,6,7,8,9,10]);
+let favorites = ref([]);
 let myItems = ref([]);
 let favOrMyBool = ref(true);
 
@@ -23,6 +23,29 @@ async function getMyItems() {
 
   myItems.value = await axios.get("http://localhost:9090/api/items?email="+ userEmail,config).then(res => res.data);
   console.log(myItems.value)
+}
+
+async function getMyFavorites(){
+    const userEmail = tokenStore.loggedInUser.email;
+
+    const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + tokenStore.jwtToken,
+    },
+  };
+
+  const user = {
+            username: tokenStore.loggedInUser.username,
+            password: tokenStore.loggedInUser.password,
+            email: tokenStore.loggedInUser.email,
+            firstName: tokenStore.loggedInUser.firstName,
+            lastName: tokenStore.loggedInUser.lastName,
+            role: tokenStore.loggedInUser.role
+        }
+
+  favorites.value = await axios.get("http://localhost:9090/api/bookmark/get")
+
 }
 
 function favOrMy(key) {
@@ -57,6 +80,7 @@ const itemsToDisplay = computed(() => {
 
 onMounted(async () => {
   await getMyItems();
+  await getMyFavorites();
 });
 </script>
 
@@ -83,8 +107,12 @@ onMounted(async () => {
                 <a href="#0" @click="favOrMy(1)">My Items</a>
             </nav>
             <div class="content">
-                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in itemsToDisplay" :key="favorite">
-                    <div class="item" @click="handleItemClick(favorite)">{{ favorite }}</div>
+                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
+                <div class="item" @click="handleItemClick(item.id)">
+                    <img :src="item.images?.[0]" alt="Item image" />
+                    <h3>{{ item.briefDescription }}</h3>
+                    <h4>{{ item.price }}</h4>
+                </div>
                 </div>
                 <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
                 <div class="item" @click="handleItemClick(item.id)">

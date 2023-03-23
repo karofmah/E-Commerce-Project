@@ -1,122 +1,15 @@
 <script setup>
-import { ref, computed, onUpdated, nextTick } from 'vue'
+import { ref, computed, onUpdated, nextTick, onMounted } from 'vue'
+import axios from 'axios';
+import { useTokenStore } from "../stores/userToken";
 
-let contacts = ref([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+let contacts = ref([])
 let currentChat = ref(0)
 let chat = ref([])
 let chatInput = ref("")
+const tokenStore = useTokenStore();
 
-chat.value = [
-  [
-    ['Hello', 0],
-    ['Hi', 1],
-    ["I'm interested in your product.", 0],
-    ['Great! What would you like to know?', 1],
-    ["What's the price?", 0],
-    ["It's non-negotiable.", 1]
-  ],
-  [
-    ['Hi there!', 1],
-    ['Hello!', 0],
-    ['I saw your product listing online.', 1],
-    ['Yes, how can I help you?', 0],
-    ['Is it still available?', 1],
-    ['Yes, it is.', 0]
-  ],
-  [
-    ['Hey!', 0],
-    ['Hello!', 1],
-    ['About your product, can you tell me more?', 0],
-    ["Sure! It's a high-quality item with great features.", 1],
-    ['How long is the warranty?', 0],
-    ['It comes with a 2-year warranty. Which for this product is worthwhile', 1]
-  ],
-  [
-    ['Hello there', 1],
-    ['Hi', 0],
-    ['I saw your advertisement.', 1],
-    ['Great! Do you have any questions?', 0],
-    ['Can you explain the product features?', 1],
-    ['Certainly! It has a powerful processor and a long-lasting battery.', 0],
-    ['What about the camera?', 1],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-    ['It has a 12MP camera.', 0],
-  ],
-  [
-    ['Hello', 0],
-    ['Hi', 1],
-    ['I found your product online.', 0],
-    ['Awesome! How can I help you?', 1],
-    ['Is it compatible with other devices?', 0],
-    ['Yes, it is compatible with a wide range of devices.', 1]
-  ],
-  [
-    ['Hey', 1],
-    ['Hello', 0],
-    ["I'm looking for more information about your product.", 1],
-    ["Of course! It's an excellent choice for your needs.", 0],
-    ['What are the dimensions?', 1],
-    ['It measures 5.5 x 3.5 x 2 inches.', 0]
-  ],
-  [
-    ['Hi', 0],
-    ['Hello', 1],
-    ['Can I get a discount on your product?', 0],
-    ['Sorry, the price is non-negotiable.', 1]
-  ],
-  [
-    ['Hello', 1],
-    ['Hi', 0],
-    ["I'd like to know more about your product.", 1],
-    ["Sure, it's a top-of-the-line device with great performance.", 0],
-    ["What's the storage capacity?", 1],
-    ['It comes with 128GB of storage.', 0],
-    ['Is it expandable?', 1],
-    ['Yes, you can expand it up to 512GB with a microSD card. Which is enough storage', 0]
-  ],
-  [
-    ['Hey', 0],
-    ['Hello', 1],
-    ['I have a question about your product.', 0],
-    ["Sure, what's your question?", 1],
-    ['Is there any damage on it. The picture is abit unclear', 0],
-    ['No there is no damage', 1],
-    ['You are free to check it out before buying', 1],
-    ['Thanks i will do that', 0]
-  ],
-  [
-    ['Hey', 0],
-    ['Hello', 1],
-    ['I was wondering if you could sell me your product for a discount f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f ', 0],
-    ["I willing to let go of it for 250", 1],
-    ['How about 230', 0],
-    ['240 is the lowest i will go', 1],
-    ['Any more and i might as well give it to you for free', 1],
-    ['I will take it for 240', 0]
-  ]
-]
+
 
 function openChat(contactValue){
     const index = contacts.value.findIndex(c => c === contactValue)
@@ -137,12 +30,28 @@ const filteredContacts = computed(() => {
 })
 
 function getLastMessage(contact){
-	let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
-	return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
+	//let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
+	//return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
+  return "last message";
 }
 
-function addChat(input) {
+async function addChat(input) {
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
+
 	if (input != "") {
+    let message = {
+      "toEmail": contacts.value[currentChat.value].email,
+      "fromEmail": tokenStore.loggedInUser.email,
+      "messageContent": input
+    } 
+    await axios.post("http://localhost:9090/api/messages/sendMessage", message,config)
+
 		chat.value[currentChat.value].push([input, 0])
 		chatInput.value = ""
 		scrollToBottom()
@@ -160,9 +69,75 @@ function scrollToBottom() {
   });
 }
 
+async function getContacts() {
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
+
+  contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts",config)).data
+
+  console.log(contacts.value)
+}
+
+async function getMessages() {
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
+  
+  console.log("Getting messages...")
+  console.log(contacts.value.length)
+
+  chat.value = []
+  for (let i = 0; i < contacts.value.length; i++) {
+
+    console.log(i)
+
+    chat.value.push([])
+    console.log('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
+    const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
+
+
+    console.log(response.data)
+    let tempMessages = response.data
+    
+    for (const message in tempMessages) {
+  
+      let content = tempMessages[message].messageContent
+      let sender = 1
+      if (tempMessages[message].fromEmail === tokenStore.loggedInUser.email) {
+        sender = 0
+      }
+  
+      console.log(content, sender)
+  
+      chat.value[i].push([content, sender])
+    }
+  }
+}
+
 onUpdated(() => {
 	scrollToBottom()
 })
+
+onMounted(() => {
+  initialize()
+})
+
+async function initialize() {
+    await getContacts()
+    await getMessages()
+
+    console.log(chat.value)
+}
+
 </script>
 
 <template>
@@ -178,7 +153,7 @@ onUpdated(() => {
         <div class="contact" v-for="contact in filteredContacts" @click="openChat(contact)">
             <img src="../assets/person-fill.svg" alt="Person img">
             <div>
-                <h2>Contact{{ contact }} name</h2>
+                <h2> {{ contact.firstName + " " + contact.lastName }} </h2>
                 <h3>{{ getLastMessage(contact) }}</h3>
             </div>
         </div>
@@ -188,7 +163,7 @@ onUpdated(() => {
     <div class="chat">
       <div class="header">
         <img src="../assets/person-fill.svg" alt="Person img" />
-        <h1>Contact{{ currentChat }} name</h1>
+        <h1 v-if="contacts[currentChat]"> {{ contacts[currentChat].firstName + " " + contacts[currentChat].lastName }} </h1>
       </div>
       <hr />
       <div class="chatInstances">

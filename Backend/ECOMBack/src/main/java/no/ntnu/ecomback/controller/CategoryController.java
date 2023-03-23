@@ -5,6 +5,7 @@ import no.ntnu.ecomback.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class CategoryController {
     }
 
     @PostMapping("/addCategory")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
         try {
             Category _category = categoryService.addCategory(category);
@@ -42,6 +44,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/deleteCategory/{categoryName}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Category> deleteCategory(@PathVariable("categoryName") String categoryName) {
         try {
             if (categoryService.deleteCategory(categoryName)) {

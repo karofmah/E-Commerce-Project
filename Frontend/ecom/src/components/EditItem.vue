@@ -92,7 +92,8 @@ export default {
       marker: null,
       markerLayer: null,
       locationString: "",
-      categories: []
+      categories: [],
+      idOfItem: null
     };
   },
   setup() {
@@ -163,6 +164,7 @@ export default {
 async loadItemData() {
   try {
     const itemId = this.$route.params.id;
+    this.idOfItem = itemId;
     const response = await axios.get(`http://localhost:9090/api/items/${itemId}`);
 
     if (response.status === 200) {
@@ -300,6 +302,7 @@ async submit() {
 
   const user = this.tokenStore.loggedInUser;
   const updatedItem = {
+    id : this.idOfItem,
     seller:{
       email: user.email,
       firstName: user.firstName,
