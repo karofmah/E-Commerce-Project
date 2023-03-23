@@ -36,13 +36,21 @@ function getLastMessage(contact){
 }
 
 async function addChat(input) {
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
+
 	if (input != "") {
     let message = {
       "toEmail": contacts.value[currentChat.value].email,
       "fromEmail": tokenStore.loggedInUser.email,
       "messageContent": input
     } 
-    await axios.post("http://localhost:9090/api/messages/sendMessage", message)
+    await axios.post("http://localhost:9090/api/messages/sendMessage", message,config)
 
 		chat.value[currentChat.value].push([input, 0])
 		chatInput.value = ""
@@ -62,12 +70,27 @@ function scrollToBottom() {
 }
 
 async function getContacts() {
-  contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts")).data
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
+
+  contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts",config)).data
 
   console.log(contacts.value)
 }
 
 async function getMessages() {
+
+  const config = {
+        headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+        },
+    };
   
   console.log("Getting messages...")
   console.log(contacts.value.length)
@@ -78,8 +101,8 @@ async function getMessages() {
     console.log(i)
 
     chat.value.push([])
-    console.log('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email);
-    const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email);
+    console.log('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
+    const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
 
 
     console.log(response.data)
@@ -140,7 +163,7 @@ async function initialize() {
     <div class="chat">
       <div class="header">
         <img src="../assets/person-fill.svg" alt="Person img" />
-        <h1> {{ /*contacts[currentChat].firstName + " " + contacts[currentChat].lastName*/ currentChat }} </h1>
+        <h1 v-if="contacts[currentChat]"> {{ contacts[currentChat].firstName + " " + contacts[currentChat].lastName }} </h1>
       </div>
       <hr />
       <div class="chatInstances">

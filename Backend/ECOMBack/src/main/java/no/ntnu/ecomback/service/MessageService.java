@@ -84,7 +84,13 @@ public class MessageService {
 
         List<User> contacts = new ArrayList<>();
         try {
-            List<Message> contactMessages = messageRepository.findByFromEmail(email);
+            List<Message> contactMessages = new ArrayList<>();
+            contactMessages.addAll(messageRepository.findByToEmail(email));
+            for (Message message : contactMessages) {
+                contacts.add(userService.getUser(message.getFromEmail()).get());
+            }
+            contactMessages.clear();
+            contactMessages.addAll(messageRepository.findByFromEmail(email));
             for (Message message : contactMessages) {
                 contacts.add(userService.getUser(message.getToEmail()).get());
             }

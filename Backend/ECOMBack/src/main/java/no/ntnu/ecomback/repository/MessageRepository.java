@@ -12,4 +12,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
                 String toEmail1, String fromEmail1, String toEmail2, String fromEmail2);
 
     List<Message> findByFromEmail(String fromEmail);
+    List<Message> findByToEmail(String fromEmail);
 }

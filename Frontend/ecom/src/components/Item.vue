@@ -179,7 +179,7 @@ onMounted(async () => {
         </nav>
         <br>
         <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
-        <h3 :hidden="descOrSpecBool">Category: {{ item.category.categoryName }}</h3>
+        <h3 :hidden="descOrSpecBool" v-if="item.category">Category: {{ item.category.categoryName }}</h3>
     </div>
 
     <div class="map">
