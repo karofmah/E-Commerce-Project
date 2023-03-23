@@ -112,4 +112,13 @@ public class UserService {
             return null;
         }
     }
+
+    public boolean deleteUser(String email) {
+        try {
+            userRepository.deleteById(email);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
