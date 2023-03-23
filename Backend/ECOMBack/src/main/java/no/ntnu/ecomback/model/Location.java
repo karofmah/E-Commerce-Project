@@ -1,10 +1,12 @@
+/**
+ * The Location class is used to represent the exact location of an Item
+ */
+
 package no.ntnu.ecomback.model;
 
 import jakarta.persistence.Embeddable;
 
-/**
- * The Location class is used to represent the exact location of an Item
- */
+
 @Embeddable
 public class Location {
     private double latitude;

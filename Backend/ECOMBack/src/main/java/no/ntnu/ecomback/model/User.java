@@ -1,10 +1,12 @@
+
+/**
+ * The User class represents a user of the e-commerce application.
+ */
 package no.ntnu.ecomback.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-/**
- * The User class represents a user of the e-commerce application.
- */
+
 @Entity
 @Table
 public class User {
