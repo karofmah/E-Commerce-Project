@@ -28,7 +28,6 @@ public class ItemController {
 
     @PostMapping("/add")
     public Item addItem(@RequestBody Item item){
-        System.out.println(item);
         return itemService.addItem(item);
     }
 

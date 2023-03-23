@@ -26,6 +26,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/items/{id}").permitAll()
                 .requestMatchers("/api/categories/getCategories").permitAll()
                 .requestMatchers("/api/items/get/keyword").permitAll()
+                .requestMatchers("/api/items/add").permitAll()
+
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

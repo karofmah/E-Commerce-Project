@@ -38,7 +38,10 @@ public class ItemService {
     public Item addItem(Item item){
         try {
             _logger.info("Adding item");
-            return itemRepository.save(item);
+            item=itemRepository.save(item);
+            System.out.println("Addde item: " + item);
+            return item;
+
         } catch (Exception e) {
             _logger.warn("Error occurred while adding item: " + e.getMessage());
             return null;
