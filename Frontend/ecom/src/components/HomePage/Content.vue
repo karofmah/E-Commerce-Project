@@ -42,19 +42,20 @@ async function getItemsByLocation() {
 
   // loop through each item and reverse geocode its latitude and longitude values using the OpenStreetMap Nominatim API
   for (const item of items.value) {
-    const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${item.location.latitude}&lon=${item.location.longitude}&format=json`);
+    const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${Number(item.location.latitude).toString()}&lon=${Number(item.location.longitude).toString()}&format=json`);
     if (response.data.display_name) {
       item.locationString = response.data.display_name;
     } else {
-      item.locationString = `(${item.location.latitude.toFixed(6)}, ${item.location.longitude.toFixed(6)})`;
+      item.locationString = `(${Number(item.location.latitude).toFixed(6)}, ${Number(item.location.longitude).toFixed(6)})`;
     }
   }
 
-  const keyword = getKeyword().toLowerCase();
-  if (keyword !== '') {
-    items.value = items.value.filter(item => item.locationString.toLowerCase().includes(keyword));
+  const keyword = getKeyword();
+  if (typeof keyword === 'string' && keyword.toLowerCase() !== '') {
+    items.value = items.value.filter(item => item.locationString.toLowerCase().includes(keyword.toLowerCase()));
   }
 }
+
 
 function handleItemClick(linkItem) {
   router.push({ name: 'Item', params: { id: linkItem.id } });
