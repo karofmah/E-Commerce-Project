@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/items/get/category").permitAll()
                 .requestMatchers("/api/items/{id}").permitAll()
                 .requestMatchers("/api/categories/getCategories").permitAll()
-
+                .requestMatchers("/api/bookmark/get").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
