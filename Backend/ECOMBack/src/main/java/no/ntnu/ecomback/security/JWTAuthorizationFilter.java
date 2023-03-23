@@ -49,6 +49,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         final String username = validateTokenAndGetUserId(token);
         if (username == null) {
             // validation failed or token expired
+            System.out.println("fittefaen");
             filterChain.doFilter(request, response);
             return;
         }

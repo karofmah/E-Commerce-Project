@@ -1,5 +1,5 @@
 package no.ntnu.ecomback.security;
-
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,9 +10,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
-    // inject SecurityFilterChain and tell that all requests are authenticated
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -26,11 +26,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/items/{id}").permitAll()
                 .requestMatchers("/api/categories/getCategories").permitAll()
                 .requestMatchers("/api/items/get/keyword").permitAll()
+                .requestMatchers("/api/items/add").authenticated() // Require authentication for the addItem endpoint
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 }
+

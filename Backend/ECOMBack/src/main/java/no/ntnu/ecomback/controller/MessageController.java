@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@EnableAutoConfiguration
 @RequestMapping("/api/messages")
 @CrossOrigin("http://localhost:5173/")
 public class MessageController {
@@ -25,6 +25,7 @@ public class MessageController {
     }
 
     @PostMapping("/sendMessage")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Message> sendMessage(@RequestBody Message message){
         try {
             Message _message = messageService.addMessage(message);
@@ -37,6 +38,7 @@ public class MessageController {
 
 
     @GetMapping("/getAllMessages")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Message>> getItems() {
         try {
             List<Message> messages = messageService.getAllMessages();
@@ -48,6 +50,7 @@ public class MessageController {
     }
 
     @GetMapping("/{fromEmail}/{toEmail}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Message>> getMessagesByToEmailAndFromEmail(
             @PathVariable String fromEmail, @PathVariable String toEmail){
 
@@ -66,6 +69,7 @@ public class MessageController {
 
 
     @GetMapping("/{email}/contacts")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getContacts(@PathVariable String email){
         try {
 

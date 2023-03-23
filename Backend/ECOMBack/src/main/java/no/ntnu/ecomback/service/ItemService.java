@@ -3,7 +3,6 @@ package no.ntnu.ecomback.service;
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
-import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.slf4j.Logger;

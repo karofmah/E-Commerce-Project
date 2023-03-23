@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.Optional;
 
 
 @RestController
-@EnableAutoConfiguration
 @RequestMapping("/api/users")
 @CrossOrigin("http://localhost:5173/")
 public class UserController {
@@ -40,11 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('USER')")
     public User updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
         return userService.updateUser(updateUserRequest);
     }
 
     @GetMapping("/getAllUsers")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             List<User> users = userService.getAllUsers();
@@ -56,6 +58,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser/{email}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("email") String email) {
         try {
             userService.deleteUser(email);

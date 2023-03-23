@@ -1,11 +1,13 @@
 package no.ntnu.ecomback.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
+
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
 import no.ntnu.ecomback.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
 @RequestMapping("/api/items")
 @CrossOrigin("http://localhost:5173/")
 public class ItemController {
@@ -27,16 +28,19 @@ public class ItemController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('USER')") // Add this line
     public Item addItem(@RequestBody Item item){
         System.out.println(item);
         return itemService.addItem(item);
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('USER')")
     public Item updateItem(@RequestBody UpdateItemRequest updateItemRequest){
         return itemService.updateItem(updateItemRequest);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> deleteItem(@PathVariable long id){
         return itemService.deleteItem(id);
     }
@@ -50,6 +54,7 @@ public class ItemController {
         }
     }
     @GetMapping("")
+    @PreAuthorize("hasRole('USER')")
     public List<Item> getItemsByUserEmail(@RequestParam String email){
         return itemService.getItemsByUserEmail(email);
     }
