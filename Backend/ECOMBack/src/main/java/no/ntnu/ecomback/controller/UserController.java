@@ -15,7 +15,6 @@ import java.util.Optional;
 
 
 @RestController
-@EnableAutoConfiguration
 @RequestMapping("/api/users")
 @CrossOrigin("http://localhost:5173/")
 public class UserController {

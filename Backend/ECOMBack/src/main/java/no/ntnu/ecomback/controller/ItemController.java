@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
+
 @RequestMapping("/api/items")
 @CrossOrigin("http://localhost:5173/")
 public class ItemController {

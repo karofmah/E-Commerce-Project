@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -68,7 +69,6 @@ public class ItemControllerTest {
         mockItems.add(new Item(user1, "Description 3", "Full description 3",new Category("Category 3"),location ,200));
 
 
-        // Set up mock behavior for ItemRepository
         when(itemRepository.findAll()).thenReturn(mockItems);
     }
 
@@ -90,6 +90,7 @@ public class ItemControllerTest {
         //might add assert fields
     }
     @Test
+    @WithMockUser(username = "ADMIN")
     @DisplayName("Testing the endpoint for adding an item")
     public void testAddItem() throws Exception {
         User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
