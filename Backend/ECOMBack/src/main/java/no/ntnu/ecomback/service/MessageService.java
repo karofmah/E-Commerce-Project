@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -32,7 +33,7 @@ public class MessageService {
         try {
             return messageRepository.save(message);
         } catch (Exception e) {
-            System.out.println("Error occurred while adding item: " + e.getMessage());
+            System.out.println("Error occurred while adding message: " + e.getMessage());
             return null;
         }
     }
@@ -44,7 +45,7 @@ public class MessageService {
             myMessages = messageRepository.findAll();
 
         } catch (Exception e) {
-            System.out.println("Error getting items: " + e.getMessage());
+            System.out.println("Error getting message: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
@@ -58,7 +59,7 @@ public class MessageService {
             myMessages = messageRepository.findByToEmailAndFromEmailOrderByTimestamp(toEmail, fromEmail);
 
         } catch (Exception e) {
-            System.out.println("Error getting items: " + e.getMessage());
+            System.out.println("Error getting messages: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
@@ -72,29 +73,26 @@ public class MessageService {
                     .findByToEmailAndFromEmailOrToEmailAndFromEmailOrderByTimestamp(
                             email1, email2, email2, email1);
         } catch (Exception e) {
-            System.out.println("Error getting items: " + e.getMessage());
+            System.out.println("Error getting messages: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
     }
 
 
-    public List<Optional<User>> getContacts(String email){
+    public List<User> getContacts(String email){
 
-        List<Optional<User>> contacts = new ArrayList<>();
+        List<User> contacts = new ArrayList<>();
         try {
-            System.out.println("Hello");
             List<Message> contactMessages = messageRepository.findByFromEmail(email);
-            System.out.println(contactMessages.toString());
             for (Message message : contactMessages) {
-                contacts.add(userService.getUser(message.getToEmail()));
-                System.out.println(userService.getUser(message.getToEmail()));
+                contacts.add(userService.getUser(message.getToEmail()).get());
             }
+            return contacts.stream().distinct().collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println("Error getting items: " + e.getMessage());
-            contacts = null;
+            System.out.println("Error getting contacts: " + e.getMessage());
+            return null;
         }
-        return contacts;
     }
 
 

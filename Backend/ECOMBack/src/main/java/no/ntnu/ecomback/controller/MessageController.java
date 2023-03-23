@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @EnableAutoConfiguration
@@ -26,9 +25,14 @@ public class MessageController {
     }
 
     @PostMapping("/sendMessage")
-    public Message sendMessage(@RequestBody Message message){
-        System.out.println(message);
-        return messageService.addMessage(message);
+    public ResponseEntity<Message> sendMessage(@RequestBody Message message){
+        try {
+            Message _message = messageService.addMessage(message);
+
+            return new ResponseEntity<>(_message, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -44,18 +48,37 @@ public class MessageController {
     }
 
     @GetMapping("/{fromEmail}/{toEmail}")
-    public List<Message> getMessagesByToEmailAndFromEmail(@PathVariable String fromEmail,
-                                                       @PathVariable String toEmail){
-        System.out.println(fromEmail);
-        System.out.println(toEmail);
-        return messageService.getMessagesInBothDirections(toEmail, fromEmail);
+    public ResponseEntity<List<Message>> getMessagesByToEmailAndFromEmail(
+            @PathVariable String fromEmail, @PathVariable String toEmail){
+
+        try {
+            List<Message> messages = messageService.getMessagesInBothDirections(toEmail, fromEmail);
+
+            if (messages.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(messages, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @GetMapping("/{email}/contacts")
-    public List<Optional<User>> getContacts(@PathVariable String email){
-        System.out.println(email);
-        return messageService.getContacts(email);
+    public ResponseEntity<List<User>> getContacts(@PathVariable String email){
+        try {
+
+            List<User> contacts = messageService.getContacts(email);
+
+            if (contacts.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(contacts, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

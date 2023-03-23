@@ -29,7 +29,7 @@ public class Message {
     }
 
     public Message() {
-
+        this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     public int getMessageId() {
