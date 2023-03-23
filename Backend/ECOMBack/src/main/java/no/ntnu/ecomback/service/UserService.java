@@ -39,8 +39,7 @@ public class UserService {
                 }
             }
             _logger.info("User registered successfully");
-            User savedUser = userRepository.save(user);
-            return savedUser;
+            return userRepository.save(user);
         } catch (Exception e) {
             _logger.info("Error occurred while registering user: " + e.getMessage());
             return null;
@@ -113,12 +112,13 @@ public class UserService {
         }
     }
 
-    public boolean deleteUser(String email) {
+    public ResponseEntity<HttpStatus> deleteUser(String email) {
         try {
             userRepository.deleteById(email);
-            return true;
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            return false;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 }

@@ -6,6 +6,8 @@ import no.ntnu.ecomback.repository.BookmarkRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,14 @@ public class BookmarkService {
         }catch (Exception e){
             _logger.warn("Error while getting bookmarks: " + e.getMessage());
             return null;
+        }
+    }
+    public ResponseEntity<HttpStatus> deleteItem(long id) {
+        try {
+            bookmarkRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

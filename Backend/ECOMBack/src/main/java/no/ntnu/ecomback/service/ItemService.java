@@ -38,7 +38,6 @@ public class ItemService {
         try {
             _logger.info("Adding item");
             item=itemRepository.save(item);
-            System.out.println("Addde item: " + item);
             return item;
 
         } catch (Exception e) {
@@ -75,7 +74,7 @@ public class ItemService {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch(Exception e){
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+        }
     }
     public List<Item> getItems(){
         try {
