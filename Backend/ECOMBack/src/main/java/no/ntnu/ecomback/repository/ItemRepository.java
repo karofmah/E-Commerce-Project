@@ -12,8 +12,8 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     @Override
     <S extends Item> S save(S Item);
 
-    @Query("SELECT i FROM Item i WHERE i.briefDescription LIKE %:keyword% OR i.fullDescription LIKE %:keyword% OR i.category.categoryName LIKE %:keyword%")
-    List<Item> findByKeyword(String keyword);
+    List<Item> findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContaining(String briefKeyword, String fullKeyword,String categoryKeyword);
+
     List<Item> findByCategory(Category category);
     @Override
     <S extends Item> List<S> findAll(Example<S> example);
