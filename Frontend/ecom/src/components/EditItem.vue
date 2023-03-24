@@ -141,10 +141,11 @@ export default {
     },
 
     async reverseGeocode(latitude, longitude) {
+  const apiKey = 'c91bf8238fff45d4beeb016ab09c1b7b';
   const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
+    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
       latitude
-    )}&lon=${encodeURIComponent(longitude)}`
+    )},${encodeURIComponent(longitude)}&key=${apiKey}`
   );
 
   if (!response.ok) {
@@ -153,12 +154,12 @@ export default {
   }
 
   const data = await response.json();
-  if (!data || !data.display_name) {
+  if (!data || !data.results || !data.results[0] || !data.results[0].formatted) {
     console.error("No location data found");
     return;
   }
 
-  this.locationString = data.display_name;
+  this.locationString = data.results[0].formatted;
 },
 async loadItemData() {
   try {
@@ -266,12 +267,13 @@ async handleImages() {
 },
 async handleLocation(event) {
   const location = event.target.value;
+  const apiKey = 'c91bf8238fff45d4beeb016ab09c1b7b';
 
-  // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
+  // Use OpenCageData API to get latitude and longitude for the location
   const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
       location
-    )}&limit=1`
+    )}&key=${apiKey}&limit=1`
   );
 
   if (!response.ok) {
@@ -280,18 +282,19 @@ async handleLocation(event) {
   }
 
   const data = await response.json();
-  if (!data || data.length === 0) {
+  if (!data || data.results.length === 0) {
     console.error("No location data found");
     return;
   }
 
-  const { lat, lon } = data[0];
+  const { lat, lng } = data.results[0].geometry;
   this.latitude = parseFloat(lat);
-  this.longitude = parseFloat(lon);
+  this.longitude = parseFloat(lng);
 
   // Update the map view and add a marker at the coordinates.
   this.updateMapWithLocation(this.latitude, this.longitude);
 },
+
 async submit() {
   if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
     this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";

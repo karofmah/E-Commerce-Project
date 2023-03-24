@@ -25,27 +25,17 @@ async function getMyItems() {
   console.log(myItems.value)
 }
 
-async function getMyFavorites(){
+async function getMyFavorites() {
+    const config = {
+        headers: {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + tokenStore.jwtToken,
+        },
+    };
+
     const userEmail = tokenStore.loggedInUser.email;
 
-    const config = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: "Bearer " + tokenStore.jwtToken,
-    },
-  };
-
-  const user = {
-            username: tokenStore.loggedInUser.username,
-            password: tokenStore.loggedInUser.password,
-            email: tokenStore.loggedInUser.email,
-            firstName: tokenStore.loggedInUser.firstName,
-            lastName: tokenStore.loggedInUser.lastName,
-            role: tokenStore.loggedInUser.role
-        }
-
-  favorites.value = await axios.get("http://localhost:9090/api/bookmark/get")
-
+    favorites.value = await axios.get("http://localhost:9090/api/bookmark/get?email=" + userEmail, config).then(res => res.data);
 }
 
 function favOrMy(key) {
@@ -68,6 +58,10 @@ function logOut() {
 
 function handleItemClick(itemId) {
   router.push({ name: 'Item', params: { id: itemId } });
+}
+
+function handleFavoriteItemClick(item_id) {
+  router.push({ name: 'ItemFavorite', params: { item_id } });
 }
 
 const itemsToDisplay = computed(() => {
@@ -108,21 +102,24 @@ onMounted(async () => {
             </nav>
             <div class="content">
                 <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
-                    <div class="item" @click="handleItemClick(item.id)">
+                    <div class="item" @click="handleFavoriteItemClick(item.item_id)">
                         <img :src="item.images?.[0]" alt="Item image" />
                         <h3>{{ item.briefDescription }}</h3>
+                        <h4>{{ item.price }}</h4>
                     </div>
                 </div>
                 <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
                     <div class="item" @click="handleItemClick(item.id)">
                         <img :src="item.images?.[0]" alt="Item image" />
                         <h3>{{ item.briefDescription }}</h3>
+                        <h4>{{ item.price }}</h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 
 <style scoped>
