@@ -27,7 +27,6 @@ let items = ref([
   ['Item6', 600, 6],
   ['Item6', 600, 6],
   ['Item6', 600, 6],
-
 ])
 
 let totalPrice = ref(0)
@@ -73,9 +72,10 @@ onMounted(() => {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  align-items: top;
+  align-items: start;
   margin: 3em auto;
   width: 90%;
+  height: fit-content;
 }
 
 .cart,

@@ -108,18 +108,16 @@ onMounted(async () => {
             </nav>
             <div class="content">
                 <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
-                <div class="item" @click="handleItemClick(item.id)">
-                    <img :src="item.images?.[0]" alt="Item image" />
-                    <h3>{{ item.briefDescription }}</h3>
-                    <h4>{{ item.price }}</h4>
-                </div>
+                    <div class="item" @click="handleItemClick(item.id)">
+                        <img :src="item.images?.[0]" alt="Item image" />
+                        <h3>{{ item.briefDescription }}</h3>
+                    </div>
                 </div>
                 <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
-                <div class="item" @click="handleItemClick(item.id)">
-                    <img :src="item.images?.[0]" alt="Item image" />
-                    <h3>{{ item.briefDescription }}</h3>
-                    <h4>{{ item.price }}</h4>
-                </div>
+                    <div class="item" @click="handleItemClick(item.id)">
+                        <img :src="item.images?.[0]" alt="Item image" />
+                        <h3>{{ item.briefDescription }}</h3>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,15 +126,16 @@ onMounted(async () => {
 
 
 <style scoped>
-    .container{
+    .container {
         display: flex;
         flex-flow: row wrap;
+        align-items: start;
         width: 90%;
-        min-height: 33rem;
+        height: fit-content;
         margin: 3em auto;
     }
 
-    .user{
+    .user {
         position: relative;
         display: flex;
         flex-flow: column wrap;
@@ -151,60 +150,8 @@ onMounted(async () => {
         border-radius: 15px;
     }
 
-    .item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-    height: 6em; /* Adjust this value to make the images smaller */
-    width: 6em; /* Adjust this value to make the images smaller */
-    background-color: var(--color-blue);
-    border-radius: 15px;
-    }
-
-    .item img {
-    max-height: 100%;
-    max-width: 100%;
-    }
-
-    .item:hover{
-        cursor: pointer;
-    }
-
-    #userImg{
-        height: 12em;
-        width: 12em;
-        padding: 5px;
-        background-color: var(--blue-complementary);
-        border-radius: 50%;
-        margin: 1em;
-    }
-
-    .userFields{
-        display: flex;
-        flex-flow: column wrap;
-        align-items: start;
-        width: 100%;
-    }
-
-    .userButtons{
-        display: flex;
-        justify-content: space-evenly;
-        width: 60%;
-        margin: 1em;
-    }
-
-    #edit, #logOut{
-        border-radius: 50px;
-    }
-
-    #logOut{
-        background-color: var(--blue-complementary);
-    }
-
-    .contentWrapper{
-        min-height: 30em;
+    .contentWrapper {
+        min-height: 35em;
         min-width: 40em;
         flex: 1;
         /* margin: 0 38em; */
@@ -213,40 +160,91 @@ onMounted(async () => {
         border-radius: 15px;
     }
 
-    nav{
+    .favoritesWrapper,
+    .myItemsWrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 20px 0;
+        padding: 0 .5em;
+    }
+
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-width: calc(33.33% - 20px);
+        background-color: var(--color-blue-light);
+        border-radius: 15px;
+    }
+
+    .item img {
+        width: 170px;
+        height: 170px;
+        border-radius: 15px 15px 0px 0px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .item:hover {
+        cursor: pointer;
+    }
+
+    #userImg {
+        height: 12em;
+        width: 12em;
+        padding: 5px;
+        background-color: var(--blue-complementary);
+        border-radius: 50%;
+        margin: 1em;
+    }
+
+    .userFields {
+        display: flex;
+        flex-flow: column wrap;
+        align-items: start;
+        width: 100%;
+    }
+
+    .userButtons {
+        display: flex;
+        justify-content: space-evenly;
+        width: 60%;
+        margin: 1em;
+    }
+
+    #edit,
+    #logOut {
+        border-radius: 50px;
+    }
+
+    #logOut {
+        background-color: var(--blue-complementary);
+    }
+
+    nav {
         display: flex;
         flex-direction: row;
     }
 
-    .content{
+    .content {
         display: flex;
         flex-flow: row wrap;
         box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2) inset;
         border-radius: 15px;
     }
 
-    .item{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 3px;
-        height: 10em;
-        width: 10em;
-        background-color: var(--color-blue);
-        border-radius: 15px;
-    }
-
-    .favoritesWrapper, .myItemsWrapper{
-        padding-left: 10px;
-    }
-
     hr {
         width: 90%;
     }
 
-    h3{
+    h3 {
         line-height: 3;
     }
+
 
     @media(max-width: 768px){
         .user{
@@ -255,6 +253,18 @@ onMounted(async () => {
         .contentWrapper{
             min-width: 0em;
             margin: 0;
+        }
+
+        .favoritesWrapper,
+        .myItemsWrapper {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item {
+            width: 100%;
+            margin-bottom: 20px;
         }
 
     }

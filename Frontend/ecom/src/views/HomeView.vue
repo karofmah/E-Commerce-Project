@@ -41,6 +41,7 @@ watch(
 <style scoped>
     .container{
       display: flex;
+      align-items: start;
       flex-flow: row wrap;
       padding: 0;
       width: 100%;

@@ -1,17 +1,17 @@
 <template>
-    <div class="new-item">
+    <div class="container">
       <h1>Oppdater annonse</h1>
   
       <div class="existing-images">
         <h2>Eksisterende bilder:</h2>
         <div class="images-container">
             <div v-for="(image, index) in images" :key="index" class="image-wrapper">
-            <img :src="image" alt="Uploaded image" class="uploaded-image" />
-            <img src="@/assets/cross.png" alt="Remove" class="remove-image-btn" @click="deleteImage(index)" />
+              <img :src="image" alt="Uploaded image" class="uploaded-image" />
+              <img src="@/assets/cross.png" alt="Remove" class="remove-image-btn" @click="deleteImage(index)" />
             </div>
-        </div>
-        </div>
-  
+          </div>
+      </div>
+
       <div class="field-container">
         <label for="images">Last opp bilder (maks 10):</label>
         <input type="file" id="images" ref="images" multiple @change="handleImages" />
@@ -43,10 +43,9 @@
       </div>
   
       <div class="field-container">
-        <div class="location-container">
-          <label for="location">Plassering:</label>
-          <input type="text" id="location" v-model="locationString" @change="handleLocation" />
-        </div>
+        <label for="location">Plassering:</label>
+        <input type="text" id="location" v-model="locationString" @change="handleLocation" />
+        <br>
         <div id="map" ref="map" class="map"></div>
       </div>
   
@@ -55,7 +54,7 @@
         <input type="number" id="price" v-model="price" />
       </div>
   
-      <button @click="submit">Oppdater annonse</button>
+      <button @click="submit" id="submit">Oppdater annonse</button>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </template>
@@ -362,43 +361,69 @@ async submit() {
 
 
 <style scoped>
-.map {
-  width: 100%;
-  height: 400px;
-}
+.container{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    height: fit-content;
+    padding: 1em 0;
+  }
 
-.images-container {
-  display: flex;
-  overflow-x: scroll;
-  gap: 10px;
-  padding: 10px;
-  max-width: 100%;
-}
+  .existing-images{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .images-container{
+    justify-content: center;
+    height: 10em;
+    width: 90%;
+    overflow-x: auto;
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    max-width: 100%;
+  }
 
-.image-wrapper {
-  position: relative;
-}
+  .image-wrapper {
+    position: relative;
+  }
 
-.uploaded-image {
-  max-width: 150px;
-  max-height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
+  .field-container{
+    display: flex;
+    flex-flow: column wrap;
+    padding: 1em;
+  }
 
-.remove-image-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 50px;
-  height: 50px;
-}
+  .map{
+    min-width: 60em;
+    background-color: red;
+  }
 
+  .uploaded-image {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
 
+  .remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50px;
+    height: 50px;
+  }
+
+  #submit{
+    margin: 2em;
+  }
 </style>
