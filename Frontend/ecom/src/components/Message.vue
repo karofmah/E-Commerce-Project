@@ -61,16 +61,12 @@ async function addChat(input) {
 function scrollToBottom() {
   nextTick(() => {
     let chatInstances = document.querySelector(".chatInstances");
-    let lastChatInstance = chatInstances.lastElementChild;
       
-    if (lastChatInstance) {
-      lastChatInstance.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
+    chatInstances.scrollTop = chatInstances.scrollHeight;
   });
 }
 
 async function getContacts() {
-
   const config = {
         headers: {
             "Content-type": "application/json",
@@ -79,12 +75,10 @@ async function getContacts() {
     };
 
   contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts",config)).data
-
-  console.log(contacts.value)
 }
 
 async function getMessages() {
-
+  
   const config = {
         headers: {
             "Content-type": "application/json",
@@ -92,20 +86,15 @@ async function getMessages() {
         },
     };
   
-  console.log("Getting messages...")
-  console.log(contacts.value.length)
 
   chat.value = []
   for (let i = 0; i < contacts.value.length; i++) {
 
-    console.log(i)
 
     chat.value.push([])
-    console.log('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
     const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
 
 
-    console.log(response.data)
     let tempMessages = response.data
     
     for (const message in tempMessages) {
@@ -116,7 +105,6 @@ async function getMessages() {
         sender = 0
       }
   
-      console.log(content, sender)
   
       chat.value[i].push([content, sender])
     }
@@ -129,13 +117,17 @@ onUpdated(() => {
 
 onMounted(() => {
   initialize()
+
+  setInterval(() => {
+    getContacts()
+    getMessages()
+  }, 5000);
 })
 
 async function initialize() {
     await getContacts()
     await getMessages()
 
-    console.log(chat.value)
 }
 
 </script>
