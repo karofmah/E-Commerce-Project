@@ -21,18 +21,20 @@ async function refreshToken() {
     if (store.loggedInUser) {
       return await store.getTokenAndSaveInStore(store.loggedInUser.email, store.loggedInUser.password);
     }
-  }, 1000 * 60 * 5);
+  }, 1000 * 5);
 }
 
 
 </script>
 
 <template>
-  <router-view v-slot="{ Component }">
+  <!-- <router-view v-slot="{ Component }">
     <Transition name="fade">
       <component :is="Component" />
     </Transition>
-  </router-view>
+  </router-view> -->
+
+  <RouterView />
 </template>
 
 

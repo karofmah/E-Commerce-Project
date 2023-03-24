@@ -1,3 +1,35 @@
+<style scoped>
+  .wrapper{
+    height: fit-content;
+    margin: 3em;
+  }
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 1em;
+  }
+  label {
+    display: block;
+    text-align: right;
+    width: 150px;
+    margin-right: 10px;
+  }
+  input {
+    width: 100%;
+  }
+  button[type="submit"] {
+    margin-top: 20px;
+    margin-left: 130px;
+  }
+</style>
+
 <template>
   <div class="wrapper">
     <div class="main-container">
@@ -24,9 +56,9 @@
           <input id="currentPassword" type="password" v-model="currentPassword" />
         </div>
 
-        <div>
+        
           <button type="submit">Lagre endringer</button>
-        </div>
+        
       </form>
 
       <br />
