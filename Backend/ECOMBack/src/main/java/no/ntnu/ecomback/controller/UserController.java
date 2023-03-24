@@ -29,8 +29,15 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user){
-        return userService.registerUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        try{
+             User _user=userService.registerUser(user);
+            return new ResponseEntity<>(_user, HttpStatus.CREATED);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
 
@@ -46,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/getAllUsers")
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             List<User> users = userService.getAllUsers();

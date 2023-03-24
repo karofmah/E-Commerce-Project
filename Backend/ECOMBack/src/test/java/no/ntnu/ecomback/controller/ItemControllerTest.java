@@ -1,12 +1,14 @@
-package no.ntnu.ecomback;
+package no.ntnu.ecomback.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.ntnu.ecomback.EcomBackApplication;
 import no.ntnu.ecomback.model.*;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.service.ItemService;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -32,9 +34,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = MOCK, classes=EcomBackApplication.class)
+@SpringBootTest(webEnvironment = MOCK, classes= EcomBackApplication.class)
 public class ItemControllerTest {
 
     @Autowired
@@ -114,7 +116,7 @@ public class ItemControllerTest {
 
     }
     @Test
-    @WithMockUser(username = "ADMIN")
+    @WithMockUser(username = "USER")
     @DisplayName("Testing the endpoint for adding an item as a valid user")
     public void addItemValid() throws Exception {
         User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);

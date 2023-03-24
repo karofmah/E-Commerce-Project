@@ -32,7 +32,6 @@ public class MessageController {
     public ResponseEntity<Message> sendMessage(@RequestBody Message message){
         try {
             Message _message = messageService.addMessage(message);
-
             return new ResponseEntity<>(_message, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -42,7 +41,7 @@ public class MessageController {
 
     @GetMapping("/getAllMessages")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Message>> getItems() {
+    public ResponseEntity<List<Message>> getMessages() {
         try {
             List<Message> messages = messageService.getAllMessages();
 
