@@ -7,6 +7,8 @@ let contacts = ref([])
 let currentChat = ref(0)
 let chat = ref([])
 let chatInput = ref("")
+let currentChatLength = 0;
+let currentScrollLength = 0;
 const tokenStore = useTokenStore();
 
 
@@ -54,15 +56,19 @@ async function addChat(input) {
 
 		chat.value[currentChat.value].push([input, 0])
 		chatInput.value = ""
+    currentChatLength++
 		scrollToBottom()
 	}
 }
 
 function scrollToBottom() {
   nextTick(() => {
-    let chatInstances = document.querySelector(".chatInstances");
-      
-    chatInstances.scrollTop = chatInstances.scrollHeight;
+    if (currentChatLength != currentScrollLength) {
+      let chatInstances = document.querySelector(".chatInstances");
+        
+      chatInstances.scrollTop = chatInstances.scrollHeight;
+      currentScrollLength++
+    }
   });
 }
 
@@ -87,11 +93,13 @@ async function getMessages() {
     };
   
 
-  chat.value = []
+  //chat.value = []
+  let newChat = ref([])
   for (let i = 0; i < contacts.value.length; i++) {
 
 
-    chat.value.push([])
+    //chat.value.push([])
+    newChat.value.push([])
     const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
 
 
@@ -106,9 +114,13 @@ async function getMessages() {
       }
   
   
-      chat.value[i].push([content, sender])
+      //chat.value[i].push([content, sender])
+      newChat.value[i].push([content, sender])
     }
   }
+  
+
+  chat.value = newChat.value
 }
 
 onUpdated(() => {
@@ -121,13 +133,13 @@ onMounted(() => {
   setInterval(() => {
     getContacts()
     getMessages()
-  }, 5000);
+    scrollToBottom()
+  }, 1000);
 })
 
 async function initialize() {
     await getContacts()
     await getMessages()
-
 }
 
 </script>
