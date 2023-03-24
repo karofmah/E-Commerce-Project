@@ -213,6 +213,7 @@ async function initialize() {
   padding-left: 2.5em;
   width: 93%;
   margin: 1em;
+  transition: all 0.3s ease;
 }
 
 #search::-webkit-input-placeholder {
@@ -324,7 +325,7 @@ async function initialize() {
 	margin-top: 1em;
   padding-left: 2em;
   width: 100%;
-	animation: 1s linear;
+  transition: all 0.3s ease;
 }
 
 #chatInput::-webkit-input-placeholder {

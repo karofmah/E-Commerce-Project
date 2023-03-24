@@ -295,9 +295,13 @@ async handleLocation(event) {
 },
 async submit() {
   if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
-  this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
-  return;
-}
+    this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
+    return;
+  }
+  if (this.briefDescription.length > 42) {
+    this.errorMessage = "Breif Description can be longer than 42 characters";
+    return;
+  }
 
 
   const user = this.tokenStore.loggedInUser;

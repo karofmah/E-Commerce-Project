@@ -15,7 +15,6 @@
 
 <style scoped>
 .container{
-    /* background-color: #191f2b; */
     background-color: var(--color-blue);
     display: flex;
     flex-direction: row;
@@ -24,7 +23,6 @@
     width: 100%;
     height: 10em;
     padding: 1em;
-    position: relative;
 }
 
 .info-box{

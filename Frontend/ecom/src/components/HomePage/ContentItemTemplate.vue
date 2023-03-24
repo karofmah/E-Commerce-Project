@@ -47,57 +47,46 @@ onMounted(async () => {
     <marquee v-else behavior="scroll" direction="left">{{ location }}</marquee>
     <h1 id="itemTitle"> {{ item.briefDescription }}</h1>
     <h2>Price: {{ item.price }}</h2>
-    <h3> {{ item.fullDescription }}</h3>
   </div>
 </template>
 
 
 <style scoped>
 .displayBase {
-  margin: 10px;
-  flex: 0 0 auto;
-  cursor: pointer;
-  background-color: rgba(176, 176, 176, 0.5);
-  border-radius: 8px;
-  text-align: start;
-  padding: 1em;
+    margin: 10px;
+    flex: 0 0 auto;
+    cursor: pointer;
+    justify-content: space-evenly;
+    background-color: var(--color-blue-lighter);
+    /* background-color: rgba(176, 176, 176, 0.5); */
+    border-radius: 8px;
+    text-align: start;
+    padding: 1em;
 }
 
 #displayFull {
-  min-height: 21.5em;
-  width: 25vw;
+  height: 30em;
+  width: 30%;
 }
 
-/* .fullImg{
-        display: flex;
-        justify-content: center;
-    }
+.fullImg{
+    display: flex;
+    justify-content: center;
+    height: 70%;
+}
 
 #itemImgFull{
-    max-width: 300px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-} */
-
-.fullImg {
-    position: relative;
-    display: inline-block;
-    text-align: center; /* center the image horizontally */
-    line-height: 0; /* remove any extra vertical space caused by inline-block elements */
-}
-
-#itemImgFull {
-    max-width: 100%;
-    height: 250px;
-    object-fit: cover;
-    vertical-align: middle; /* center the image vertically */
+    object-position: center;
 }
 
 .displayBase span, .displayBase marquee {
     position: absolute;
     max-width: 89%;
     max-height: 32px;
-    top: 230px;
+    top: 275px;
     left: 1.1em;
     padding: 3px;
     color: white;

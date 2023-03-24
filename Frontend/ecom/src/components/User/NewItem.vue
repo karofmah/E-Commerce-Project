@@ -244,6 +244,10 @@
     this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
     return;
   }
+  if (this.briefDescription.length > 42) {
+    this.errorMessage = "Breif Description can be longer than 42 characters";
+    return;
+  }
 
 
   const user = this.tokenStore.loggedInUser;
