@@ -122,6 +122,4 @@ public class UserControllerTest {
                 .andExpect(status().is(403))
                 .andReturn();
     }
-
-
 }
