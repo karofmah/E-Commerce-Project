@@ -15,6 +15,7 @@ import Feature from 'ol/Feature';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import { useTokenStore } from '../stores/userToken';
+import { useCartStore } from '../stores/cartStore';
 
 import starImg from '../assets/star.svg';
 import starFillImg from '../assets/star-fill.svg';
@@ -22,6 +23,7 @@ import starFillImg from '../assets/star-fill.svg';
 const tokenStore = useTokenStore()
 const route = useRoute();
 const router = useRouter();
+const cartStore = useCartStore();
 const itemId = ref(route.params.id);
 
 
@@ -44,16 +46,78 @@ const isUserSeller = computed(() => {
 
 const star = ref(starImg);
 const starFill = ref(starFillImg);
-let favoriteBool = ref(false)
-function getFavorite() {
-  favoriteBool.value = (!favoriteBool.value)
+let bookmarkedItem = ref(null);
+
+async function addToCart() {
+  if (!tokenStore.loggedInUser) {
+    router.push({ name: 'Login' });
+    return;
+  }
+
+  if (cartStore.items.length !== 0) {
+    alert("There is already an item in the cart. Only one item allowed at a time.");
+    return;
+  }
+  
+  const itemData = await axios.get(`http://localhost:9090/api/items/${itemId.value}`).then(res => res.data);
+  cartStore.addItem(itemData);
+  router.push({ name: 'Cart' });
+}
+
+
+async function getFavorite() {
+  if (!tokenStore.loggedInUser) {
+    router.push({ name: "Login" });
+    return;
+  }
+
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + tokenStore.jwtToken,
+    },
+  };
+
   const favIcon = document.querySelector("#favIcon");
-  if (favoriteBool.value) {
-    //AddFavorite
+
+  if (bookmarkedItem.value === null) {
+    // Add favorite
+    const bookmark = {
+      user : tokenStore.loggedInUser,
+      item: { id: itemId.value },
+    };
+    await axios.post("http://localhost:9090/api/bookmark/add", bookmark, config);
     favIcon.classList.add("star-spin");
-  }else{
-    //RemoveFavorite
+    await checkIfBookmarked();
+  } else {
+    await axios.delete(`http://localhost:9090/api/bookmark/delete/${bookmarkedItem.value.id}`, config);
     favIcon.classList.remove("star-spin");
+    bookmarkedItem.value = null;
+  }
+}
+
+async function checkIfBookmarked() {
+  if (tokenStore.loggedInUser) {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer " + tokenStore.jwtToken,
+      },
+    };
+
+    const bookmarks = await axios.get(`http://localhost:9090/api/bookmark/get?email=${tokenStore.loggedInUser.email}`, config).then(res => res.data);
+    console.log(bookmarks)
+    console.log(bookmarks[0].item.id)
+    console.log(itemId.value)
+
+    for (const bookmark of bookmarks) {
+        console.log(bookmark.item.id)
+        console.log(itemId.value)
+      if(bookmark.item.id == itemId.value){
+        bookmarkedItem.value = bookmark;
+        console.log(bookmarkedItem.value)
+      }
+    }
   }
 }
 
@@ -62,7 +126,9 @@ function goToEditItem() {
 }
 
 async function deleteItem() {
-  const config = {
+  
+
+const config = {
     headers: {
       "Content-type": "application/json",
       Authorization: "Bearer " + tokenStore.jwtToken,
@@ -112,8 +178,6 @@ async function contactSeller() {
 
 }
 
-
-
 let description = ref("");
 let specs = ref("");
 let descOrSpecBool = ref(true);
@@ -138,9 +202,14 @@ watch(route, async (newRoute) => {
   }
 });
 
+watch(bookmarkedItem, (newVal) => {
+  const favIcon = document.querySelector("#favIcon");
+  favIcon.src = newVal ? starFill.value : star.value;
+});
 
 onMounted(async () => {
   await getItemById(itemId.value);
+
   const map = new Map({
     target: 'map-container',
     layers: [
@@ -181,7 +250,11 @@ onMounted(async () => {
     map.getView().setCenter(fromLonLat([longitude, latitude]));
     map.getView().setZoom(13);
   }
+
+  // Call checkIfBookmarked after the map is rendered and item.value is updated.
+  await checkIfBookmarked();
 });
+
 </script>
 
 
@@ -199,7 +272,7 @@ onMounted(async () => {
         </div>
         <br>
         <button v-if="isUserSeller" @click="goToEditItem">Endre annonse</button>
-        <button v-else>Legg i handlekurv</button>
+        <button v-else @click="addToCart">Legg i handlekurv</button>
         <br>
         <button v-if="isUserSeller" @click="deleteItem">Slett annonse</button>
         <button v-else @click="contactSeller">Kontakt selger <img src="../assets/chat-dots-fill.svg" alt=""></button>

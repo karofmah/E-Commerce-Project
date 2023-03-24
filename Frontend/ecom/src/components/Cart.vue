@@ -1,48 +1,92 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router';
+import { useTokenStore } from '../stores/userToken';
+import { useCartStore } from '../stores/cartStore';
+import axios from 'axios';
 
-let items = ref([
-  ['Item1', 100, 1],
-  ['Item2', 200, 2],
-  ['Item3', 300, 3],
-  ['Item4', 400, 4],
-  ['Item5', 500, 5],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-  ['Item6', 600, 6],
-])
+const cartStore = useCartStore();
+const tokenStore = useTokenStore();
+const router = useRouter();
+
+const items = computed(() => cartStore.items);
 
 let totalPrice = ref(0)
+
+
 function calcTotalPrice() {
   totalPrice.value = 0;
-  for (let i = 0; i < items.value.length; i++) {
-    let item = items.value[i]
-    if (item && item[1] && item[2]) {
-      totalPrice.value += item[1] * item[2]
-    } else {
-      console.error(`Invalid item: ${item}`)
+  if (items.value && items.value.length > 0) {
+    for (let i = 0; i < items.value.length; i++) {
+      let item = items.value[i]
+      if (item && item.id && item.price) {
+        totalPrice.value += item.price
+      } else {
+        console.error(`Invalid item: ${item}`)
+      }
     }
   }
 }
 
-onMounted(() => {
+async function buyItem(itemId) {
+  const itemIndex = items.value.findIndex(item => item.id === itemId);
+  const item = items.value[itemIndex];
+
+  // Contact the seller
+  if (tokenStore.loggedInUser) {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        "Authorization" : "Bearer " + tokenStore.jwtToken
+      },
+    };
+
+    let content = tokenStore.loggedInUser.firstName + " " + tokenStore.loggedInUser.lastName 
+    + " har kjøpt " + item.briefDescription + " for " + item.price + "."
+
+    let message = {
+      "toEmail": item.seller.email,
+      "fromEmail": tokenStore.loggedInUser.email,
+      "messageContent": content
+    }
+    console.log(item.seller.email + "test")
+
+    await axios.post("http://localhost:9090/api/messages/sendMessage", message, config);
+    console.log(message);
+  } else {
+    router.push({ name: "Home" });
+    return;
+  }
+
+  // Delete the item
+  const deleteConfig = {
+    headers: {
+      "Content-type": "application/json",
+      "Authorization" : "Bearer " + tokenStore.jwtToken
+    }
+  };
+  await axios.delete(`http://localhost:9090/api/items/delete/${item.id}`, deleteConfig)
+    .then(response => {
+      if (response.status === 204) {
+        cartStore.removeItem(item.id);
+        calcTotalPrice();
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  // Navigate to the 'purchase' route
+  router.push({ name: "Home" });
+}
+
+
+function deleteItem(itemId) {
+  cartStore.removeItem(itemId);
+  calcTotalPrice();
+}
+
+onMounted(async () => {
   calcTotalPrice()
 })
 </script>
@@ -52,8 +96,10 @@ onMounted(() => {
     <div class="cart">
       <h1>Shopping Cart</h1>
       <br>
-      <div v-for="item in items">
-        <h2>Product: {{ item[0] }}, Price: {{ item[1] }}, Amount: {{ item[2] }}</h2>
+      <div v-for="item in items" :key="item.id">
+        <h2>Product: {{ item.briefDescription }}, Price: {{ item.price }}</h2>
+        <button @click="deleteItem(item.id)">Delete</button>
+        <button @click="buyItem(item.id)">Buy</button>
         <hr>
       </div>
       <br>
@@ -62,10 +108,12 @@ onMounted(() => {
       <h1>Check Out</h1>
       <h2>Total Price:</h2>
       <h1 id="totalPrice">{{ totalPrice }}</h1>
-      <button>Pay</button>
     </div>
   </div>
 </template>
+
+
+
 
 <style scoped>
 .container {
