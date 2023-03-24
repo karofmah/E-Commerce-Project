@@ -167,11 +167,11 @@
   
   <style scoped>
   .container-admin {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
 
 
 .header {
