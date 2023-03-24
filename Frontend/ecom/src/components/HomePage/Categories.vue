@@ -50,35 +50,34 @@ onMounted(async () => {
   </template>
 
 <style scoped>
-    .container{
-        display: flex;
-        flex-flow: row wrap;
-        border-radius: 8px;
-        margin: 0 0 0 0;
-        width: 10em;
-        height: 15vh;
-        
-    }
-    .categories{
-        display: flex;
-        flex-direction: column;
-        height: 3vh;
-        background-color: grey;
-        opacity: 0.9;
-        width: 10vw;
-        margin: 5px;
-        height: 8vh;
-        border-radius: 8px;
-        text-align: center;
-        
-    }
+  .container{
+    border-radius: 8px;
+    margin: 0 0 0 0;
+    width: 10em;
+    height: 15vh;  
+  }
+  .categories{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 3vh;
+    background-color: var(--color-blue-lighter);
+    opacity: 0.9;
+    margin: 5px;
+    height: 8vh;
+    min-width: 8em;
+    border-radius: 8px;
+    text-align: center;
+  }
 
-    .categories:hover{
-        cursor: pointer;
-    }
+  .categories:hover{
+    cursor: pointer;
+  }
 
-    .selected {
-    background-color: #007bff; /* You can change this color to your preferred highlight color */
+  .selected {
+    background-color: var(--color-blue); /* You can change this color to your preferred highlight color */
     color: white;
   }
 </style>

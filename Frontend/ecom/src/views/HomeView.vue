@@ -26,24 +26,26 @@ watch(
 </script>
 
 <template>
+  <div class="container">
     <Header id="header"/>
     <br>
-    <div class="search-bar">
-        <input type="text" v-model="searchInput" placeholder="Search..." style="max-width: 200px;" @keyup.enter="handleSearch" />
+    <div class="catAndContAndSearch">
+      <input type="text" class="search-bar" v-model="searchInput" placeholder="Search..." @keyup.enter="handleSearch" />
+      <Categories id="categories"/>
+      <Content id="content"/>
     </div>
-    <div class="catAndCont">
-        <Categories id="categories"/>
-        <Content id="content"/>
-    </div>
-    <div class=""></div>
     <Footer id="footer"/>
+  </div>
 </template>
 
 <style scoped>
     .container{
-        display: flex;
+      display: flex;
+      flex-flow: row wrap;
+      padding: 0;
+      width: 100%;
     }
-    .catAndCont{
+    .catAndContAndSearch{
         display: flex;
         flex-flow: row wrap;
         justify-content: center;
@@ -54,30 +56,41 @@ watch(
     #header{
         z-index: 2;
     }
+
+    #categories{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: start;
+      width: 75%;
+      overflow-x: scroll;
+      flex-wrap: nowrap;
+    }
+
+    #categories::-webkit-scrollbar{
+      display: none;
+    }
+
     #content{
         flex: 1;
         margin: 0 1em;
     }
 
-    .search-bar {
-    margin-right: 1rem;
-    margin-left: 0.5rem;
-    flex-grow: 1;
-  }
-
-  .search-bar input {
-    width: 100%;
+  .search-bar{
+    background: url('../assets/search.svg') no-repeat 1.5% 50%;
+    background-size: 20px;
+	color: rebeccapurple;
+    margin: 1.3em 1em 1em 1em;
     padding: 0.5rem 1rem;
+    padding-left: 2.5em;
+    width: 20%;
+    height: 3em;
     font-size: 1rem;
-    border: none;
     border-radius: 0.5rem;
-    color: #555;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
   }
 
-  .search-bar input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px #81b5f5;
+  .search-bar::-webkit-input-placeholder{
+    color: var(--color-blue);
   }
 </style>

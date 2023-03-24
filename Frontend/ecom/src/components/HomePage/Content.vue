@@ -86,10 +86,10 @@ await getItemsByLocation();
         flex-flow: row wrap;
         justify-content: flex-start;
         align-items: center;
-        /* width: 85%; */
+        height: fit-content;
         background-color: rgba(176, 176, 176, .2);
         border-radius: 8px;
         padding-left: 2em;
-        gap: 10px;
+        gap: 2em;
     }
 </style>
