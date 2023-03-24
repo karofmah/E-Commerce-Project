@@ -10,5 +10,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark,Long> {
     @Override
     <S extends Bookmark> S save(S entity);
 
-    List<Bookmark> findByUser(User user);
+    List<Bookmark> findByUserEmail(String email);
 }

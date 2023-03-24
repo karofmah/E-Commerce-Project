@@ -33,8 +33,8 @@ public class BookmarkController {
     }
     @GetMapping("/get")
     @PreAuthorize("hasRole('USER')")
-    public List<Bookmark> getBookmarks(@RequestBody User user){
-        return bookmarkService.getBookmarks(user);
+    public List<Bookmark> getBookmarks(@RequestParam String email){
+        return bookmarkService.getBookmarks(email);
     }
 
     @DeleteMapping("/delete/{id}")
