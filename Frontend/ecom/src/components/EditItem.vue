@@ -137,30 +137,30 @@ export default {
       },
     
     deleteImage(index) {
-    this.images.splice(index, 1);
+      this.images.splice(index, 1);
     },
 
     async reverseGeocode(latitude, longitude) {
-  const apiKey = 'c91bf8238fff45d4beeb016ab09c1b7b';
-  const response = await fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-      latitude
-    )},${encodeURIComponent(longitude)}&key=${apiKey}`
-  );
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
+          latitude
+        )}&lon=${encodeURIComponent(longitude)}`
+      );
 
-  if (!response.ok) {
-    console.error("Error fetching reverse geocoding data");
-    return;
-  }
+    if (!response.ok) {
+      console.error("Error fetching reverse geocoding data");
+      return;
+    }
 
-  const data = await response.json();
-  if (!data || !data.results || !data.results[0] || !data.results[0].formatted) {
-    console.error("No location data found");
-    return;
-  }
+    const data = await response.json();
+    if (!data || !data.display_name) {
+      console.error("No location data found");
+      return;
+    }
 
-  this.locationString = data.results[0].formatted;
-},
+    this.locationString = data.display_name;
+  },
+
 async loadItemData() {
   try {
     const itemId = this.$route.params.id;
@@ -265,15 +265,15 @@ async handleImages() {
 
   this.images = this.images.concat(newImages);
 },
+
 async handleLocation(event) {
   const location = event.target.value;
-  const apiKey = 'c91bf8238fff45d4beeb016ab09c1b7b';
 
-  // Use OpenCageData API to get latitude and longitude for the location
+  // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
   const response = await fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       location
-    )}&key=${apiKey}&limit=1`
+    )}&limit=1`
   );
 
   if (!response.ok) {
@@ -282,18 +282,19 @@ async handleLocation(event) {
   }
 
   const data = await response.json();
-  if (!data || data.results.length === 0) {
+  if (!data || data.length === 0) {
     console.error("No location data found");
     return;
   }
 
-  const { lat, lng } = data.results[0].geometry;
+  const { lat, lon } = data[0];
   this.latitude = parseFloat(lat);
-  this.longitude = parseFloat(lng);
+  this.longitude = parseFloat(lon);
 
   // Update the map view and add a marker at the coordinates.
   this.updateMapWithLocation(this.latitude, this.longitude);
 },
+
 
 async submit() {
   if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
@@ -402,7 +403,7 @@ async submit() {
 
   .map{
     min-width: 60em;
-    background-color: red;
+    height: 30em;
   }
 
   .uploaded-image {

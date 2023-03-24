@@ -104,15 +104,13 @@ onMounted(async () => {
                 <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
                     <div class="item" @click="handleFavoriteItemClick(item.item_id)">
                         <img :src="item.images?.[0]" alt="Item image" />
-                        <h3>{{ item.briefDescription }}</h3>
-                        <h4>{{ item.price }}</h4>
+                        <h3>{{ item.briefDescription.substring(0, 16) }}</h3>
                     </div>
                 </div>
                 <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
                     <div class="item" @click="handleItemClick(item.id)">
                         <img :src="item.images?.[0]" alt="Item image" />
-                        <h3>{{ item.briefDescription }}</h3>
-                        <h4>{{ item.price }}</h4>
+                        <h3>{{ item.briefDescription.substring(0, 16) }}</h3>
                     </div>
                 </div>
             </div>
@@ -173,7 +171,7 @@ onMounted(async () => {
         align-items: center;
         justify-content: center;
         height: 100%;
-        min-width: calc(33.33% - 20px);
+        /* min-width: calc(33.33% - 20px); */
         background-color: var(--color-blue-light);
         border-radius: 15px;
     }

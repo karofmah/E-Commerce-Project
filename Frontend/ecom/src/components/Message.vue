@@ -7,6 +7,8 @@ let contacts = ref([])
 let currentChat = ref(0)
 let chat = ref([])
 let chatInput = ref("")
+let currentChatLength = 0;
+let currentScrollLength = 0;
 const tokenStore = useTokenStore();
 
 
@@ -54,23 +56,23 @@ async function addChat(input) {
 
 		chat.value[currentChat.value].push([input, 0])
 		chatInput.value = ""
+    currentChatLength++
 		scrollToBottom()
 	}
 }
 
 function scrollToBottom() {
   nextTick(() => {
-    let chatInstances = document.querySelector(".chatInstances");
-    let lastChatInstance = chatInstances.lastElementChild;
-      
-    if (lastChatInstance) {
-      lastChatInstance.scrollIntoView({ behavior: "smooth", block: "end" });
+    if (currentChatLength != currentScrollLength) {
+      let chatInstances = document.querySelector(".chatInstances");
+        
+      chatInstances.scrollTop = chatInstances.scrollHeight;
+      currentScrollLength++
     }
   });
 }
 
 async function getContacts() {
-
   const config = {
         headers: {
             "Content-type": "application/json",
@@ -79,12 +81,10 @@ async function getContacts() {
     };
 
   contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts",config)).data
-
-  console.log(contacts.value)
 }
 
 async function getMessages() {
-
+  
   const config = {
         headers: {
             "Content-type": "application/json",
@@ -92,20 +92,17 @@ async function getMessages() {
         },
     };
   
-  console.log("Getting messages...")
-  console.log(contacts.value.length)
 
-  chat.value = []
+  //chat.value = []
+  let newChat = ref([])
   for (let i = 0; i < contacts.value.length; i++) {
 
-    console.log(i)
 
-    chat.value.push([])
-    console.log('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
+    //chat.value.push([])
+    newChat.value.push([])
     const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
 
 
-    console.log(response.data)
     let tempMessages = response.data
     
     for (const message in tempMessages) {
@@ -116,11 +113,14 @@ async function getMessages() {
         sender = 0
       }
   
-      console.log(content, sender)
   
-      chat.value[i].push([content, sender])
+      //chat.value[i].push([content, sender])
+      newChat.value[i].push([content, sender])
     }
   }
+  
+
+  chat.value = newChat.value
 }
 
 onUpdated(() => {
@@ -129,13 +129,17 @@ onUpdated(() => {
 
 onMounted(() => {
   initialize()
+
+  setInterval(() => {
+    getContacts()
+    getMessages()
+    scrollToBottom()
+  }, 1000);
 })
 
 async function initialize() {
     await getContacts()
     await getMessages()
-
-    console.log(chat.value)
 }
 
 </script>

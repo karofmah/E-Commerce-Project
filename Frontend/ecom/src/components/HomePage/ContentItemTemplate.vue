@@ -12,10 +12,11 @@ const props = defineProps({
 
 const location = ref('')
 
-async function reverseGeocode(latitude, longitude) {
-  const apiKey = "c91bf8238fff45d4beeb016ab09c1b7b";
+async function reverseGeocode(latitude, longitude){
   const response = await fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(latitude)},${encodeURIComponent(longitude)}&key=${apiKey}`
+    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
+      latitude
+    )}&lon=${encodeURIComponent(longitude)}`
   );
 
   if (!response.ok) {
@@ -24,13 +25,14 @@ async function reverseGeocode(latitude, longitude) {
   }
 
   const data = await response.json();
-  if (!data || !data.results || !data.results[0] || !data.results[0].formatted) {
+  if (!data || !data.display_name) {
     console.error("No location data found");
     return "";
   }
 
-  return data.results[0].formatted;
+  return data.display_name;
 }
+
 
 onMounted(async () => {
   location.value = await reverseGeocode(props.item.location.latitude, props.item.location.longitude);
