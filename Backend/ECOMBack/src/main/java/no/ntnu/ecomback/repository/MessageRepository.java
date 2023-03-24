@@ -13,4 +13,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     List<Message> findByFromEmail(String fromEmail);
     List<Message> findByToEmail(String fromEmail);
+
+    void deleteAllByFromEmailOrToEmail(String fromEmail, String toEmail);
 }

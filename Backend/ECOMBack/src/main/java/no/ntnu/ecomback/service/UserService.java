@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.ItemRepository;
+import no.ntnu.ecomback.repository.MessageRepository;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class UserService {
             LoggerFactory.getLogger(UserService.class);
     private UserRepository userRepository;
     private ItemRepository itemRepositoryRepository;
+    private MessageRepository messageRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -33,6 +35,11 @@ public class UserService {
     @Autowired
     public void setItemRepositoryRepository(ItemRepository itemRepositoryRepository) {
         this.itemRepositoryRepository = itemRepositoryRepository;
+    }
+
+    @Autowired
+    public void setMessageRepository(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
     }
 
     public User registerUser(User user) {
@@ -124,6 +131,7 @@ public class UserService {
     public ResponseEntity<HttpStatus> deleteUser(String email) {
         try {
             itemRepositoryRepository.deleteAllBySellerEmail(email);
+            messageRepository.deleteAllByFromEmailOrToEmail(email, email);
             userRepository.deleteById(email);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
