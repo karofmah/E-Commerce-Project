@@ -88,11 +88,11 @@ public class UserService {
                 User _user = userByEmail.get();
                 _user.setFirstName(updateUserRequest.getFirstName());
                 _user.setLastName(updateUserRequest.getLastName());
+                _user.setUsername(updateUserRequest.getUsername());
                 System.out.println(_user.getPassword());
                 if(_user.getPassword().equals(updateUserRequest.getCurrentPassword())){
                     _user.setPassword(updateUserRequest.getNewPassword());
                 }
-
                 return userRepository.save(_user);
             }
         }catch (Exception e){

@@ -30,8 +30,13 @@ public class ItemController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')") // Add this line
-    public Item addItem(@RequestBody Item item){
-        return itemService.addItem(item);
+    public ResponseEntity<Item> addItem(@RequestBody Item item){
+        try{
+            Item _item=itemService.addItem(item);
+            return new ResponseEntity<>(_item,HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/update")
