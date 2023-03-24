@@ -80,6 +80,38 @@ async function deleteItem() {
   }
 }
 
+async function contactSeller() {
+
+  if (tokenStore.loggedInUser) {
+        
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + tokenStore.jwtToken
+          },
+        };
+        
+        let content = tokenStore.loggedInUser.firstName + " " + tokenStore.loggedInUser.lastName 
+        + " tok kontakt gjennom annonsen " + item.value.briefDescription + "."
+      
+        let message = {
+          "toEmail": item.value.seller.email,
+          "fromEmail": tokenStore.loggedInUser.email,
+          "messageContent": content
+        } 
+        
+        await axios.post("http://localhost:9090/api/messages/sendMessage", message,config)
+        
+        console.log(message)
+      
+        router.push({ name: "Message" });
+      } else {
+        router.push({ name: "Login" });
+      }
+
+
+}
+
 
 
 let description = ref("");
@@ -100,9 +132,12 @@ function descOrSpec(key) {
 }
 
 watch(route, async (newRoute) => {
-  itemId.value = newRoute.params.id;
-  await getItemById(itemId.value);
+  if (newRoute.name === 'Item') {
+    itemId.value = newRoute.params.id;
+    await getItemById(itemId.value);
+  }
 });
+
 
 onMounted(async () => {
   await getItemById(itemId.value);
@@ -164,10 +199,10 @@ onMounted(async () => {
         </div>
         <br>
         <button v-if="isUserSeller" @click="goToEditItem">Endre annonse</button>
+        <button v-else>Legg i handlekurv</button>
         <br>
         <button v-if="isUserSeller" @click="deleteItem">Slett annonse</button>
-        <button v-else>Chat <img src="../assets/chat-dots-fill.svg" alt=""></button>
-        <button v-else>Legg i handlekurv</button>
+        <button v-else @click="contactSeller">Kontakt selger <img src="../assets/chat-dots-fill.svg" alt=""></button>
     </div>
 
     <img :src="favoriteBool ? starFill : star" id="favIcon" alt="favIcon" @click="getFavorite()">
@@ -290,5 +325,12 @@ onMounted(async () => {
             flex-direction: column;
         }
 
+    }
+
+    button img {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      float: right;
     }
 </style>
