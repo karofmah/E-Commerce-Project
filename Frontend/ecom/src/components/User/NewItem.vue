@@ -178,66 +178,68 @@
       deleteImage(index) {
     this.images.splice(index, 1);
     },
-        async handleLocation(event) {
-        const location = event.target.value;
+    async handleLocation(event) {
+  const location = event.target.value;
+  const apiKey = "c91bf8238fff45d4beeb016ab09c1b7b"; // Replace with your OpenCage API key
 
-        // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
-        const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            location
-        )}&limit=1`
-        );
+  // Use OpenCage Geocoder API to get latitude and longitude for the location
+  const response = await fetch(
+    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+      location
+    )}&key=${apiKey}&limit=1`
+  );
 
-        if (!response.ok) {
-        console.error("Feil under henting av geokodingsdata");
-        return;
-        }
+  if (!response.ok) {
+    console.error("Error fetching geocoding data");
+    return;
+  }
 
-        const data = await response.json();
-        if (!data || data.length === 0) {
-        console.error("Ingen plasseringsdata funnet");
-        return;
-        }
+  const data = await response.json();
+  if (!data || !data.results || data.results.length === 0) {
+    console.error("No location data found");
+    return;
+  }
 
-        const { lat, lon } = data[0];
-        this.latitude = parseFloat(lat);
-        this.longitude = parseFloat(lon);
+  const { lat, lng } = data.results[0].geometry;
+  this.latitude = parseFloat(lat);
+  this.longitude = parseFloat(lng);
 
-        // Update the map view and add a marker at the coordinates.
-        this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
-        this.map.getView().setZoom(13);
-  
-        if (this.marker) {
-          this.markerLayer.getSource().removeFeature(this.marker);
-        }
-  
-        this.marker = new Feature({
-          geometry: new Point(fromLonLat([this.longitude, this.latitude])),
-        });
-  
-        this.marker.setStyle(
-          new Style({
-            image: new Icon({
-              src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-              anchor: [0.5, 1],
-            }),
-          })
-        );
-  
-        if (!this.markerLayer) {
-          const markerSource = new VectorSource({
-            features: [this.marker],
-          });
-  
-          this.markerLayer = new VectorLayer({
-            source: markerSource,
-          });
-  
-          this.map.addLayer(this.markerLayer);
-        } else {
-          this.markerLayer.getSource().addFeature(this.marker);
-        }
-      },
+  // Update the map view and add a marker at the coordinates.
+  this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
+  this.map.getView().setZoom(13);
+
+  if (this.marker) {
+    this.markerLayer.getSource().removeFeature(this.marker);
+  }
+
+  this.marker = new Feature({
+    geometry: new Point(fromLonLat([this.longitude, this.latitude])),
+  });
+
+  this.marker.setStyle(
+    new Style({
+      image: new Icon({
+        src: "https://openlayers.org/en/latest/examples/data/icon.png",
+        anchor: [0.5, 1],
+      }),
+    })
+  );
+
+  if (!this.markerLayer) {
+    const markerSource = new VectorSource({
+      features: [this.marker],
+    });
+
+    this.markerLayer = new VectorLayer({
+      source: markerSource,
+    });
+
+    this.map.addLayer(this.markerLayer);
+  } else {
+    this.markerLayer.getSource().addFeature(this.marker);
+  }
+},
+
       async submit() {
   // Check if any required fields are empty
   if (!this.images.length || !this.briefDescription || !this.fullDescription || !this.latitude || !this.longitude || !this.price || !this.category) {

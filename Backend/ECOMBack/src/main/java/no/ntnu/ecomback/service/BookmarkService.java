@@ -33,10 +33,10 @@ public class BookmarkService {
             return null;
         }
     }
-    public List<Bookmark> getBookmarks(User user){
+    public List<Bookmark> getBookmarks(String email){
         try{
             _logger.info("Getting bookmarks");
-            return bookmarkRepository.findByUser(user);
+            return bookmarkRepository.findByUserEmail(email);
         }catch (Exception e){
             _logger.warn("Error while getting bookmarks: " + e.getMessage());
             return null;

@@ -20,8 +20,13 @@ const routes = [
     component: HomeView,
   },
   {
-    path: '/item/:id',
+    path: '/item/:id?',
     name: 'Item',
+    component: ItemView,
+  },
+  {
+    path: '/item-favorite/:item_id?',
+    name: 'ItemFavorite',
     component: ItemView,
   },
   {
