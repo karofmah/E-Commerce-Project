@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -59,13 +60,15 @@ public class UserControllerTest {
         mockUsers.add(user1);
         mockUsers.add(user2);
         mockUsers.add(user3);
+        userRepository.save(user1);
 
         when(userRepository.findAll()).thenReturn(mockUsers);
+
     }
     @Test
     @WithMockUser(username = "ADMIN")
     @DisplayName("Testing the endpoint for retrieving all users")
-    public void testGetUsers() throws Exception {
+    public void getUsers() throws Exception {
 
 
         MvcResult result = mockMvc.perform(get("/api/users/getAllUsers")
@@ -82,12 +85,14 @@ public class UserControllerTest {
         //might add assert fields
     }
     @Test
-    @DisplayName("Testing the endpoint for registering a user")
-    public void testRegisterUser() throws Exception {
+    @DisplayName("Testing the endpoint for registering a new user")
+    public void registerNewUser() throws Exception {
         User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
 
         mockUsers.add(newUser);
         when(userService.registerUser(Mockito.any(User.class))).thenReturn(newUser);
+
+
 
         String newUserJson=objectMapper.writeValueAsString(newUser);
 
@@ -106,6 +111,17 @@ public class UserControllerTest {
         Assertions.assertThat(userJson).isNotEmpty();
         Assertions.assertThat(userJson).isEqualToIgnoringCase(objectMapper.writeValueAsString(newUser));
 
-
     }
+
+    @Test
+    public void getUsersInvalid() throws Exception {
+
+
+        MvcResult result = mockMvc.perform(get("/api/users/getAllUsers")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(403))
+                .andReturn();
+    }
+
+
 }

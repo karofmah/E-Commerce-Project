@@ -49,7 +49,7 @@ public class TokenService {
         final JWTVerifier verifier = JWT.require(hmac512).build();
         return JWT.create()
                 .withSubject(userId)
-                .withIssuer("idatt2105_token_issuer_app")
+                .withIssuer("ecom")
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
                 .sign(hmac512);

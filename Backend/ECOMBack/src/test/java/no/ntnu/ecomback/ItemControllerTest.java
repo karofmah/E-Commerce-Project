@@ -74,7 +74,7 @@ public class ItemControllerTest {
 
     @Test
     @DisplayName("Testing the endpoint for retrieving all items")
-    public void testGetItems() throws Exception {
+    public void getItems() throws Exception {
 
         MvcResult result = mockMvc.perform(get("/api/items/getItems")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -90,9 +90,33 @@ public class ItemControllerTest {
         //might add assert fields
     }
     @Test
+    @DisplayName("Testing the endpoint for adding an item as an invalid user")
+    public void addItemInvalid() throws Exception {
+        User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
+        Location location2=new Location();
+        location2.setLatitude(25);
+        location2.setLongitude(50);
+        Item newItem=new Item(newUser, "Description 4", "Full description 4",new Category("Category 4"),location2 ,100);
+
+        when(itemService.addItem(Mockito.any(Item.class))).thenReturn(newItem);
+
+        String newItemJson=objectMapper.writeValueAsString(newItem);
+
+        MvcResult result= mockMvc.perform(post("/api/items/add")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newItemJson)
+
+                )
+                .andExpect(MockMvcResultMatchers.status().is(403))
+                .andReturn();
+
+
+    }
+    @Test
     @WithMockUser(username = "ADMIN")
-    @DisplayName("Testing the endpoint for adding an item")
-    public void testAddItem() throws Exception {
+    @DisplayName("Testing the endpoint for adding an item as a valid user")
+    public void addItemValid() throws Exception {
         User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
         Location location2=new Location();
         location2.setLatitude(25);
@@ -119,5 +143,6 @@ public class ItemControllerTest {
 
 
     }
+
 
 }
