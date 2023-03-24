@@ -67,7 +67,7 @@
     <div class="field-container">
       <div class="location-container">
         <label for="location">Plassering:</label>
-        <input type="text" id="location" @change="handleLocation" />
+        <input type="text" id="location" v-model="locationName" @change="handleLocation" />
       </div>
       <div id="map" ref="map" class="map"></div>
     </div>
@@ -117,7 +117,8 @@
             marker: null,
             markerLayer: null,
             listed: "",
-            categories: []
+            categories: [],
+            locationName: "",
       };
     },
     setup(){
@@ -180,13 +181,12 @@
     },
     async handleLocation(event) {
   const location = event.target.value;
-  const apiKey = "c91bf8238fff45d4beeb016ab09c1b7b"; // Replace with your OpenCage API key
-
-  // Use OpenCage Geocoder API to get latitude and longitude for the location
+  
+  // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
   const response = await fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-      location
-    )}&key=${apiKey}&limit=1`
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+            location
+    )}&limit=1`
   );
 
   if (!response.ok) {
@@ -195,14 +195,14 @@
   }
 
   const data = await response.json();
-  if (!data || !data.results || data.results.length === 0) {
+  if (!data || data.length === 0) {
     console.error("No location data found");
     return;
   }
 
-  const { lat, lng } = data.results[0].geometry;
+  const { lat, lon } = data[0];
   this.latitude = parseFloat(lat);
-  this.longitude = parseFloat(lng);
+  this.longitude = parseFloat(lon);
 
   // Update the map view and add a marker at the coordinates.
   this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
@@ -264,7 +264,7 @@
     },
     images : this.images,
     briefDescription: this.briefDescription,
-    fullDescription: this.fullDescription,
+    fullDescription: this.fullDescription + ` | \nLocation: ` + this.locationName,
     category: {
       categoryName: this.category
     },
