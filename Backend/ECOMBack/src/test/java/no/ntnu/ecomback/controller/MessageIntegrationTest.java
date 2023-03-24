@@ -4,10 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.ecomback.EcomBackApplication;
 import no.ntnu.ecomback.model.Message;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import no.ntnu.ecomback.repository.MessageRepository;
+import no.ntnu.ecomback.service.MessageService;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,14 +31,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
 
-public class MessageControllerTest {
+public class MessageIntegrationTest {
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
-
+    ObjectMapper objectMapper;
     @MockBean
-    private static MessageController messageController;
+    MessageController messageController;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    MessageRepository messageRepository;
     List <Message> mockMessagesToAndFrom=new ArrayList<>();
     List <Message> mockMessages=new ArrayList<>();
 
@@ -69,27 +73,40 @@ public class MessageControllerTest {
         mockMessagesToAndFrom.add(message2);
 
         when(messageController.getMessages()).thenReturn(new ResponseEntity<>(mockMessages, HttpStatus.OK));
-        when(messageController.getMessagesByToEmailAndFromEmail(message1.getFromEmail(),message1.getToEmail()))
+        when(messageController.getMessagesByToEmailAndFromEmail(Mockito.any(String.class),Mockito.any(String.class)))
                 .thenReturn(new ResponseEntity<>(mockMessagesToAndFrom,HttpStatus.OK));
     }
 
-    @Test
-    @WithMockUser(username = "USER")
-    @DisplayName("Testing the endpoint for retrieving all messages as a valid user")
-    public void getMessages() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/messages/getAllMessages")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+    @Nested
+    class TestGetMessages{
+        @Test
+        @WithMockUser(username = "USER")
+        @DisplayName("Testing the endpoint for retrieving all messages as a valid user")
+        public void getMessages() throws Exception {
+            MvcResult result = mockMvc.perform(get("/api/messages/getAllMessages")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andReturn();
 
-        String responseString = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
-        });
-        Assertions.assertEquals(mockMessages.size(), actualMessages.size());
-        //might add assert fields
+            String responseString = result.getResponse().getContentAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
+            });
+            Assertions.assertEquals(mockMessages.size(), actualMessages.size());
+
+            System.out.println(actualMessages);
+        }
+        @Test
+        @DisplayName("Testing the endpoint for retrieving all messages as an invalid user")
+        public void getMessagesInvalid() throws Exception {
+
+            mockMvc.perform(get("/api/messages/getAllMessages")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is(403))
+                    .andReturn();
+        }
+
     }
-
     @Test
     @WithMockUser(username = "USER")
     @DisplayName("Testing the endpoint for sending a valid message")
@@ -97,7 +114,7 @@ public class MessageControllerTest {
         Message newMessage=new Message();
         newMessage.setMessageContent("newHei");
         mockMessages.add(newMessage);
-        when(messageController.sendMessage(Mockito.any(Message.class))).thenReturn(new ResponseEntity<>(mockMessages.get(0),HttpStatus.CREATED));
+        when(messageController.sendMessage(Mockito.any(Message.class))).thenReturn(new ResponseEntity<>(mockMessages.get(mockMessages.size()-1),HttpStatus.CREATED));
 
         String newMessageJson=objectMapper.writeValueAsString(newMessage);
 
@@ -110,19 +127,17 @@ public class MessageControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        System.out.println("result: " + result);
-        /*Assertions.assertThat(result).isNotNull();
+        Assertions.assertNotNull(result);
         String userJson = result.getResponse().getContentAsString();
-        assertEquals(userJson).isNotEmpty();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(objectMapper.writeValueAsString(newMessage));
-*/
+        Assertions.assertEquals(userJson,objectMapper.writeValueAsString(newMessage));
+        System.out.println(userJson);
     }
 
     @Test
     @WithMockUser(username = "USER")
     @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
     public void getMessagesEmail() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/messages/edvard@ntnu.no/karo@ntnu.no")
+        MvcResult result = mockMvc.perform(get("/api/messages/karo@ntnu.no/edvard@ntnu.no")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -134,17 +149,9 @@ public class MessageControllerTest {
 
         Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
         //might add assert fields
-
-
+        System.out.println(actualMessages);
+        System.out.println(mockMessagesToAndFrom);
 
     }
-    @Test
-    @DisplayName("Testing the endpoint for retrieving all messages as an invalid user")
-    public void getMessagesInvalid() throws Exception {
 
-        mockMvc.perform(get("/api/messages/getAllMessages")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(403))
-                .andReturn();
-    }
 }

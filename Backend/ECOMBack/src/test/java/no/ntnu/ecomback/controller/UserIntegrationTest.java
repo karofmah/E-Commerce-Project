@@ -37,11 +37,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
 
-public class UserControllerTest {
+public class UserIntegrationTest {
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
     @MockBean
     UserController userController;
     @Autowired
@@ -68,7 +68,7 @@ public class UserControllerTest {
 
     }
     @Nested
-    class TestGetUser{
+    class TestGetUsers{
         @Test
         @WithMockUser(username = "USER")
         @DisplayName("Testing the endpoint for retrieving all users")
