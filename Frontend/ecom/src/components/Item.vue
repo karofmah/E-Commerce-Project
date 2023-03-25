@@ -31,7 +31,6 @@ let item = ref({});
 
 async function getItemById(id) {
   item.value = await axios.get(`http://localhost:9090/api/items/${id}`).then(res => res.data);
-  console.log('Hello' + item.value.seller.email)
 }
 
 const isUserSeller = computed(() => {
@@ -81,7 +80,6 @@ async function getFavorite() {
   const favIcon = document.querySelector("#favIcon");
 
   if (bookmarkedItem.value === null) {
-    // Add favorite
     const bookmark = {
       user : tokenStore.loggedInUser,
       item: { id: itemId.value },
@@ -106,16 +104,9 @@ async function checkIfBookmarked() {
     };
 
     const bookmarks = await axios.get(`http://localhost:9090/api/bookmark/get?email=${tokenStore.loggedInUser.email}`, config).then(res => res.data);
-    console.log(bookmarks)
-    console.log(bookmarks[0].item.id)
-    console.log(itemId.value)
-
     for (const bookmark of bookmarks) {
-        console.log(bookmark.item.id)
-        console.log(itemId.value)
       if(bookmark.item.id == itemId.value){
         bookmarkedItem.value = bookmark;
-        console.log(bookmarkedItem.value)
       }
     }
   }
@@ -167,9 +158,6 @@ async function contactSeller() {
         } 
         
         await axios.post("http://localhost:9090/api/messages/sendMessage", message,config)
-        
-        console.log(message)
-      
         router.push({ name: "Message" });
       } else {
         router.push({ name: "Login" });
@@ -251,7 +239,6 @@ onMounted(async () => {
     map.getView().setZoom(13);
   }
 
-  // Call checkIfBookmarked after the map is rendered and item.value is updated.
   await checkIfBookmarked();
 });
 
@@ -259,6 +246,7 @@ onMounted(async () => {
 
 
 <template>
+    <Transition name="fade">
   <div class="container">
     <div class="images">
         <img v-for="img in item.images" :src="img" :alt="img">
@@ -296,6 +284,8 @@ onMounted(async () => {
 
     
   </div>
+</Transition>
+
 </template>
 
 <style scoped>

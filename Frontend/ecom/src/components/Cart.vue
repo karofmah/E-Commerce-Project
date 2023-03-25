@@ -49,16 +49,15 @@ async function buyItem(itemId) {
       "fromEmail": tokenStore.loggedInUser.email,
       "messageContent": content
     }
-    console.log(item.seller.email + "test")
+  
 
     await axios.post("http://localhost:9090/api/messages/sendMessage", message, config);
-    console.log(message);
+
   } else {
     router.push({ name: "Home" });
     return;
   }
 
-  // Delete the item
   const deleteConfig = {
     headers: {
       "Content-type": "application/json",
@@ -76,7 +75,6 @@ async function buyItem(itemId) {
       console.log(error);
     });
 
-  // Navigate to the 'purchase' route
   router.push({ name: "Home" });
 }
 

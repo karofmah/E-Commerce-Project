@@ -53,29 +53,34 @@ data(){
     changeRoute(string){
         this.$router.push({name:string})
     },
-    async register(){
-        if (!this.email || !this.username || !this.password || !this.firstName || !this.lastName) {
-            this.error = 'Alle feltene må være utfylt';
-            return;
-        }
-        const user = {
-            username: this.username,
-            password: this.password,
-            email: this.email,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            role: this.role
-        }
-        console.log(user)
+    async register() {
+  if (!this.email || !this.username || !this.password || !this.firstName || !this.lastName) {
+    this.error = 'Alle feltene må være utfylt';
+    return;
+  }
+  const user = {
+    username: this.username,
+    password: this.password,
+    email: this.email,
+    firstName: this.firstName,
+    lastName: this.lastName,
+    role: this.role
+  }
+ 
 
-        this.access = await(await (axios.post("http://localhost:9090/api/users/register",user))).data 
-        if(this.access.data !== null){
-            this.error = 'Ny bruker var registert'
-            this.changeRoute('Login')
-        }else{
-            this.error = 'Registering av fungerte ikke. Prøv igjen....'
-        }
+  try {
+    this.access = await (await (axios.post("http://localhost:9090/api/users/register", user))).data;
+    if (this.access.data !== null) {
+      this.error = 'Ny bruker var registert';
+      this.changeRoute('Login');
+    } else {
+      this.error = 'Registering av fungerte ikke. Prøv igjen....';
     }
+  } catch (error) {
+    console.error(error);
+    this.error = 'An error occurred during registration. Please try again.';
+  }
+}
 }
 }
 

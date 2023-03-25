@@ -1,7 +1,7 @@
 <script setup>
   import Header from '../components/Header.vue'
   import Footer from '../components/Footer.vue'
-  import Purchase from '../components/PurChase.vue'
+  import Purchase from '../components/Purchase.vue'
 </script>
 
 <template>

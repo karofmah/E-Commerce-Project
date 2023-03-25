@@ -24,7 +24,6 @@ async function getMyItems() {
   };
 
   myItems.value = await axios.get("http://localhost:9090/api/items?email="+ userEmail,config).then(res => res.data);
-  console.log(myItems.value)
 }
 
 async function getMyFavorites() {
@@ -38,7 +37,6 @@ async function getMyFavorites() {
     const userEmail = tokenStore.loggedInUser.email;
 
     favorites.value = await axios.get("http://localhost:9090/api/bookmark/get?email=" + userEmail, config).then(res => res.data);
-    console.log(favorites)
 }
 
 function favOrMy(key) {
@@ -92,49 +90,49 @@ onMounted(async () => {
 
 <template>
     <div class="container">
-        <div class="user">
-            <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
-            <h2>{{ tokenStore.loggedInUser.email }}</h2>
-            <div class="userFields">
-                <h3>{{ "Fornavn: " +  tokenStore.loggedInUser.firstName }}</h3>
-                <hr>
-                <h3>{{ "Etternavn: " + tokenStore.loggedInUser.lastName }}</h3>
-                <hr>
-                <h4>{{ "Brukernavn: " + tokenStore.loggedInUser.username }}</h4>
-            </div>
-            <br>
-            <div class="userButtons">
-                <RouterLink to="/edit"><button id="edit">Edit</button></RouterLink>
-                <button @click="logOut()" id="logOut">Log Out</button>
-            </div>
+      <div class="user">
+        <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
+        <h2>{{ tokenStore.loggedInUser ? tokenStore.loggedInUser.email : '' }}</h2>
+        <div class="userFields">
+          <h3>{{ "Fornavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.firstName : '') }}</h3>
+          <hr>
+          <h3>{{ "Etternavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.lastName : '') }}</h3>
+          <hr>
+          <h4>{{ "Brukernavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.username : '') }}</h4>
         </div>
-        <div class="contentWrapper">
-            <nav>
-                <a href="#0" @click="favOrMy(0)">Favorites</a>
-                <a href="#0" @click="favOrMy(1)">My Items</a>
-            </nav>
-            <div class="content">
-                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in favoritesToDisplay" :key="favorite.id">
-                    <div class="item" @click="handleItemClick(favorite.item.id)">
-                        <img :src="favorite.item.images?.[0]" alt="Item image" />
-                        <h3>{{ favorite.item.briefDescription }}</h3>
-                        <h4>{{ favorite.item.price }}</h4>
-                    </div>
-                </div>
-                <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in myItemsToDisplay" :key="item.id">
-                    <div class="item" @click="handleItemClick(item.id)">
-                        <img :src="item.images?.[0]" alt="Item image" />
-                        <h3>{{ item.briefDescription }}</h3>
-                        <h4>{{ item.price }}</h4>
-                    </div>
-                </div>
-            </div>
+        <br>
+        <div class="userButtons">
+          <RouterLink to="/edit"><button id="edit">Edit</button></RouterLink>
+          <button @click="logOut()" id="logOut">Log Out</button>
         </div>
+      </div>
+      <div class="contentWrapper">
+        <nav>
+          <a href="#0" @click="favOrMy(0)">Favorites</a>
+          <a href="#0" @click="favOrMy(1)">My Items</a>
+        </nav>
+        <div class="content">
+          <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in favoritesToDisplay" :key="favorite.id">
+            <div class="item" @click="handleItemClick(favorite.item.id)">
+              <img :src="favorite.item.images?.[0]" alt="Item image" />
+              <h3>{{ favorite.item.briefDescription }}</h3>
+              <h4>{{ favorite.item.price }}</h4>
+            </div>
+          </div>
+          <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in myItemsToDisplay" :key="item.id">
+            <div class="item" @click="handleItemClick(item.id)">
+              <img :src="item.images?.[0]" alt="Item image" />
+              <h3>{{ item.briefDescription }}</h3>
+              <h4>{{ item.price }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</template>
-
-
-
+  </template>
+  
+ 
+  
 <style scoped>
     .container {
         display: flex;

@@ -6,7 +6,10 @@
 
 <template>
     <Header />
-    <Login/>
+    <div>
+      <Login/>
+    </div>
     <Footer />
-</template>
+  </template>
+  
 

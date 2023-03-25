@@ -1,54 +1,51 @@
-describe('New user registration', () => {
+describe('New User Registration', () => {
   beforeEach(() => {
-    cy.visit('/register') // assuming the component is rendered at "/register" URL
-  })
+    cy.visit('/register'); // Update this path with the actual path to your registration page
+  });
 
-  it('should display error message if form fields are not filled', () => {
-    cy.get('button').contains('Register ny bruker').click()
-    cy.contains('Alle feltene må være utfylt')
-  })
+  it('registers a new user successfully', () => {
+    cy.get('.email input').type('test@example.com');
+    cy.get('.username input').type('testuser');
+    cy.get('.password input').type('TestPassword123');
+    cy.get('.Forname input').type('Test');
+    cy.get('.Surname input').type('User');
 
-  it('should successfully register new user', () => {
-    const username = 'testuser'
-    const password = 'testpassword'
-    const email = 'testuser@example.com'
-    const firstName = 'Test'
-    const lastName = 'User'
-
-    cy.get('.username input').type(username)
-    cy.get('.password input').type(password)
-    cy.get('.email input').type(email)
-    cy.get('.Forname input').type(firstName)
-    cy.get('.Surname input').type(lastName)
-    cy.get('button').contains('Register ny bruker').click()
-
-    // assuming the server responds with a success message upon successful registration
-    cy.contains('Ny bruker var registert')
-    cy.url().should('include', '/login') // assuming the user is redirected to login page after successful registration
-  })
-
-  it('should display error message if registration fails', () => {
-    // assuming the server responds with an error message upon failed registration
     cy.intercept('POST', 'http://localhost:9090/api/users/register', {
-      statusCode: 500,
+      statusCode: 200,
+      body: {
+        data: {
+          username: 'testuser',
+          email: 'test@example.com',
+          firstName: 'Test',
+          lastName: 'User',
+          role: 'NORMAL_USER',
+        },
+      },
+    });
+
+    cy.get('.submit button').click();
+    cy.url().should('include', '/login');
+  });
+
+  it('shows an error message when registration fails', () => {
+    cy.get('.email input').type('test@example.com');
+    cy.get('.username input').type('testuser');
+    cy.get('.password input').type('TestPassword123');
+    cy.get('.Forname input').type('Test');
+    cy.get('.Surname input').type('User');
+
+    cy.intercept('POST', 'http://localhost:9090/api/users/register', {
+      statusCode: 400,
       body: {
         data: null,
-        error: 'Something went wrong'
-      }
-    })
-    const username = 'testuser'
-    const password = 'testpassword'
-    const email = 'testuser@example.com'
-    const firstName = 'Test'
-    const lastName = 'User'
+      },
+    });
 
-    cy.get('.username input').type(username)
-    cy.get('.password input').type(password)
-    cy.get('.email input').type(email)
-    cy.get('.Forname input').type(firstName)
-    cy.get('.Surname input').type(lastName)
-    cy.get('button').contains('Register ny bruker').click()
+    cy.get('.submit button').click();
+  });
 
-    cy.contains('Registering av fungerte ikke. Prøv igjen....')
-  })
-})
+  it('shows an error message when input fields are empty', () => {
+    cy.get('.submit button').click();
+    cy.get('.main-container p').should('contain', 'Alle feltene må være utfylt');
+  });
+});

@@ -104,14 +104,11 @@ export default {
   await this.loadItemData();
 
   // Initialize the map after the component has been rendered
-  this.$nextTick(() => {
-    this.initMap();
-    this.updateMapWithLocation(this.latitude, this.longitude);
-  });
+  this.map = this.initMap();
+  this.updateMapWithLocation(this.latitude, this.longitude);
 
   // Reverse geocode the coordinates to get the location name
   await this.reverseGeocode(this.latitude, this.longitude);
-
 
   const config = {
         headers: {
@@ -127,8 +124,6 @@ export default {
       .catch(error => {
         console.error(error);
       });
-
-
 },
 
   methods: {
@@ -193,6 +188,10 @@ async loadItemData() {
   }
 },
 updateMapWithLocation(lat, lon) {
+  if (!this.map) {
+    return;
+  }
+  
   // Update the map view and add a marker at the coordinates.
   this.map.getView().setCenter(fromLonLat([lon, lat]));
   this.map.getView().setZoom(13);
@@ -228,8 +227,9 @@ updateMapWithLocation(lat, lon) {
     this.markerLayer.getSource().addFeature(this.marker);
   }
 },
+
 initMap() {
-  this.map = new Map({
+  return new Map({
     target: this.$refs.map,
     layers: [
       new TileLayer({
@@ -345,9 +345,6 @@ async submit() {
       updatedItem,
       config
     );
-
-    console.log(response)
-
     if (response.status === 200) {
       this.changeRoute('Home');
     } else {
