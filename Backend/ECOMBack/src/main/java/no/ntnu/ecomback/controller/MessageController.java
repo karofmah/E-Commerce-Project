@@ -4,7 +4,6 @@ import no.ntnu.ecomback.model.Message;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

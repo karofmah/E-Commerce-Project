@@ -1,7 +1,6 @@
 package no.ntnu.ecomback.controller;
 
 import no.ntnu.ecomback.model.Bookmark;
-import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

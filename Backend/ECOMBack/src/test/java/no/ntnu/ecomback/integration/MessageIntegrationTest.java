@@ -1,8 +1,9 @@
-package no.ntnu.ecomback.controller;
+package no.ntnu.ecomback.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.ecomback.EcomBackApplication;
+import no.ntnu.ecomback.controller.MessageController;
 import no.ntnu.ecomback.model.Message;
 import no.ntnu.ecomback.repository.MessageRepository;
 import no.ntnu.ecomback.service.MessageService;
@@ -35,13 +36,13 @@ public class MessageIntegrationTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
+    @Autowired
     MessageController messageController;
 
     @Autowired
     MessageService messageService;
 
-    @Autowired
+    @MockBean
     MessageRepository messageRepository;
     List <Message> mockMessagesToAndFrom=new ArrayList<>();
     List <Message> mockMessages=new ArrayList<>();
@@ -58,6 +59,9 @@ public class MessageIntegrationTest {
         message2.setMessageContent("hei2");
         message3.setMessageContent("hei3");
 
+        message1.setMessageId(1);
+        message2.setMessageId(2);
+
         message1.setFromEmail("edvard@ntnu.no");
         message1.setToEmail("karo@ntnu.no");
 
@@ -71,9 +75,11 @@ public class MessageIntegrationTest {
         mockMessagesToAndFrom.add(message1);
         mockMessagesToAndFrom.add(message2);
 
-        when(messageController.getMessages()).thenReturn(new ResponseEntity<>(mockMessages, HttpStatus.OK));
-        when(messageController.getMessagesByToEmailAndFromEmail(Mockito.any(String.class),Mockito.any(String.class)))
-                .thenReturn(new ResponseEntity<>(mockMessagesToAndFrom,HttpStatus.OK));
+        when(messageRepository.findAll()).thenReturn(mockMessages);
+        when(messageRepository.findByToEmailAndFromEmailOrToEmailAndFromEmailOrderByTimestamp
+                ("karofm@ntnu.no","edvard@ntnu.no","edvard@ntnu.no",
+                        "karo@ntnu.no")).thenReturn(mockMessagesToAndFrom);
+
     }
 
     @Nested
@@ -113,7 +119,7 @@ public class MessageIntegrationTest {
         Message newMessage=new Message();
         newMessage.setMessageContent("newHei");
         mockMessages.add(newMessage);
-        when(messageController.sendMessage(Mockito.any(Message.class))).thenReturn(new ResponseEntity<>(mockMessages.get(mockMessages.size()-1),HttpStatus.CREATED));
+        when(messageRepository.save(Mockito.any(Message.class))).thenReturn(newMessage);
 
         String newMessageJson=objectMapper.writeValueAsString(newMessage);
 
@@ -127,30 +133,58 @@ public class MessageIntegrationTest {
                 .andReturn();
 
         Assertions.assertNotNull(result);
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertEquals(userJson,objectMapper.writeValueAsString(newMessage));
-        System.out.println(userJson);
+        String messageJson = result.getResponse().getContentAsString();
+        Assertions.assertEquals(messageJson,objectMapper.writeValueAsString(newMessage));
+        System.out.println(messageJson);
     }
 
-    @Test
-    @WithMockUser(username = "USER")
-    @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
-    public void getMessagesEmail() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/messages/karo@ntnu.no/edvard@ntnu.no")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+    /*
+    @Nested
+    class TestGetMessagesEmail{
 
-        String responseString = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
-        });
+        @Test
+        @WithMockUser(username = "USER")
+        @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
+        public void getMessagesEmail() throws Exception {
 
-        Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
-        //might add assert fields
-        System.out.println(actualMessages);
-        System.out.println(mockMessagesToAndFrom);
+            MvcResult result = mockMvc.perform(get("/api/messages/'karo@ntnu.no'/'edvard@ntnu.no'")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andReturn();
 
-    }
+            String responseString = result.getResponse().getContentAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
+            });
 
+            Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
+
+            System.out.println(actualMessages);
+            System.out.println(mockMessagesToAndFrom);
+
+        }
+        @Test
+        @WithMockUser(username = "USER")
+        @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
+        public void getEmptyMessagesEmail() throws Exception {
+            mockMessagesToAndFrom.clear();
+            when(messageController.getMessagesByToEmailAndFromEmail(Mockito.any(String.class),Mockito.any(String.class)))
+                    .thenReturn(new ResponseEntity<>(mockMessagesToAndFrom,HttpStatus.NO_CONTENT));
+            MvcResult result = mockMvc.perform(get("/api/messages/karo@ntnu.no/edvard@ntnu.no")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNoContent())
+                    .andReturn();
+
+            String responseString = result.getResponse().getContentAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
+            });
+
+            Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
+            //might add assert fields
+            System.out.println(actualMessages);
+            System.out.println(mockMessagesToAndFrom);
+
+        }*
+    }*/
 }

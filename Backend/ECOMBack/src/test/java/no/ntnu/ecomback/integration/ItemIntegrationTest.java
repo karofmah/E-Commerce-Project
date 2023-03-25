@@ -1,10 +1,10 @@
-package no.ntnu.ecomback.controller;
+package no.ntnu.ecomback.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.ecomback.EcomBackApplication;
+import no.ntnu.ecomback.controller.ItemController;
 import no.ntnu.ecomback.model.*;
-import org.junit.jupiter.api.*;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.service.ItemService;
 import org.assertj.core.api.Assertions;
@@ -50,7 +50,7 @@ public class ItemIntegrationTest {
     @Autowired
     ItemRepository itemRepository;
     @Autowired
-    private ItemService itemService;
+    ItemService itemService;
 
      List<Item> mockItems=new ArrayList<>();
 
@@ -87,7 +87,6 @@ public class ItemIntegrationTest {
 
         System.out.println(actualItems);
         org.junit.jupiter.api.Assertions.assertEquals(mockItems.size(), actualItems.size());
-        //might add assert fields
     }
     @Nested
     class TestAddItem{

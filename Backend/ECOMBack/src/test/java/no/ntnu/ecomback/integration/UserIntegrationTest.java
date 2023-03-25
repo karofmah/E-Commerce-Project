@@ -1,17 +1,15 @@
-package no.ntnu.ecomback.controller;
+package no.ntnu.ecomback.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.ecomback.EcomBackApplication;
+import no.ntnu.ecomback.controller.UserController;
 import no.ntnu.ecomback.model.Role;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.UserRepository;
 import no.ntnu.ecomback.service.UserService;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,18 +31,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
-
 public class UserIntegrationTest {
+
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
-    UserController userController;
+
     @Autowired
+    UserController userController;
+    @MockBean
     UserRepository userRepository;
 
     @Autowired
@@ -64,17 +65,18 @@ public class UserIntegrationTest {
         mockUsers.add(user2);
         mockUsers.add(user3);
 
-        when(userController.getAllUsers()).thenReturn(new ResponseEntity<>(mockUsers,HttpStatus.OK));
+        when(userRepository.findAll()).thenReturn(mockUsers);
+
+        //Mockito.when(userController.getAllUsers()).thenReturn(new ResponseEntity<>(mockUsers,HttpStatus.OK));
 
     }
     @Nested
     class TestGetUsers{
+
         @Test
         @WithMockUser(username = "USER")
         @DisplayName("Testing the endpoint for retrieving all users")
         public void getUsers() throws Exception {
-
-
             MvcResult result = mockMvc.perform(get("/api/users/getAllUsers")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -86,6 +88,8 @@ public class UserIntegrationTest {
             List<User> actualItems = mapper.readValue(responseString, new TypeReference<>() {
             });
             System.out.println(actualItems);
+
+
 
         }
         @Test
@@ -102,10 +106,10 @@ public class UserIntegrationTest {
     @Test
     @DisplayName("Testing the endpoint for registering a new user")
     public void registerNewUser() throws Exception {
-        User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
+        User newUser=new User("karofm5@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
 
-        mockUsers.add(newUser);
-        when(userController.createUser(Mockito.any(User.class))).thenReturn(new ResponseEntity<>(newUser, HttpStatus.CREATED));
+
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(newUser);
 
         String newUserJson=objectMapper.writeValueAsString(newUser);
 

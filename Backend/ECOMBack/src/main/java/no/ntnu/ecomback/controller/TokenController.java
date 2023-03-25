@@ -3,7 +3,6 @@ package no.ntnu.ecomback.controller;
 import no.ntnu.ecomback.model.LoginRequest;
 import no.ntnu.ecomback.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
