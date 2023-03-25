@@ -1,8 +1,10 @@
 package no.ntnu.ecomback.service;
 
+import jakarta.transaction.Transactional;
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
+import no.ntnu.ecomback.repository.BookmarkRepository;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.repository.UserRepository;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class ItemService {
     private ItemRepository itemRepository;
     private UserRepository userRepository;
+    private BookmarkRepository bookmarkRepository;
 
     private static final Logger _logger =
             LoggerFactory.getLogger(ItemService.class);
@@ -33,6 +36,10 @@ public class ItemService {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setBookmarkRepository(BookmarkRepository bookmarkRepository) {
+        this.bookmarkRepository = bookmarkRepository;
+    }
 
     public Item addItem(Item item){
         try {
@@ -68,12 +75,15 @@ public class ItemService {
         _logger.info("Item does not exist ");
         return null;
     }
+    @Transactional
     public ResponseEntity <HttpStatus> deleteItem(long id) {
         try {
+            bookmarkRepository.deleteBookmarksByItem(itemRepository.findById(id).get());
             itemRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch(Exception e){
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            _logger.error(String.valueOf(e));
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     public List<Item> getItems(){

@@ -150,7 +150,6 @@ export default {
   color: var(--vt-c-white-soft);
   text-decoration: none;
   border-radius: 15px;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   margin-right: 25px;
   font-size: 20px;
 }

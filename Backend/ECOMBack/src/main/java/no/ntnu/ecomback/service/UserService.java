@@ -3,6 +3,7 @@ package no.ntnu.ecomback.service;
 import jakarta.transaction.Transactional;
 import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
+import no.ntnu.ecomback.repository.BookmarkRepository;
 import no.ntnu.ecomback.repository.ItemRepository;
 import no.ntnu.ecomback.repository.MessageRepository;
 import no.ntnu.ecomback.repository.UserRepository;
@@ -26,6 +27,7 @@ public class UserService {
     private UserRepository userRepository;
     private ItemRepository itemRepositoryRepository;
     private MessageRepository messageRepository;
+    private BookmarkRepository bookmarkRepository;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -40,6 +42,11 @@ public class UserService {
     @Autowired
     public void setMessageRepository(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
+    }
+
+    @Autowired
+    public void setBookmarkRepository(BookmarkRepository bookmarkRepository) {
+        this.bookmarkRepository = bookmarkRepository;
     }
 
     public User registerUser(User user) {
@@ -130,6 +137,7 @@ public class UserService {
     @Transactional
     public ResponseEntity<HttpStatus> deleteUser(String email) {
         try {
+            bookmarkRepository.deleteBookmarkByUserEmail(email);
             itemRepositoryRepository.deleteAllBySellerEmail(email);
             messageRepository.deleteAllByFromEmailOrToEmail(email, email);
             userRepository.deleteById(email);

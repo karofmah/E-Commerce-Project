@@ -21,7 +21,7 @@ async function refreshToken() {
     if (store.loggedInUser) {
       return await store.getTokenAndSaveInStore(store.loggedInUser.email, store.loggedInUser.password);
     }
-  }, 1000*60*30);
+  }, 1000*60);
 }
 
 
