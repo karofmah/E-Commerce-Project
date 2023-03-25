@@ -26,8 +26,7 @@ test-frontend:
   image: cypress/base:latest
   script:
     - cd Frontend/ecom
-    - npm ci
-    - npx cypress run
+    - npm run test:e2e
   artifacts:
     when: always
     paths:
