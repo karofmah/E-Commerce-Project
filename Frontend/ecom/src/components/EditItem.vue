@@ -398,6 +398,11 @@ async submit() {
     padding: 1em;
   }
 
+  #full-description{
+    height: 17em;
+    width: 40em;
+  }
+
   .map{
     min-width: 60em;
     height: 30em;

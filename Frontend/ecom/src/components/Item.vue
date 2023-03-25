@@ -246,7 +246,7 @@ onMounted(async () => {
 
 
 <template>
-    <Transition name="fade">
+  <Transition name="fade">
   <div class="container">
     <div class="images">
         <img v-for="img in item.images" :src="img" :alt="img">
@@ -266,7 +266,7 @@ onMounted(async () => {
         <button v-else @click="contactSeller">Kontakt selger <img src="../assets/chat-dots-fill.svg" alt=""></button>
     </div>
 
-    <img :src="favoriteBool ? starFill : star" id="favIcon" alt="favIcon" @click="getFavorite()">
+    <img v-if="!isUserSeller" :src="favoriteBool ? starFill : star" id="favIcon" alt="favIcon" @click="getFavorite()">
 
     <div class="info">
         <nav>
@@ -284,7 +284,7 @@ onMounted(async () => {
 
     
   </div>
-</Transition>
+  </Transition>
 
 </template>
 

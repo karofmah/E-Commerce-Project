@@ -115,15 +115,13 @@ onMounted(async () => {
           <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in favoritesToDisplay" :key="favorite.id">
             <div class="item" @click="handleItemClick(favorite.item.id)">
               <img :src="favorite.item.images?.[0]" alt="Item image" />
-              <h3>{{ favorite.item.briefDescription }}</h3>
-              <h4>{{ favorite.item.price }}</h4>
+              <h3>{{ (favorite.item.briefDescription > 35) ? favorite.item.briefDescription.substring(0,33) + ".." : favorite.item.briefDescription}}</h3>
             </div>
           </div>
           <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in myItemsToDisplay" :key="item.id">
             <div class="item" @click="handleItemClick(item.id)">
               <img :src="item.images?.[0]" alt="Item image" />
-              <h3>{{ item.briefDescription }}</h3>
-              <h4>{{ item.price }}</h4>
+              <h3>{{ (item.briefDescription > 35) ? item.briefDescription.substring(0,33) + ".." : item.briefDescription }}</h3>
             </div>
           </div>
         </div>

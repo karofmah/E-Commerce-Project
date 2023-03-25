@@ -171,6 +171,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: start;
+    margin-bottom: 2em;
   }
 
 

@@ -6,11 +6,11 @@
     <div class="links">
       <div class="link-pair">
         <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
-        <a @click="handleItemClick('NewItem')" href="">Ny annonse</a>
+        <a @click="handleItemClick('NewItem')" href="">New Add</a>
       </div>
       <div class="link-pair">
         <img @click="handleItemClick('Message')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
-        <a @click="handleItemClick('Message')" href="">Meldinger</a>
+        <a @click="handleItemClick('Message')" href="">Messages</a>
       </div>
       <div class="link-pair">
       <img @click="handleItemClick('Cart')" src="../assets/cart3.svg" class="icon" alt="Cart">

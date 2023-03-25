@@ -7,16 +7,16 @@ let contacts = ref([])
 let currentChat = ref(0)
 let chat = ref([])
 let chatInput = ref("")
-let currentChatLength = 0;
 let currentScrollLength = 0;
 const tokenStore = useTokenStore();
 
 
 
 function openChat(contactValue){
-    const index = contacts.value.findIndex(c => c === contactValue)
-    currentChat.value = index
-		chatInput.value = ""
+  const index = contacts.value.findIndex(c => c === contactValue)
+  currentScrollLength = 0
+  currentChat.value = index
+	chatInput.value = ""
 }
 
 let searchText = ref('')
@@ -32,8 +32,8 @@ const filteredContacts = computed(() => {
 })
 
 function getLastMessage(contact){
-	//let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
-	//return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
+	// let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
+	// return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
   return "last message";
 }
 
@@ -56,18 +56,18 @@ async function addChat(input) {
 
 		chat.value[currentChat.value].push([input, 0])
 		chatInput.value = ""
-    currentChatLength++
 		scrollToBottom()
 	}
 }
 
 function scrollToBottom() {
   nextTick(() => {
-    if (currentChatLength != currentScrollLength) {
+    if (currentScrollLength < chat.value[currentChat.value].length) {
       let chatInstances = document.querySelector(".chatInstances");
         
       chatInstances.scrollTop = chatInstances.scrollHeight;
-      currentScrollLength++
+      console.log(currentScrollLength + "," + chat.value[currentChat.value].length)
+      currentScrollLength = chat.value[currentChat.value].length
     }
   });
 }
@@ -126,6 +126,7 @@ onUpdated(() => {
 
 onMounted(() => {
   initialize()
+
 
   setInterval(() => {
     getContacts()
