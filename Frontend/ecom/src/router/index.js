@@ -10,6 +10,7 @@ import UserView from '../views/UserView.vue';
 import UpdateItemView from '../views/UpdateItemView.vue';
 import MessageView from '../views/MessageView.vue';
 import AdminView from '../views/AdminView.vue'
+import PurchaseView from '../views/PurchaseView.vue'
 import { useTokenStore } from '../stores/userToken';
 import axios from 'axios';
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: CartView,
+  },
+  {
+    path: '/purchase',
+    name: 'Purchase',
+    component: PurchaseView,
   },
   {
     path: '/login',

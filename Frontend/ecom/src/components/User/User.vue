@@ -2,9 +2,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../../stores/userToken';
+import { useCartStore } from '../../stores/cartStore';
 import axios from 'axios';
 
 const tokenStore = useTokenStore()
+const cartStore = useCartStore();
 let router = useRouter();
 
 let favorites = ref([]);
@@ -36,6 +38,7 @@ async function getMyFavorites() {
     const userEmail = tokenStore.loggedInUser.email;
 
     favorites.value = await axios.get("http://localhost:9090/api/bookmark/get?email=" + userEmail, config).then(res => res.data);
+    console.log(favorites)
 }
 
 function favOrMy(key) {
@@ -53,6 +56,7 @@ function favOrMy(key) {
 
 function logOut() {
   tokenStore.logOut();
+  cartStore.logOut();
   router.push("Login");
 }
 
@@ -64,12 +68,20 @@ function handleFavoriteItemClick(item_id) {
   router.push({ name: 'ItemFavorite', params: { item_id } });
 }
 
-const itemsToDisplay = computed(() => {
-    if (favOrMyBool.value) {
-        return favorites.value;
-    } else {
-        return myItems.value;
-    }
+const favoritesToDisplay = computed(() => {
+  if (favOrMyBool.value) {
+    return favorites.value;
+  } else {
+    return [];
+  }
+});
+
+const myItemsToDisplay = computed(() => {
+  if (!favOrMyBool.value) {
+    return myItems.value;
+  } else {
+    return [];
+  }
 });
 
 onMounted(async () => {
@@ -82,12 +94,13 @@ onMounted(async () => {
     <div class="container">
         <div class="user">
             <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
-            <h1>{{ tokenStore.loggedInUser.email }}</h1>
+            <h2>{{ tokenStore.loggedInUser.email }}</h2>
             <div class="userFields">
                 <h3>{{ "Fornavn: " +  tokenStore.loggedInUser.firstName }}</h3>
                 <hr>
                 <h3>{{ "Etternavn: " + tokenStore.loggedInUser.lastName }}</h3>
                 <hr>
+                <h4>{{ "Brukernavn: " + tokenStore.loggedInUser.username }}</h4>
             </div>
             <br>
             <div class="userButtons">
@@ -101,16 +114,18 @@ onMounted(async () => {
                 <a href="#0" @click="favOrMy(1)">My Items</a>
             </nav>
             <div class="content">
-                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
-                    <div class="item" @click="handleFavoriteItemClick(item.item_id)">
-                        <img :src="item.images?.[0]" alt="Item image" />
-                        <h3>{{ item.briefDescription.substring(0, 16) }}</h3>
+                <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in favoritesToDisplay" :key="favorite.id">
+                    <div class="item" @click="handleItemClick(favorite.item.id)">
+                        <img :src="favorite.item.images?.[0]" alt="Item image" />
+                        <h3>{{ favorite.item.briefDescription }}</h3>
+                        <h4>{{ favorite.item.price }}</h4>
                     </div>
                 </div>
-                <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in itemsToDisplay" :key="item.id">
+                <div class="myItemsWrapper" :hidden="favOrMyBool" v-for="item in myItemsToDisplay" :key="item.id">
                     <div class="item" @click="handleItemClick(item.id)">
                         <img :src="item.images?.[0]" alt="Item image" />
-                        <h3>{{ item.briefDescription.substring(0, 16) }}</h3>
+                        <h3>{{ item.briefDescription }}</h3>
+                        <h4>{{ item.price }}</h4>
                     </div>
                 </div>
             </div>

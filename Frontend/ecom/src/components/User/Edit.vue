@@ -35,6 +35,11 @@
     <div class="main-container">
       <h1>Endre bruker</h1>
       <form @submit.prevent="handleSubmit">
+
+        <div class="form-group">
+          <label for="username">Brukernavn</label>
+          <input id="username" type="text" v-model="username" />
+        </div>
         
         <div class="form-group">
           <label for="firstName">Fornavn</label>
@@ -79,6 +84,7 @@ export default {
 data() {
   return {
     email: this.tokenStore.loggedInUser.email,
+    username: this.tokenStore.loggedInUser.username,
     firstName: this.tokenStore.loggedInUser.firstName,
     lastName: this.tokenStore.loggedInUser.lastName,
     newPassword: "",
@@ -114,6 +120,7 @@ methods: {
 
 const updateRequest = {
   email: this.email,
+  username : this.username,
   firstName: this.firstName,
   lastName: this.lastName,
   newPassword: this.newPassword,

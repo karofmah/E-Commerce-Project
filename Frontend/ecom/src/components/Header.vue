@@ -13,6 +13,10 @@
         <a @click="handleItemClick('Message')" href="">Meldinger</a>
       </div>
       <div class="link-pair">
+      <img @click="handleItemClick('Cart')" src="../assets/cart3.svg" class="icon" alt="Cart">
+      <a @click="handleItemClick('Cart')" href="">Cart</a>
+    </div>
+      <div class="link-pair">
         <img @click="changeRoute('UserInfo')" src="../assets/person-fill.svg" class="icon" alt="Log in">
         <template v-if="tokenStore.jwtToken && tokenStore.jwtToken !== null">
           <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
@@ -146,7 +150,6 @@ export default {
   color: var(--vt-c-white-soft);
   text-decoration: none;
   border-radius: 15px;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   margin-right: 25px;
   font-size: 20px;
 }

@@ -93,12 +93,10 @@ async function getMessages() {
     };
   
 
-  //chat.value = []
   let newChat = ref([])
   for (let i = 0; i < contacts.value.length; i++) {
 
 
-    //chat.value.push([])
     newChat.value.push([])
     const response = await axios.get('http://localhost:9090/api/messages/' + tokenStore.loggedInUser.email + "/" + contacts.value[i].email,config);
 
@@ -113,14 +111,13 @@ async function getMessages() {
         sender = 0
       }
   
-  
-      //chat.value[i].push([content, sender])
       newChat.value[i].push([content, sender])
     }
   }
   
 
   chat.value = newChat.value
+  
 }
 
 onUpdated(() => {

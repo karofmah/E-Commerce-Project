@@ -63,7 +63,12 @@ public class UserController {
     @DeleteMapping("/deleteUser/{email}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("email") String email) {
-        return userService.deleteUser(email);
+        try {
+            userService.deleteUser(email);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
