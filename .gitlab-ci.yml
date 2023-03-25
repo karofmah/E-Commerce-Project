@@ -1,23 +1,72 @@
-build-job:
-  stage: build
-  script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
 
-test-job1:
-  stage: test
-  script:
-    - echo "This job tests something"
+#New Pipeline
+stages:
+  - build-frontend
+  - test-frontend
+  - build-backend
+  - test-backend
+  - deploy
 
-test-job2:
-  stage: test
+build-frontend:
+  stage: build-frontend
+  image: node:latest
   script:
-    - echo "This job tests something, but takes more time than test-job1."
-    - echo "After the echo commands complete, it runs the sleep command for 20 seconds"
-    - echo "which simulates a test that runs 20 seconds longer than test-job1"
-    - sleep 20
+    - cd Frontend
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - Frontend/dist
+  cache:
+    paths:
+      - Frontend/node_modules
 
-deploy-prod:
+test-frontend:
+  stage: test-frontend
+  image: cypress/base:latest
+  script:
+    - cd Frontend
+    - npm ci
+    - npx cypress run
+  artifacts:
+    when: always
+    paths:
+      - Frontend/cypress/videos
+      - Frontend/cypress/screenshots
+  cache:
+    paths:
+      - Frontend/node_modules
+
+build-backend:
+  stage: build-backend
+  image: maven:latest
+  script:
+    - cd Backend
+    - mvn clean install
+  artifacts:
+    paths:
+      - Backend/target/*.jar
+  cache:
+    paths:
+      - Backend/.m2
+
+test-backend:
+  stage: test-backend
+  image: maven:latest
+  script:
+    - cd Backend
+    - mvn test
+  cache:
+    paths:
+      - Backend/.m2
+
+deploy:
   stage: deploy
+  image: alpine:latest
   script:
-    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
-  environment: production
+    - echo "Deploy your app using your preferred method"
+  environment:
+    name: production
+  when: manual
+  only:
+    - main
