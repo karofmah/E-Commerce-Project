@@ -11,54 +11,54 @@ build-frontend:
   stage: build-frontend
   image: node:latest
   script:
-    - cd Frontend
+    - cd Frontend/ecom
     - npm ci
     - npm run build
   artifacts:
     paths:
-      - Frontend/dist
+      - Frontend/ecom/dist
   cache:
     paths:
-      - Frontend/node_modules
+      - Frontend/ecom/node_modules
 
 test-frontend:
   stage: test-frontend
   image: cypress/base:latest
   script:
-    - cd Frontend
+    - cd Frontend/ecom
     - npm ci
     - npx cypress run
   artifacts:
     when: always
     paths:
-      - Frontend/cypress/videos
-      - Frontend/cypress/screenshots
+      - Frontend/ecom/cypress/videos
+      - Frontend/ecom/cypress/screenshots
   cache:
     paths:
-      - Frontend/node_modules
+      - Frontend/ecom/node_modules
 
 build-backend:
   stage: build-backend
   image: maven:latest
   script:
-    - cd Backend
+    - cd Backend/ECOMBack
     - mvn clean install
   artifacts:
     paths:
-      - Backend/target/*.jar
+      - Backend/ECOMBack/target/*.jar
   cache:
     paths:
-      - Backend/.m2
+      - Backend/ECOMBack.m2
 
 test-backend:
   stage: test-backend
   image: maven:latest
   script:
-    - cd Backend
+    - cd Backend/ECOMBack
     - mvn test
   cache:
     paths:
-      - Backend/.m2
+      - Backend/ECOMBack/.m2
 
 deploy:
   stage: deploy
