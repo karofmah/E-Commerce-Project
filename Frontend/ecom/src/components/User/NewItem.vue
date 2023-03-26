@@ -3,7 +3,6 @@
     <br /><h1>{{ $t("addNewItem") }}</h1>
 
     <div class="existing-images">
-      <h2>{{ $t("addNewItem") }}:</h2>
       <div class="images-container">
         <div
           v-for="(image, index) in images"

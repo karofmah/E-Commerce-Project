@@ -77,7 +77,7 @@ export default{
     deleteItem: "Delete Item",
     contactSeller: "Contact seller",
     description: "Description",
-    spesifications: "Spesification", 
+    spesifications: "Spesifications", 
 
     //Admin
     adminPagePressXToDeleteThings: "Admin page, press X to delete things",
