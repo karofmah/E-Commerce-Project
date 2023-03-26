@@ -7,7 +7,7 @@
       <select v-model="selectedLanguage" @change="changeLanguage()">
         <option disabled value="">{{ $t("selectLanguage") }}</option>
         <option value="en" selected>English</option>
-        <option value="no">Norsk</option>
+        <option value="nb">Norsk</option>
         <option value="es">Español</option>
         <option value="de">German</option>
         <option value="fr">French</option>
