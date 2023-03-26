@@ -1,5 +1,8 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.UserService;
@@ -24,9 +27,9 @@ public class UserController {
         this.userService=userService;
     }
 
-
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody(description = "User object to be created") User user){
         try{
              User _user=userService.registerUser(user);
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
@@ -37,18 +40,23 @@ public class UserController {
         }
     }
 
-
+    @Operation(summary = "Get a user", description = "Used for login")
     @GetMapping("/login/user")
-    public Optional<User> getUser(@RequestParam String email){
+    public Optional<User> getUser(
+            @Parameter(description = "The email of the user to get")
+            @RequestParam String email){
         return userService.getUser(email);
     }
-
+    @Operation(summary = "Update a user")
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
-    public User updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+    public User updateUser(
+            @RequestBody(description = "The user object that will replace the current user")
+            UpdateUserRequest updateUserRequest) {
         return userService.updateUser(updateUserRequest);
     }
 
+    @Operation(summary = "Get all users")
     @GetMapping("/getAllUsers")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -60,9 +68,12 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Delete user by their email")
     @DeleteMapping("/deleteUser/{email}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("email") String email) {
+    public ResponseEntity<HttpStatus> deleteUser(
+            @Parameter(description = "Email of the user to delete")
+            @PathVariable("email") String email) {
         try {
             userService.deleteUser(email);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

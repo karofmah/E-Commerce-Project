@@ -1,8 +1,9 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.model.UpdateItemRequest;
@@ -28,9 +29,10 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    @Operation(summary = "Add a new item")
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')") // Add this line
-    public ResponseEntity<Item> addItem(@RequestBody Item item){
+    public ResponseEntity<Item> addItem(@RequestBody(description = "Item object to be created") Item item){
         try{
             Item _item=itemService.addItem(item);
             return new ResponseEntity<>(_item,HttpStatus.CREATED);
@@ -39,16 +41,24 @@ public class ItemController {
         }
     }
 
+    @Operation(summary = "Update an item")
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
-    public Item updateItem(@RequestBody UpdateItemRequest updateItemRequest){
+    public Item updateItem(
+            @RequestBody(description = "The updated item object") UpdateItemRequest updateItemRequest){
         return itemService.updateItem(updateItemRequest);
     }
+
+    @Operation(summary = "Delete an item")
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> deleteItem(@PathVariable long id){
+    public ResponseEntity<HttpStatus> deleteItem(
+            @Parameter(description = "The id of the item")
+            @PathVariable long id){
         return itemService.deleteItem(id);
     }
+
+    @Operation(summary = "Get all items")
     @GetMapping("/getItems")
     public ResponseEntity<List<Item>> getItems() {
         try {
@@ -58,21 +68,37 @@ public class ItemController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(summary = "Get items by user")
     @GetMapping("")
     @PreAuthorize("hasRole('USER')")
-    public List<Item> getItemsByUserEmail(@RequestParam String email){
+    public List<Item> getItemsByUserEmail(
+            @Parameter(description = "The user email of the seller of the item")
+            @RequestParam String email){
         return itemService.getItemsByUserEmail(email);
     }
+
+    @Operation(summary = "Get a specific item")
     @GetMapping("{id}")
-    public Optional<Item> getItemById(@PathVariable long id){
+    public Optional<Item> getItemById(
+            @Parameter(description = "The id of the item")
+            @PathVariable long id){
         return itemService.getItemById(id);
     }
+
+    @Operation(summary = "Get items by keyword")
     @GetMapping("/get/keyword")
-    public List<Item> getItemsByKeyword(@RequestParam String keyword){
+    public List<Item> getItemsByKeyword(
+            @Parameter(description = "The keyword to be searched for")
+            @RequestParam String keyword){
         return itemService.getItemsByKeyword(keyword);
     }
+
+    @Operation(summary = "Get items by category")
     @GetMapping("/get/category")
-    public List<Item> getItemsByCategory(@RequestParam Category category){
+    public List<Item> getItemsByCategory(
+            @Parameter(description = "The item category to be searched for")
+            @RequestParam Category category){
         return itemService.getItemsByCategory(category);
     }
 }

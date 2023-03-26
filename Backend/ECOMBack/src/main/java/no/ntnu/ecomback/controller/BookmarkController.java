@@ -1,5 +1,8 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import no.ntnu.ecomback.model.Bookmark;
 import no.ntnu.ecomback.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +28,26 @@ public class BookmarkController {
         this.bookmarkService = bookmarkService;
     }
 
+    @Operation(summary = "Add a new bookmark")
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')")
-    public Bookmark addBookmark(@RequestBody Bookmark bookmark){
+    public Bookmark addBookmark(@RequestBody(description = "The bookmark to be added") Bookmark bookmark){
         return bookmarkService.addBookmark(bookmark);
     }
+
+    @Operation(summary = "Get bookmarks by user")
     @GetMapping("/get")
     @PreAuthorize("hasRole('USER')")
-    public List<Bookmark> getBookmarks(@RequestParam String email){
+    public List<Bookmark> getBookmarks(
+            @Parameter(description = "The email of the user") @RequestParam String email){
         return bookmarkService.getBookmarks(email);
     }
 
+    @Operation(summary = "Delete a bookmark")
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> deleteBookmark(@PathVariable long id){
+    public ResponseEntity<HttpStatus> deleteBookmark(
+            @Parameter(description = "The id of the bookmark to be deleted") @PathVariable long id){
         return bookmarkService.deleteItem(id);
     }
 }
