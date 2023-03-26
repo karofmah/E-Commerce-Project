@@ -5,7 +5,7 @@ stages:
   - deploy
 
 variables:
-  SPRING_PROFILES_ACTIVE: test
+  SPRING_PROFILES_ACTIVE: central
 
 build-frontend:
   stage: build-frontend
