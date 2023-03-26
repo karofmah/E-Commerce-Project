@@ -6,7 +6,6 @@ stages:
 
 variables:
   SPRING_PROFILES_ACTIVE: test
- 
 
 build-frontend:
   stage: build-frontend
@@ -39,15 +38,14 @@ build-backend:
 test:
   stage: test
   image: openjdk:11
-  services:
-    - name: openjdk:11
-      alias: backend
   script:
     - cd Backend/ECOMBack
     - java -jar target/*.jar &
-    - sleep 30
     - cd ../../Frontend/ecom
-    - docker run -v $PWD:/e2e -w /e2e cypress/base:12.8.1 /bin/bash -c "npm ci && npm run test:e2e:ci"
+    - npm ci
+    - npm run serve &
+    - sleep 30
+    - npm run test:e2e:ci
   artifacts:
     when: always
     paths:
