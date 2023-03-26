@@ -1,6 +1,8 @@
+import { getJwtToken } from "../../httputils"
+
 describe('User Login', () => {
     beforeEach(() => {
-      cy.visit('/login'); // Update this path with the actual path to your login page
+      cy.visit('/login');
     });
   
     it('logs in successfully', () => {
