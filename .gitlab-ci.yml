@@ -31,8 +31,9 @@ build-backend:
     paths:
       - Backend/ECOMBack/target/*.jar
   cache:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - Backend/ECOMBack/.m2
+      - Backend/ECOMBack/.m2/repository
 
 test:
   stage: test
