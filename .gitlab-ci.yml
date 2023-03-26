@@ -37,7 +37,7 @@ build-backend:
 
 test:
   stage: test
-  image: openjdk:11
+  image: node:latest
   script:
     - cd Backend/ECOMBack
     - java -jar target/.jar &
