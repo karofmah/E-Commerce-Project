@@ -4,15 +4,6 @@
       <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt=""></a>
     </div>
     <div class="links">
-      <select v-model="selectedLanguage" @change="changeLanguage()">
-        <option disabled value="">{{ $t("selectLanguage") }}</option>
-        <option value="en" selected>English</option>
-        <option value="nb">Norsk</option>
-        <option value="es">Español</option>
-        <option value="de">German</option>
-        <option value="fr">French</option>
-      </select>
-
       <div class="link-pair">
         <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
         <a @click="handleItemClick('NewItem')" href="">{{ $t("addNew") }}</a>
@@ -52,13 +43,11 @@ import axios from 'axios';
 import { useTokenStore } from "../stores/userToken";
 import { useRouter } from "vue-router";
 import { watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 export default {
   data() {
     return {
       scrollPosition: 0,
-      selectedLanguage: this.$i18n.locale,
     };
   },
   setup() {
@@ -90,9 +79,6 @@ export default {
     },
     changeRoute(string) {
       this.$router.push({ name: string });
-    },
-    changeLanguage(){
-      this.$i18n.locale = this.selectedLanguage;
     },
   },
   async mounted() {
@@ -181,11 +167,33 @@ select option:hover{
 }
 
 @media (max-width: 768px) {
+  .header {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  .logo img {
+    height: 5rem;
+  }
+
+  .links {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .link-pair {
+    margin-bottom: 10px;
+  }
+
+  .icon {
+    width: 1.5em;
+    margin-right: 1em;
+  }
+
   .links a {
     font-size: 1.2rem;
-  }
-  .logo h1{
-    font-size: 30px;
+    margin-right: 10px;
   }
 }
 </style>

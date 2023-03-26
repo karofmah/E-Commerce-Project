@@ -275,7 +275,7 @@ onMounted(async () => {
     <div class="info">
         <nav>
             <a href="#0" @click="descOrSpec(0)">{{ t("description") }}</a>
-            <a href="#0" @click="descOrSpec(1)">{{ t("spesification") }}</a>
+            <a href="#0" @click="descOrSpec(1)">{{ t("spesifications") }}</a>
         </nav>
         <br>
         <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
