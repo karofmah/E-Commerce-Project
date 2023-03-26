@@ -1,8 +1,7 @@
 stages:
   - build-frontend
-  - test-frontend
   - build-backend
-  - test-backend
+  - test
   - deploy
 
 variables:
@@ -22,22 +21,6 @@ build-frontend:
     paths:
       - Frontend/ecom/node_modules
 
-test-frontend:
-  stage: test-frontend
-  image: cypress/base:12.8.1
-  script:
-    - cd Frontend/ecom
-    - npm ci
-    - npm run test:e2e:ci
-  artifacts:
-    when: always
-    paths:
-      - Frontend/ecom/cypress/videos
-      - Frontend/ecom/cypress/screenshots
-  cache:
-    paths:
-      - Frontend/ecom/node_modules
-
 build-backend:
   stage: build-backend
   image: maven:latest
@@ -51,14 +34,26 @@ build-backend:
     paths:
       - Backend/ECOMBack/.m2
 
-test-backend:
-  stage: test-backend
-  image: maven:latest
+test:
+  stage: test
+  image: openjdk:11
+  services:
+    - name: openjdk:11
+      alias: backend
   script:
     - cd Backend/ECOMBack
-    - mvn test
+    - java -jar target/*.jar &
+    - sleep 30
+    - cd ../../Frontend/ecom
+    - docker run -v $PWD:/e2e -w /e2e cypress/base:12.8.1 /bin/bash -c "npm ci && npm run test:e2e:ci"
+  artifacts:
+    when: always
+    paths:
+      - Frontend/ecom/cypress/videos
+      - Frontend/ecom/cypress/screenshots
   cache:
     paths:
+      - Frontend/ecom/node_modules
       - Backend/ECOMBack/.m2
 
 deploy:
