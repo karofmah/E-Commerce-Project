@@ -6,8 +6,8 @@ stages:
 
 variables:
   SPRING_PROFILES_ACTIVE: test
-  SPRING_DATASOURCE_URL: dbc:mysql://mysql-ait.stud.idi.ntnu.no:3306/edvarso
-  SPRING_DATASOURCE_USERNAME: spring.datasource.username=edvarso
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql-ait.stud.idi.ntnu.no:3306/edvarso
+  SPRING_DATASOURCE_USERNAME: edvarso
   SPRING_DATASOURCE_PASSWORD: 5Tm9UfCjx
 
 build-frontend:
@@ -32,7 +32,7 @@ build-backend:
     - mvn clean package
   artifacts:
     paths:
-      - Backend/ECOMBack/target/.jar
+      - Backend/ECOMBack/target/*.jar
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -40,10 +40,10 @@ build-backend:
 
 test:
   stage: test
-  image: node:latest
+  image: circleci/node:14-openjdk-11
   script:
     - cd Backend/ECOMBack
-    - java -jar target/.jar &
+    - java -jar target/*.jar &
     - cd ../../Frontend/ecom
     - npm ci
     - npm run serve &
