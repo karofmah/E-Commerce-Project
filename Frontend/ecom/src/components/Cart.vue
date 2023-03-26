@@ -93,12 +93,14 @@ onMounted(async () => {
   <div class="container">
     <div class="cart">
       <h1>Shopping Cart</h1>
-      <br>
       <div v-for="item in items" :key="item.id">
         <h2>Product: {{ item.briefDescription }}, Price: {{ item.price }}</h2>
         <button @click="deleteItem(item.id)">Delete</button>
         <button @click="buyItem(item.id)">Buy</button>
         <hr>
+      </div>
+      <div v-if="items.length == 0">
+        <h2>You have not added any items to cart</h2>
       </div>
       <br>
     </div>
@@ -141,6 +143,10 @@ onMounted(async () => {
   float: left;
 }
 
+button:nth-of-type(2){
+  margin-left: 1em;
+}
+
 .pay {
   height: 25em;
   /* margin: 48em 48em; */
@@ -157,6 +163,7 @@ onMounted(async () => {
 }
 
 hr {
+  margin-top: 1em;
   width: 40em;
 }
 

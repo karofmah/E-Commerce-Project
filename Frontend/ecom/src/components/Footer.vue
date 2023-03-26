@@ -29,6 +29,7 @@
     color: white;
     font-size: 18px;
     width: 33%;
+    height: 100%;
     display: flex; 
     flex-direction: column;
     justify-content: center; 
@@ -39,6 +40,7 @@
     color: white;
     font-size: 18px;
     width: 33%;
+    height: 57%;
     display: flex;
     justify-content: center; 
     align-items: flex-end;
@@ -47,6 +49,8 @@
 .logo{
     width: 33%;
     display: flex; 
+    height: 100%;
+    margin-top: 1em;
     justify-content: flex-start; 
     align-items: flex-start;
     flex-direction: column;

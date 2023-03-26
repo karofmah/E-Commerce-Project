@@ -44,13 +44,12 @@ onMounted(async () => {
     <div class="fullImg">
       <img :src="item.images[0]" id="itemImgFull" :alt="'Item' + ID + ' img'" />
     </div>
-    <span for="itemImgFull" v-if="item.location.length < 38">{{ location }}</span>
-    <marquee v-else behavior="scroll" direction="left">{{ location }}</marquee>
+    <span v-if="item.location.length < 38">{{ location }}</span>
+    <span v-else class="scrolling-text">{{ location }}</span>
     <h1 id="itemTitle"> {{ item.briefDescription }}</h1>
     <h2>Price: {{ item.price }}</h2>
   </div>
 </template>
-
 
 <style scoped>
 .displayBase {
@@ -63,6 +62,7 @@ onMounted(async () => {
     border-radius: 8px;
     text-align: start;
     padding: 1em;
+    overflow: hidden;
 }
 
 #displayFull {
@@ -83,9 +83,9 @@ onMounted(async () => {
     object-position: center;
 }
 
-.displayBase span, .displayBase marquee {
+.displayBase span, .scrolling-text {
     position: absolute;
-    max-width: 89%;
+    min-width: fit-content;
     max-height: 32px;
     top: 275px;
     left: 1.1em;
@@ -98,5 +98,19 @@ onMounted(async () => {
     white-space: pre;
 }
 
+.scrolling-text {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: scrolling 10s linear infinite;
+}
 
+@keyframes scrolling {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 </style>
+

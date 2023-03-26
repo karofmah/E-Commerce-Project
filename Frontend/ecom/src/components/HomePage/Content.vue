@@ -86,6 +86,7 @@ await getItemsByLocation();
         flex-flow: row wrap;
         justify-content: flex-start;
         align-items: center;
+        min-height: 30em;
         height: fit-content;
         background-color: rgba(176, 176, 176, .2);
         border-radius: 8px;
