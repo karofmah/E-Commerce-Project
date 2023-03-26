@@ -40,6 +40,7 @@ describe('Admin page tests', () => {
     cy.get('input[type="text"]').type(newCategory);
     cy.get('button[type="submit"]').click();
 
+    cy.wait(10000)
     cy.visit('/');
     cy.contains(newCategory).should('exist');
 

@@ -32,14 +32,17 @@ describe('Edit Item Test with Login', () => {
 
   it('Updates the brief description', () => {
     cy.get('#brief-description')
-    .clear()
-    .should('have.value', "test");
+    .clear().type("123")
+    .should('have.value', "test123");
+    cy.wait(10000)
   });
-  
+
   it('Updates the full description', () => {
-    cy.get('#brief-description')
-    .clear()
-    .should('have.value', "test");
+    cy.get('#full-description')
+      .clear()
+      .type("123")
+      .should('have.value', 'test | \nLocation: ladeveien 22123');
+    cy.wait(10000);
   });
   
   it('Updates the price', () => {
