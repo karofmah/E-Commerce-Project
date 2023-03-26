@@ -1,11 +1,12 @@
-
-#New Pipeline
 stages:
   - build-frontend
   - test-frontend
   - build-backend
   - test-backend
   - deploy
+
+variables:
+  SPRING_PROFILES_ACTIVE: test
 
 build-frontend:
   stage: build-frontend
@@ -23,11 +24,11 @@ build-frontend:
 
 test-frontend:
   stage: test-frontend
-  image: cypress/base:latest
+  image: cypress/base:12.8.1
   script:
     - cd Frontend/ecom
     - npm ci
-    - npx cypress run
+    - npm run test:e2e:ci
   artifacts:
     when: always
     paths:
@@ -42,13 +43,13 @@ build-backend:
   image: maven:latest
   script:
     - cd Backend/ECOMBack
-    - mvn clean install
+    - mvn clean package
   artifacts:
     paths:
       - Backend/ECOMBack/target/*.jar
   cache:
     paths:
-      - Backend/ECOMBack.m2
+      - Backend/ECOMBack/.m2
 
 test-backend:
   stage: test-backend
