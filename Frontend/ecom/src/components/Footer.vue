@@ -6,9 +6,6 @@
         <div class="copyright">
             <div>{{ $t("logoCreatedBy") }} <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
         </div>
-        <div class="info-box">
-            <p>{{ $t("thisIsInfoAboutProgram") }}</p>
-        </div>
     </div>
 </template>
 

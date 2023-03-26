@@ -18,6 +18,8 @@ export default {
     //Login
     email: "E-post",
     password: "Passord",
+    yourEmail: "Din Email",
+    yourPassword: "Ditt Passord",
     doYouWantToRegisterNewUser: "Vil du registrere en ny bruker",
     registerNewUser: "Registrer ny bruker",
   
@@ -85,9 +87,8 @@ export default {
   
     //Purchase
     thanksForPurchase: "TAKK FOR KJØPET",
-  
+
     //Footer
-    logoCreatedBy: "Logo laget av",
-    thisIsInfoAboutProgram: "Dette er informasjon om programmet",
+    logoCreatedBy: "Logo-en er laget av",
   };
   

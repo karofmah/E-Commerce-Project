@@ -18,6 +18,8 @@ export default{
     //Login
     email: "Email",
     password: "Password",
+    yourEmail: "Your Email",
+    yourPassword: "Your Password",
     doYouWantToRegisterNewUser: "Do you want to register a new user",
     registerNewUser: "Register new user",
 
@@ -89,5 +91,4 @@ export default{
 
     //Footer
     logoCreatedBy: "Logo created by",
-    thisIsInfoAboutProgram: "This is info about the program",
 }

@@ -4,12 +4,12 @@
         <form>
             <div class="email">
                 <label for="password">{{ $t("email") }}</label>
-            <input id="email" type="email" v-model="email" required autocomplete="username" placeholder="Din email">
+            <input id="email" type="email" v-model="email" required autocomplete="username" :placeholder="$t('yourEmail')">
             </div>
           <br>
           <div class="password">
             <label for="password">{{ $t("password") }}</label>
-            <input id="password" type="password" v-model="password" autocomplete="current-password" required placeholder="Ditt passord">
+            <input id="password" type="password" v-model="password" autocomplete="current-password" required :placeholder="$t('yourPassword')">
           </div>
           <p>{{ error }}</p>
           <br>
@@ -18,7 +18,7 @@
           </div>
           <br>
           <div class="register">
-            <p>Har du lyst å registere en ny bruker? </p>
+            <p>{{ $t("doYouWantToRegisterNewUser") }}? </p>
             <button type="button" @click="changeRoute('Register')">{{ $t("registerNewUser") }}</button>
           </div>
           <br>
