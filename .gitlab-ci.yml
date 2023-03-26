@@ -1,20 +1,14 @@
 stages:
-  - build
+  - build-frontend
+  - build-backend
   - test
   - deploy
 
 variables:
   SPRING_PROFILES_ACTIVE: test
 
-.build_template: &build_definition
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - Frontend/ecom/node_modules
-      - Backend/ECOMBack/.m2/repository
-
 build-frontend:
-  stage: build
+  stage: build-frontend
   image: node:latest
   script:
     - cd Frontend/ecom
@@ -23,28 +17,30 @@ build-frontend:
   artifacts:
     paths:
       - Frontend/ecom/dist
-  <<: *build_definition
+  cache:
+    paths:
+      - Frontend/ecom/node_modules
 
 build-backend:
-  stage: build
+  stage: build-backend
   image: maven:latest
   script:
     - cd Backend/ECOMBack
     - mvn clean package
   artifacts:
     paths:
-      - Backend/ECOMBack/target/*.jar
-  <<: *build_definition
+      - Backend/ECOMBack/target/.jar
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - Backend/ECOMBack/.m2/repository
 
 test:
   stage: test
-  image: node:latest
-  services:
-    - name: docker:dind
-      alias: docker
+  image: openjdk:11
   script:
     - cd Backend/ECOMBack
-    - docker run -d -p 9090:9090 --name backend openjdk:11 java -jar target/*.jar
+    - java -jar target/.jar &
     - cd ../../Frontend/ecom
     - npm ci
     - npm run serve &
@@ -55,7 +51,10 @@ test:
     paths:
       - Frontend/ecom/cypress/videos
       - Frontend/ecom/cypress/screenshots
-  <<: *build_definition
+  cache:
+    paths:
+      - Frontend/ecom/node_modules
+      - Backend/ECOMBack/.m2
 
 deploy:
   stage: deploy
