@@ -1,30 +1,30 @@
 <template>
     <div class=" wrapper">
         <div class="main-container">
-            <br><h1>Ny bruker</h1>
+            <br><h1>{{ $t("newUser") }}</h1>
             <br>
             <div class="email">
-                <input placeholder="Epostadresse" type="email" v-model="email">
+                <input :placeholder="$t('email')" type="email" v-model="email">
             </div>
             <br>
             <div class="username">
-                <input placeholder="Ditt brukernavn" type="text" v-model="username">
+                <input :placeholder="$t('email')" type="text" v-model="username">
             </div>
             <br>
             <div class="password">
-                <input placeholder="Ditt passord" type="password" v-model="password">
+                <input :placeholder="$t('email')" type="password" v-model="password">
             </div>
             <br>
             <div class="Forname">
-                <input placeholder="Fornavn" type="text" v-model="firstName">
+                <input :placeholder="$t('email')" type="text" v-model="firstName">
             </div>
             <br>
             <div class="Surname">
-                <input placeholder="Etternavn" type="text" v-model="lastName">
+                <input :placeholder="$t('email')" type="text" v-model="lastName">
             </div>
             <br>
             <div class="submit">
-                <button @click="register()">Register ny bruker</button>
+                <button @click="register()">{{ $t("registerNewUser") }}</button>
             </div>
             <p>{{ error }}</p>
             <br>
