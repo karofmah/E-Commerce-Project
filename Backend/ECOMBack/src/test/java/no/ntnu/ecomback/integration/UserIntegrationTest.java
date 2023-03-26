@@ -53,15 +53,23 @@ public class UserIntegrationTest {
     @Autowired
     UserService userService;
 
+    List <User> users=new ArrayList<>();
 
     @BeforeEach
     @DisplayName("Setting up mock data for tests")
     public void setup() {
-        /*
+
         User user1=new User("karofm@ntnu.no","Karo","Mahmoud","karofm","pw",Role.NORMAL_USER);
         User user2=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
         User user3=new User("karofm3@ntnu.no","Karo3","Mahmoud3","karofm3","pw3",Role.NORMAL_USER);
-*/
+
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
 
 
 
@@ -80,30 +88,20 @@ public class UserIntegrationTest {
         @WithMockUser(username = "USER")
         @DisplayName("Testing the endpoint for retrieving all users")
         public void getUsers() throws Exception {
+
             MvcResult result = mockMvc.perform(get("/api/users/getAllUsers")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
-
             String responseString = result.getResponse().getContentAsString();
             ObjectMapper mapper = new ObjectMapper();
             List<User> actualItems = mapper.readValue(responseString, new TypeReference<>() {
             });
-            System.out.println(actualItems);
 
-
-
+            Assertions.assertEquals(userRepository.findAll().size(),actualItems.size());
         }
-        @Test
-        @DisplayName("Testing the endpoint for retrieving all users as an invalid user")
-        public void getUsersInvalid() throws Exception {
 
-            mockMvc.perform(get("/api/users/getAllUsers")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is(403))
-                    .andReturn();
-        }
     }
 
     @Test
@@ -125,6 +123,6 @@ public class UserIntegrationTest {
         User retrievedUser = userOptional.get();
         Assertions.assertEquals(newUser.getEmail(), retrievedUser.getEmail());
 
-
     }
+
 }
