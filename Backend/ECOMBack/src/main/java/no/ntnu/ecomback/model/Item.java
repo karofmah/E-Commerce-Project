@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,49 +18,57 @@ public class Item {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "The Id of the item")
     private long id;
 
     /**
      * The seller of the item
      */
+    @Schema(description = "The seller of the item")
     @ManyToOne
     private User seller;
 
     /**
      * A brief description of the item
      */
+    @Schema(description = "A brief description of the item")
     @Column
     private String briefDescription;
 
     /**
      * The full description of the item
      */
+    @Schema(description = "The full description of the item")
     @Column
     private String fullDescription;
 
     /**
      * The category of item
      */
-    @ManyToOne()
+    @Schema(description = "The full description of the item")
+    @ManyToOne
     private Category category;
 
     /**
      * The location of the item
      */
     @Embedded
+    @Schema(description = "The location of the item")
     private Location location;
 
     /**
      * The price of the item
      */
     @Column
+    @Schema(description = "The price of the item")
     private int price;
 
     /**
-     *
+     * The list of base64-encoded images of the item
      */
     @ElementCollection
     @Column(name = "image", length = Integer.MAX_VALUE)
+    @Schema(description = "The encoded images of the item")
     private List<String> images = new ArrayList<>();
 
     /**
@@ -183,10 +192,18 @@ public class Item {
         this.price = price;
     }
 
+    /**
+     * Gets images
+     * @return the images
+     */
     public List<String> getImages() {
         return images;
     }
 
+    /**
+     * Sets images
+     * @param images the images
+     */
     public void setImages(List<String> images) {
         this.images = images;
     }

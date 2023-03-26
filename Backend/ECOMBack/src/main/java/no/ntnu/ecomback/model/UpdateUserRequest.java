@@ -5,37 +5,45 @@
 package no.ntnu.ecomback.model;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class UpdateUserRequest {
 
     /**
 
      The user's email.
      */
+    @Schema(description = "The email address of the user")
     private String email;
     /**
 
      The user's first name.
      */
+    @Schema(description = "The updated first name of the user")
     private String firstName;
     /**
 
      The user's last name.
      */
+    @Schema(description = "The updated last name of the user")
     private String lastName;
 
     /**
      * The user's username
      */
+    @Schema(description = "The updated username of the user")
     private String username;
     /**
 
      The user's new password.
      */
+    @Schema(description = "The updated password of the user")
     private String newPassword;
     /**
 
      The user's current password.
      */
+    @Schema(description = "The current password of the user")
     private String currentPassword;
 
 

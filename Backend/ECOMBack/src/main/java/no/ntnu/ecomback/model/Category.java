@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,6 +15,7 @@ public class Category {
      * The name of the category
      */
     @Id
+    @Schema(description = "The name of the category")
     private String categoryName;
 
     public Category() {

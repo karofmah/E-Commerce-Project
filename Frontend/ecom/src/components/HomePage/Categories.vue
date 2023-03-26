@@ -71,6 +71,10 @@ onMounted(async () => {
     border-radius: 8px;
     text-align: center;
   }
+  
+  .categories h3::first-letter {
+    text-transform: capitalize;
+  }
 
   .categories:hover{
     cursor: pointer;
