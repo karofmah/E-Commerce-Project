@@ -6,6 +6,9 @@ stages:
 
 variables:
   SPRING_PROFILES_ACTIVE: test
+  SPRING_DATASOURCE_URL: dbc:mysql://mysql-ait.stud.idi.ntnu.no:3306/edvarso
+  SPRING_DATASOURCE_USERNAME: spring.datasource.username=edvarso
+  SPRING_DATASOURCE_PASSWORD: 5Tm9UfCjx
 
 build-frontend:
   stage: build-frontend
