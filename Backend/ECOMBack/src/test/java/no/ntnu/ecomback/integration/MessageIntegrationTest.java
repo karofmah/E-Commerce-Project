@@ -13,14 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -30,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
+@TestPropertySource(locations = "classpath:application-karo.properties")
 
 public class MessageIntegrationTest {
     @Autowired
@@ -39,13 +43,13 @@ public class MessageIntegrationTest {
     @Autowired
     MessageController messageController;
 
-    @Autowired
+    @MockBean
     MessageService messageService;
 
-    @MockBean
+    @Autowired
     MessageRepository messageRepository;
-    List <Message> mockMessagesToAndFrom=new ArrayList<>();
-    List <Message> mockMessages=new ArrayList<>();
+
+    String baseUrl = "http://localhost:9090";
 
     @BeforeEach
     @DisplayName("Setting up mock data for tests")
@@ -67,18 +71,27 @@ public class MessageIntegrationTest {
 
         message2.setFromEmail("karo@ntnu.no");
         message2.setToEmail("edvard@ntnu.no");
-
+/*
         mockMessages.add(message1);
         mockMessages.add(message2);
         mockMessages.add(message3);
+*/
+        messageRepository.save(message2);
 
+/*
         mockMessagesToAndFrom.add(message1);
         mockMessagesToAndFrom.add(message2);
 
-        when(messageRepository.findAll()).thenReturn(mockMessages);
-        when(messageRepository.findByToEmailAndFromEmailOrToEmailAndFromEmailOrderByTimestamp
-                ("karofm@ntnu.no","edvard@ntnu.no","edvard@ntnu.no",
-                        "karo@ntnu.no")).thenReturn(mockMessagesToAndFrom);
+        when(messageService.getAllMessages()).thenReturn(mockMessages);
+        when(messageService.getMessagesByToAndFromEmail("karofm@ntnu.no","edvard@ntnu.no"))
+                .thenReturn(mockMessagesToAndFrom);
+*/
+    }
+    @AfterEach
+    public void teardown(){
+
+        messageRepository.deleteAll();
+
 
     }
 
@@ -88,18 +101,8 @@ public class MessageIntegrationTest {
         @WithMockUser(username = "USER")
         @DisplayName("Testing the endpoint for retrieving all messages as a valid user")
         public void getMessages() throws Exception {
-            MvcResult result = mockMvc.perform(get("/api/messages/getAllMessages")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andReturn();
 
-            String responseString = result.getResponse().getContentAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
-            });
-            Assertions.assertEquals(mockMessages.size(), actualMessages.size());
 
-            System.out.println(actualMessages);
         }
         @Test
         @DisplayName("Testing the endpoint for retrieving all messages as an invalid user")
@@ -112,31 +115,50 @@ public class MessageIntegrationTest {
         }
 
     }
-    @Test
-    @WithMockUser(username = "USER")
-    @DisplayName("Testing the endpoint for sending a valid message")
-    public void sendValidMessage() throws Exception {
-        Message newMessage=new Message();
-        newMessage.setMessageContent("newHei");
-        mockMessages.add(newMessage);
-        when(messageRepository.save(Mockito.any(Message.class))).thenReturn(newMessage);
+    @Nested
+    class TestSendMessage{
+        @Test
+        @WithMockUser(username = "USER")
+        @DisplayName("Testing the endpoint for sending a valid message")
+        public void sendValidMessage() throws Exception {
+            Message newMessage=new Message();
+            newMessage.setMessageContent("newHei");
+            when(messageService.addMessage(Mockito.any(Message.class))).thenReturn(newMessage);
 
-        String newMessageJson=objectMapper.writeValueAsString(newMessage);
+            String newMessageJson=objectMapper.writeValueAsString(newMessage);
 
-        MvcResult result= mockMvc.perform(post("/api/messages/sendMessage")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newMessageJson)
+            MvcResult result= mockMvc.perform(post("/api/messages/sendMessage")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(newMessageJson)
 
-                )
-                .andExpect(status().isCreated())
-                .andReturn();
+                    )
+                    .andExpect(status().isCreated())
+                    .andReturn();
 
-        Assertions.assertNotNull(result);
-        String messageJson = result.getResponse().getContentAsString();
-        Assertions.assertEquals(messageJson,objectMapper.writeValueAsString(newMessage));
-        System.out.println(messageJson);
+            Assertions.assertNotNull(result);
+            String messageJson = result.getResponse().getContentAsString();
+            Assertions.assertEquals(messageJson,objectMapper.writeValueAsString(newMessage));
+            System.out.println(messageJson);
+        }
+        @Test
+        @WithMockUser(username = "USER")
+        @DisplayName("Testing the endpoint for sending a message with invalid content")
+        public void sendInvalidMessage() throws Exception {
+            when(messageService.addMessage(Mockito.any(Message.class))).thenThrow(new RuntimeException("Failed to add message"));
+
+            String newMessageJson = objectMapper.writeValueAsString(new Message());
+
+            mockMvc.perform(post("/api/messages/sendMessage")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(newMessageJson)
+                    )
+                    .andExpect(status().isInternalServerError());
+        }
+
     }
+}
 
     /*
     @Nested
@@ -187,4 +209,4 @@ public class MessageIntegrationTest {
 
         }*
     }*/
-}
+

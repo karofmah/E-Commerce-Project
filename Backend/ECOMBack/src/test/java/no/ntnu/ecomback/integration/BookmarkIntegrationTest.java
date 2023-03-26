@@ -22,7 +22,7 @@ public class BookmarkIntegrationTest {
 
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
+    @Autowired
     ItemController itemController;
     @Autowired
     ItemRepository itemRepository;
