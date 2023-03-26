@@ -5,7 +5,18 @@ stages:
   - deploy
 
 variables:
-  SPRING_PROFILES_ACTIVE: test
+  SPRING_PROFILES_ACTIVE: karo
+  SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  SPRING_DATASOURCE_URL: ${url}
+  SPRING_DATASOURCE_USERNAME: ${username}
+  SPRING_DATASOURCE_PASSWORD: ${password}
+  SPRING_JPA_PROPERTIES_JAKARTA_PERSISTENCE_SHAREDCACHE_MODE: ENABLE_SELECTIVE
+  SERVER_PORT: 9090
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: ERROR
+  LOGGING_LEVEL_COM_PACKETPUB_RESTAPP: INFO
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+  
 
 build-frontend:
   stage: build-frontend
@@ -31,8 +42,9 @@ build-backend:
     paths:
       - Backend/ECOMBack/target/*.jar
   cache:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - Backend/ECOMBack/.m2
+      - Backend/ECOMBack/.m2/repository
 
 test:
   stage: test
