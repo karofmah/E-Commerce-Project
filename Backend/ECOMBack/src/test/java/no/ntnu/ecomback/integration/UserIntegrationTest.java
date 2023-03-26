@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
-@TestPropertySource(locations = "classpath:application-karo.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 
 public class UserIntegrationTest {
 
