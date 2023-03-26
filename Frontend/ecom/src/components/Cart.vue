@@ -4,6 +4,9 @@ import { useRouter } from 'vue-router';
 import { useTokenStore } from '../stores/userToken';
 import { useCartStore } from '../stores/cartStore';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const cartStore = useCartStore();
 const tokenStore = useTokenStore();
@@ -92,21 +95,21 @@ onMounted(async () => {
 <template>
   <div class="container">
     <div class="cart">
-      <h1>Shopping Cart</h1>
+      <h1>{{ t("shoppingCart") }}</h1>
       <div v-for="item in items" :key="item.id">
-        <h2>Product: {{ item.briefDescription }}, Price: {{ item.price }}</h2>
-        <button @click="deleteItem(item.id)">Delete</button>
-        <button @click="buyItem(item.id)">Buy</button>
+        <h2>{{ t("product") }}: {{ item.briefDescription }}, {{ t("price") }}: {{ item.price }}</h2>
+        <button @click="deleteItem(item.id)">{{ t("delete") }}</button>
+        <button @click="buyItem(item.id)">{{ t("buy") }}</button>
         <hr>
       </div>
       <div v-if="items.length == 0">
-        <h2>You have not added any items to cart</h2>
+        <h2>{{ t("youHaveNotAddedAnyItemsToCart") }}</h2>
       </div>
       <br>
     </div>
     <div class="pay">
-      <h1>Check Out</h1>
-      <h2>Total Price:</h2>
+      <h1>{{ t("checkOut") }}</h1>
+      <h2>{{ t("totalPrice") }}:</h2>
       <h1 id="totalPrice">{{ totalPrice }}</h1>
     </div>
   </div>

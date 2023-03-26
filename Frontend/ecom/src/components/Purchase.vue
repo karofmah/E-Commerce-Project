@@ -1,12 +1,15 @@
 <template>
     <div class="centered">
-      <h1>TAKK FOR KJØPET</h1>
-      <button @click="goToStart">Ta meg tilbake til start</button>
+      <h1>{{ t("thanksForThePurchase") }}</h1>
+      <button @click="goToStart">{{ t("returnToStart") }}</button>
     </div>
   </template>
   
-  <script setup>
+<script setup>
     import { useRouter } from 'vue-router';
+    import { useI18n } from 'vue-i18n';
+
+    const { t } = useI18n();
     const router = useRouter();
 
     function goToStart(){

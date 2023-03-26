@@ -2,6 +2,9 @@
 import { ref, computed, onUpdated, nextTick, onMounted } from 'vue'
 import axios from 'axios';
 import { useTokenStore } from "../stores/userToken";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 let contacts = ref([])
 let currentChat = ref(0)
@@ -150,7 +153,7 @@ async function initialize() {
         <h1>Chats</h1>
       </div>
       <hr />
-      <input type="text" id="search" placeholder="Search" v-model="searchText" />
+      <input type="text" id="search" :placeholder="t('search')" v-model="searchText" />
       <div class="contacts">
         <div class="contact" v-for="contact in filteredContacts" @click="openChat(contact)">
             <img src="../assets/person-fill.svg" alt="Person img">
@@ -177,7 +180,7 @@ async function initialize() {
           {{ chatInstance[0] }}
         </div>
       </div>
-	  <input type="text" id="chatInput" placeholder="Send a Chat" autocomplete="off" v-model="chatInput" @keydown.enter="addChat(chatInput)"/>
+	  <input type="text" id="chatInput" :placeholder="t('sendAChat')" autocomplete="off" v-model="chatInput" @keydown.enter="addChat(chatInput)"/>
     </div>
   </div>
 </template>

@@ -4,10 +4,10 @@
             <img src="../assets/logo.png" alt="Logo">
         </div>
         <div class="copyright">
-            <div>Logo created by <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
+            <div>{{ $t("logoCreatedBy") }} <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo logo maker</a></div>
         </div>
         <div class="info-box">
-            <p>This is info about program</p>
+            <p>{{ $t("thisIsInfoAboutProgram") }}</p>
         </div>
     </div>
 </template>
@@ -79,7 +79,4 @@
         font-size: 13px;
     }
 }
-
-
-
 </style>

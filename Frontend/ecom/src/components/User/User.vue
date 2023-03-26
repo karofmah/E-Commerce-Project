@@ -4,6 +4,9 @@ import { RouterLink, useRouter } from 'vue-router';
 import { useTokenStore } from '../../stores/userToken';
 import { useCartStore } from '../../stores/cartStore';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const tokenStore = useTokenStore()
 const cartStore = useCartStore();
@@ -92,24 +95,24 @@ onMounted(async () => {
     <div class="container">
       <div class="user">
         <img src="../../assets/person-fill.svg" id="userImg" alt="Person">
-        <h2>{{ tokenStore.loggedInUser ? tokenStore.loggedInUser.email : '' }}</h2>
+        <h2>{{ tokenStore.loggedInUser ? tokenStore.loggedInUser.username : '' }}</h2>
         <div class="userFields">
-          <h3>{{ "Fornavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.firstName : '') }}</h3>
+          <h3>{{ t("firstName") + ": " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.firstName : '') }}</h3>
           <hr>
-          <h3>{{ "Etternavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.lastName : '') }}</h3>
+          <h3>{{ t("lastName") + ": " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.lastName : '') }}</h3>
           <hr>
-          <h4>{{ "Brukernavn: " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.username : '') }}</h4>
+          <h3>{{ t("email") + ": " + (tokenStore.loggedInUser ? tokenStore.loggedInUser.email : '') }}</h3>
         </div>
         <br>
         <div class="userButtons">
-          <RouterLink to="/edit"><button id="edit">Edit</button></RouterLink>
-          <button @click="logOut()" id="logOut">Log Out</button>
+          <RouterLink to="/edit"><button id="edit">{{ t("edit") }}</button></RouterLink>
+          <button @click="logOut()" id="logOut">{{ t("logOut") }}</button>
         </div>
       </div>
       <div class="contentWrapper">
         <nav>
-          <a href="#0" @click="favOrMy(0)">Favorites</a>
-          <a href="#0" @click="favOrMy(1)">My Items</a>
+          <a href="#0" @click="favOrMy(0)">{{ t("favorites") }}</a>
+          <a href="#0" @click="favOrMy(1)">{{ t("myItems") }}</a>
         </nav>
         <div class="content">
           <div class="favoritesWrapper" :hidden="!favOrMyBool" v-for="favorite in favoritesToDisplay" :key="favorite.id">
@@ -148,7 +151,7 @@ onMounted(async () => {
         align-items: center;
         background-color: var(--color-blue);
         color: var(--vt-c-white-mute);
-        height: 35em;
+        height: 36em;
         width: 40%;
         margin: 0 3em 3em 0em;
         padding: 1em 3em;

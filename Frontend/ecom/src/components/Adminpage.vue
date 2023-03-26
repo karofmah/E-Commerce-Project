@@ -1,11 +1,11 @@
 <template>
     <div>
       <div class="header">
-        <h1>Admin page, press X to delete things</h1>
+        <h1>{{ $t("adminPagePressXToDeleteThings") }}</h1>
       </div>
       <div class="container-admin">
         <div class="user-section">
-          <h1>Users</h1>
+          <h1>{{ $t("users") }}</h1>
           <ul>
             <li v-for="(user, index) in users" :key="index">
               {{ user.email }} <span class="delete" @click="deleteUser(index)">X</span>
@@ -13,7 +13,7 @@
           </ul>
         </div>
         <div class="category-section">
-          <h1>Categories</h1>
+          <h1>{{ $t("categories") }}</h1>
           <ul>
             <li v-for="(category, index) in categories" :key="index">
               {{ category.categoryName }} <span class="delete" @click="deleteCategory(index)">X</span>
@@ -21,14 +21,14 @@
           </ul>
           <form @submit.prevent="addCategory">
             <input type="text" v-model="newCategory">
-            <button type="submit">Add Category</button>
+            <button type="submit">{{ $t("addCategory") }}</button>
           </form>
         </div>
         <div class="item-section">
-          <h1>Items</h1>
+          <h1>{{ $t("addCategory") }}</h1>
           <ul>
             <li v-for="(item, index) in items" :key="index">
-              {{ "Seller: " + item.seller.email + " Title: " + item.briefDescription}} <span class="delete" @click="deleteItem(index)">X</span>
+              {{ $t("seller") + ": " + item.seller.email + " " + $t("title") + ": " + item.briefDescription}} <span class="delete" @click="deleteItem(index)">X</span>
             </li>
           </ul>
         </div>
