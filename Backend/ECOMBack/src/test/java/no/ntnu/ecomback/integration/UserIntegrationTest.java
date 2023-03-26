@@ -8,16 +8,11 @@ import no.ntnu.ecomback.model.Role;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.UserRepository;
 import no.ntnu.ecomback.service.UserService;
-import org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -96,10 +90,10 @@ public class UserIntegrationTest {
 
             String responseString = result.getResponse().getContentAsString();
             ObjectMapper mapper = new ObjectMapper();
-            List<User> actualItems = mapper.readValue(responseString, new TypeReference<>() {
+            List<User> actualUsers = mapper.readValue(responseString, new TypeReference<>() {
             });
 
-            Assertions.assertEquals(userRepository.findAll().size(),actualItems.size());
+            Assertions.assertEquals(userRepository.findAll().size(),actualUsers.size());
         }
 
     }
@@ -109,7 +103,7 @@ public class UserIntegrationTest {
     public void registerNewUser() throws Exception {
         User newUser=new User("karofm6@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
 
-        userRepository.save(newUser);
+
         String newUserJson=objectMapper.writeValueAsString(newUser);
 
         mockMvc.perform(post("/api/users/register")

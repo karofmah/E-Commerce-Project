@@ -32,7 +32,7 @@ public class MessageController {
         try {
             Message _message = messageService.addMessage(message);
             return new ResponseEntity<>(_message, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
