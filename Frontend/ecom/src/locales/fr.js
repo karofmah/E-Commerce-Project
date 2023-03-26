@@ -1,6 +1,6 @@
 export default {
     // Header
-    addNew: "Ajouter un nouveau",
+    addNew: "Ajouter",
     messages: "Messages",
     cart: "Panier",
     logIn: "Se connecter",

@@ -1,9 +1,41 @@
 <template>
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
-      <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt=""></a>
+      <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt="logo"></a>
+      <img src="../assets/list.svg" alt="menu" class="menyImg" v-if="windowWidth < 768" @click="linksVisibility()">
     </div>
-    <div class="links">
+    <div class="links" v-if="windowWidth > 768">
+      <div class="link-pair">
+        <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
+        <a @click="handleItemClick('NewItem')" href="">{{ $t("addNew") }}</a>
+      </div>
+
+      <div class="link-pair">
+        <img @click="handleItemClick('Message')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
+        <a @click="handleItemClick('Message')" href="">{{ $t("messages") }}</a>
+      </div>
+
+      <div class="link-pair">
+        <img @click="handleItemClick('Cart')" src="../assets/cart3.svg" class="icon" alt="Cart">
+        <a @click="handleItemClick('Cart')" href="">{{ $t("cart") }}</a>
+      </div>
+
+      <div class="link-pair">
+        <img @click="changeRoute('UserInfo')" src="../assets/person-fill.svg" class="icon" alt="Log in">
+        <template v-if="tokenStore.jwtToken && tokenStore.loggedInUser">
+          <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
+        </template>
+        <template v-else>
+          <a @click="changeRoute('Login')" href="">{{ $t("logIn") }}</a>
+        </template>
+      </div>
+
+      <div v-if="tokenStore.loggedInUser && tokenStore.loggedInUser.role === 'ADMINISTRATOR'" class="link-pair">
+        <img @click="changeRoute('admin')" src="../assets/person-fill.svg" class="icon" alt="Admin">
+        <a @click="changeRoute('admin')" href="">Admin</a>
+      </div>
+    </div>
+    <div class="links" v-if="links">
       <div class="link-pair">
         <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
         <a @click="handleItemClick('NewItem')" href="">{{ $t("addNew") }}</a>
@@ -48,6 +80,8 @@ export default {
   data() {
     return {
       scrollPosition: 0,
+      windowWidth: window.innerHeight,
+      links: false,
     };
   },
   setup() {
@@ -80,10 +114,18 @@ export default {
     changeRoute(string) {
       this.$router.push({ name: string });
     },
+    linksVisibility(){
+      this.links = !this.links
+    }
   },
   async mounted() {
     window.addEventListener("scroll", this.updateScroll);
   },
+  mounted() {
+    window.onresize = () => {
+      this.windowWidth = window.innerWidth
+    }
+  }
 };
 </script>
 
@@ -94,10 +136,10 @@ export default {
   top: 0;
   background: var(--color-blue);
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   place-items: center;
   justify-content: space-between;
-  max-height: 125px;
+  height: fit-content;
   transition: opacity 0.5s ease;
   opacity: 1;
   width: 100%;
@@ -169,17 +211,30 @@ select option:hover{
 @media (max-width: 768px) {
   .header {
     flex-direction: row;
-    padding: 10px;
+    padding: 5px;
+  }
+
+  .logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
   .logo img {
-    height: 5rem;
+    height: 6rem;
+  }
+
+  .menyImg{
+    width: 3.5em;
   }
 
   .links {
+    height: fit-content;
     flex-direction: row;
     align-items: center;
-    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
   }
 
   .link-pair {
@@ -192,7 +247,7 @@ select option:hover{
   }
 
   .links a {
-    font-size: 1.2rem;
+    font-size: 1.1em;
     margin-right: 10px;
   }
 }
