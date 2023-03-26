@@ -1,6 +1,7 @@
 package no.ntnu.ecomback.service;
 
 import jakarta.transaction.Transactional;
+import no.ntnu.ecomback.model.Role;
 import no.ntnu.ecomback.model.UpdateUserRequest;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.BookmarkRepository;
@@ -50,7 +51,6 @@ public class UserService {
     }
 
     public User registerUser(User user) {
-
         try {
             List<User> users = new ArrayList<>(userRepository.findAll());
 
@@ -60,6 +60,9 @@ public class UserService {
                     return null;
                 }
             }
+
+            user.setRole(Role.NORMAL_USER);
+
             _logger.info("User registered successfully");
             return userRepository.save(user);
         } catch (Exception e) {

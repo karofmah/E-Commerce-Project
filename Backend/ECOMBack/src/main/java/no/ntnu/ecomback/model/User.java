@@ -166,7 +166,9 @@ public class User {
      * @param role the password to set
      */
     public void setRole(Role role) {
-        this.role = role;
+        if (role != Role.ADMINISTRATOR) {
+            this.role = role;
+        }
     }
 
     @Override
