@@ -18,7 +18,7 @@ describe('Admin page tests', () => {
     });
   
     beforeEach(() => {
-      cy.visit('/login');
+      cy.visit('http://localhost:5173/login');
       cy.get('#email').type("1@gmail.com");
       cy.get('#password').type("123");
       cy.get('.submit > button').click();
@@ -30,16 +30,16 @@ describe('Admin page tests', () => {
 
   it('should add and delete a category', () => {
     const newCategory = 'Test Category';
-    cy.visit('/admin');
+    cy.visit('http://localhost:5173/admin');
     cy.wait(5000)
     cy.get('input[type="text"]').type(newCategory);
     cy.get('button[type="submit"]').click();
 
     cy.wait(10000)
-    cy.visit('/');
+    cy.visit('http://localhost:5173/');
     cy.contains(newCategory).should('exist');
 
-    cy.visit('/admin');
+    cy.visit('http://localhost:5173/admin');
 
     cy.wait(1000)
     cy.get('.category-section li:contains("Test Category")')
@@ -47,7 +47,7 @@ describe('Admin page tests', () => {
     .click()
 
 
-    cy.visit('/');
+    cy.visit('http://localhost:5173/');
     cy.contains(newCategory).should('not.exist');
   });
 });

@@ -1,6 +1,6 @@
 describe('New Ad Post', () => {
     beforeEach(() => {
-      cy.visit('/newItem');
+      cy.visit('http://localhost:5173/newItem');
     });
   
     it('should display an error message when required fields are empty', () => {
@@ -11,7 +11,7 @@ describe('New Ad Post', () => {
     it('should upload an image and display an error message when brief description is longer than 42 characters and other fields are filled', () => {
         cy.intercept('http://localhost:9090/api/categories/getCategories').as('getCategories');
       
-        cy.visit('/newItem');
+        cy.visit('http://localhost:5173/newItem');
         cy.wait('@getCategories');
       
         cy.fixture('logotest.png').then(fileContent => {
@@ -46,7 +46,7 @@ describe('New Ad Post', () => {
           statusCode: 200,
         });
       
-        cy.visit('/newItem');
+        cy.visit('http://localhost:5173/newItem');
         cy.wait('@getCategories');
       
         cy.get('#brief-description').type('Sample Brief Description');

@@ -1,6 +1,6 @@
 describe('New User Registration', () => {
   beforeEach(() => {
-    cy.visit('/register');
+    cy.visit('http://localhost:5173/register');
   });
 
   it('registers a new user successfully', () => {

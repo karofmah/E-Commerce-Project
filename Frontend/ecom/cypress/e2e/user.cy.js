@@ -17,7 +17,7 @@ describe('User Component Tests with Login', () => {
     });
   
     beforeEach(() => {
-      cy.visit('/login');
+      cy.visit('http://localhost:5173/login');
       cy.get('#email').type("1@gmail.com");
       cy.get('#password').type("123");
       cy.get('.submit > button').click();
@@ -27,7 +27,7 @@ describe('User Component Tests with Login', () => {
     });
   
     it('displays the correct user information', () => {
-        cy.visit('/userInfo');
+        cy.visit('http://localhost:5173/userInfo');
       cy.get('.user h2').should('contain', '1@gmail.com');
       cy.get('.userFields h3').eq(0).should('contain', 'Fornavn: test');
       cy.get('.userFields h3').eq(1).should('contain', 'Etternavn: test');
@@ -35,7 +35,7 @@ describe('User Component Tests with Login', () => {
     });
 
     it('should update the user name and then change it back', () => {
-        cy.visit('/userInfo');
+        cy.visit('http://localhost:5173/userInfo');
         cy.get('#userImg').click();
         cy.contains('Edit').click();
     
@@ -55,7 +55,7 @@ describe('User Component Tests with Login', () => {
       });
   
     it('logs out the user and redirects to login page', () => {
-        cy.visit('/userInfo');
+        cy.visit('http://localhost:5173/userInfo');
       cy.get('#logOut').click();
   
       cy.url().should('include', '/Login');

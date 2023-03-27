@@ -17,14 +17,14 @@ describe('Edit Item Test with Login', () => {
   });
 
   beforeEach(() => {
-    cy.visit('/login');
+    cy.visit('http://localhost:5173/login');
     cy.get('#email').type("1@gmail.com");
     cy.get('#password').type("123");
     cy.get('.submit > button').click();
     cy.url().should('include', '/');
 
     cy.wait(1000)
-    cy.visit('/update-item/1652');
+    cy.visit('http://localhost:5173/update-item/1652');
   });
 
   it('Updates the brief description', () => {
