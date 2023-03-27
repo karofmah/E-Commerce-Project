@@ -55,7 +55,7 @@ test:
     - npm install
   script:
     - cd ../../Backend/ECOMBack
-    - java -jar target/.jar &
+    - java -jar ECOMBack-0.0.1-SNAPSHOT.jar &
     - sleep 60
     - cd ../../Frontend/ecom
     - npm ci
