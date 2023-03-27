@@ -1,8 +1,7 @@
 stages:
   - build-frontend
-  - build-backend
-  - test
-  - deploy
+  - build-and-test-backend
+  - test-frontend
 
 variables:
   SPRING_PROFILES_ACTIVE: test
@@ -24,8 +23,8 @@ build-frontend:
     paths:
       - Frontend/ecom/node_modules
 
-build-backend:
-  stage: build-backend
+build-and-test-backend:
+  stage: build-and-test-backend
   image: maven:latest
   script:
     - cd Backend/ECOMBack
@@ -38,8 +37,8 @@ build-backend:
     paths:
       - Backend/ECOMBack/.m2/repository
 
-test:
-  stage: test
+test-frontend:
+  stage: test-frontend
   image: ubuntu:latest
   before_script:
     - apt-get update
@@ -75,14 +74,3 @@ test:
     paths:
       - Frontend/ecom/node_modules
       - Backend/ECOMBack/.m2
-
-deploy:
-  stage: deploy
-  image: alpine:latest
-  script:
-    - echo "Deploy your app using your preferred method"
-  environment:
-    name: production
-  when: manual
-  only:
-    - main
