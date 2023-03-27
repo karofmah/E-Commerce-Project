@@ -1,11 +1,14 @@
 <script setup>
- import { ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import Categories from '../components/HomePage/Categories.vue'
 import Content from '../components/HomePage/Content.vue'
 import { setKeyword, getKeyword } from '../stores/searchStore';
 import { useCategoryStore } from '../stores/categoryStore';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const searchInput = ref(null);
 const categoryStore = useCategoryStore();
@@ -30,7 +33,7 @@ watch(
     <Header id="header"/>
     <br>
     <div class="catAndContAndSearch">
-      <input type="text" class="search-bar" v-model="searchInput" placeholder="Search..." @keyup.enter="handleSearch" />
+      <input type="text" class="search-bar" v-model="searchInput" :placeholder="t('search')" @keyup.enter="handleSearch" />
       <Categories id="categories"/>
       <Content id="content"/>
     </div>

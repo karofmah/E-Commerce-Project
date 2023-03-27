@@ -1,5 +1,7 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @Operation(summary = "Get all categories")
     @GetMapping("/getCategories")
     public ResponseEntity<List<Category>> getAllCategories() {
         try {
@@ -32,9 +35,12 @@ public class CategoryController {
         }
     }
 
+    @Operation(summary = "Add a new category")
     @PostMapping("/addCategory")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+    public ResponseEntity<Category> addCategory(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The category to be added")
+            @RequestBody Category category) {
         try {
             Category _category = categoryService.addCategory(category);
             return  new ResponseEntity<>(_category, HttpStatus.CREATED);
@@ -43,9 +49,12 @@ public class CategoryController {
         }
     }
 
+    @Operation(summary = "Delete a category")
     @DeleteMapping("/deleteCategory/{categoryName}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Category> deleteCategory(@PathVariable("categoryName") String categoryName) {
+    public ResponseEntity<Category> deleteCategory(
+            @Parameter(description = "The name of the category to be deleted")
+            @PathVariable("categoryName") String categoryName) {
         try {
             if (categoryService.deleteCategory(categoryName)) {
                 return  new ResponseEntity<>(HttpStatus.NO_CONTENT);

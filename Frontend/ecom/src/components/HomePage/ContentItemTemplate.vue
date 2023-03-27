@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   ID: Number,
@@ -47,7 +50,7 @@ onMounted(async () => {
     <span v-if="item.location.length < 38">{{ location }}</span>
     <span v-else class="scrolling-text">{{ location }}</span>
     <h1 id="itemTitle"> {{ item.briefDescription }}</h1>
-    <h2>Price: {{ item.price }}</h2>
+    <h2>{{ t("price") }}: {{ item.price }}</h2>
   </div>
 </template>
 

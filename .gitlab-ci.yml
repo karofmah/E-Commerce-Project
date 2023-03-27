@@ -5,18 +5,10 @@ stages:
   - deploy
 
 variables:
-  SPRING_PROFILES_ACTIVE: karo
-  SPRING_JPA_HIBERNATE_DDL_AUTO: update
-  SPRING_DATASOURCE_URL: ${url}
-  SPRING_DATASOURCE_USERNAME: ${username}
-  SPRING_DATASOURCE_PASSWORD: ${password}
-  SPRING_JPA_PROPERTIES_JAKARTA_PERSISTENCE_SHAREDCACHE_MODE: ENABLE_SELECTIVE
-  SERVER_PORT: 9090
-  SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
-  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK: ERROR
-  LOGGING_LEVEL_COM_PACKETPUB_RESTAPP: INFO
-  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
-  
+  SPRING_PROFILES_ACTIVE: test
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql-ait.stud.idi.ntnu.no:3306/edvarso
+  SPRING_DATASOURCE_USERNAME: spring.datasource.username=edvarso
+  SPRING_DATASOURCE_PASSWORD: 5Tm9UfCjx
 
 build-frontend:
   stage: build-frontend
@@ -40,7 +32,7 @@ build-backend:
     - mvn clean package
   artifacts:
     paths:
-      - Backend/ECOMBack/target/*.jar
+      - Backend/ECOMBack/target/.jar
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -48,16 +40,15 @@ build-backend:
 
 test:
   stage: test
-  image: openjdk:11
-  services:
-    - name: openjdk:11
-      alias: backend
+  image: circleci/node:14-openjdk-11
   script:
     - cd Backend/ECOMBack
-    - java -jar target/*.jar &
-    - sleep 30
+    - java -jar target/.jar &
     - cd ../../Frontend/ecom
-    - docker run -v $PWD:/e2e -w /e2e cypress/base:12.8.1 /bin/bash -c "npm ci && npm run test:e2e:ci"
+    - npm ci
+    - npm run serve &
+    - sleep 30
+    - npm run test:e2e:ci
   artifacts:
     when: always
     paths:

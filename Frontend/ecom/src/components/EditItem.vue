@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-      <h1>Oppdater annonse</h1>
+      <h1>{{ $t("updateItem") }}</h1>
   
       <div class="existing-images">
-        <h2>Eksisterende bilder:</h2>
+        <h2>{{ $t("existingPictures") }}:</h2>
         <div class="images-container">
             <div v-for="(image, index) in images" :key="index" class="image-wrapper">
               <img :src="image" alt="Uploaded image" class="uploaded-image" />
@@ -13,17 +13,17 @@
       </div>
 
       <div class="field-container">
-        <label for="images">Last opp bilder (maks 10):</label>
+        <label for="images">{{ $t("uploadImages") }} (max 10):</label>
         <input type="file" id="images" ref="images" multiple @change="handleImages" />
       </div>
   
       <div class="field-container">
-        <label for="brief-description">Kort beskrivelse:</label>
+        <label for="brief-description">{{ $t("briefDescription") }}:</label>
         <input type="text" id="brief-description" v-model="briefDescription" />
       </div>
   
       <div class="field-container">
-      <label for="category">Kategori:</label>
+      <label for="category">{{ $t("category") }}:</label>
       <select id="category" v-model="category">
         
         <option
@@ -37,24 +37,23 @@
     </div>
   
       <div class="field-container">
-        <label for="full-description">
-            Full beskrivelse:</label>
+        <label for="full-description">{{ $t("fullDescription") }}:</label>
         <textarea id="full-description" v-model="fullDescription"></textarea>
       </div>
   
       <div class="field-container">
-        <label for="location">Plassering:</label>
+        <label for="location">{{ $t("location") }}:</label>
         <input type="text" id="location" v-model="locationString" @change="handleLocation" />
         <br>
         <div id="map" ref="map" class="map"></div>
       </div>
   
       <div class="field-container">
-        <label for="price">Pris:</label>
+        <label for="price">{{ $t("price") }}:</label>
         <input type="number" id="price" v-model="price" />
       </div>
   
-      <button @click="submit" id="submit">Oppdater annonse</button>
+      <button @click="submit" id="submit">{{ $t("updateItem") }}</button>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </template>

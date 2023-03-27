@@ -1,9 +1,8 @@
 <template>
   <div class="new-item">
-    <br /><h1>Legg til ny annonse</h1>
+    <br /><h1>{{ $t("addNewItem") }}</h1>
 
     <div class="existing-images">
-      <h2>Nåværende bilder:</h2>
       <div class="images-container">
         <div
           v-for="(image, index) in images"
@@ -26,7 +25,7 @@
     </div>
 
     <div class="field-container">
-      <label for="images">Last opp bilder (Max 10):</label>
+      <label for="images">{{ $t("uploadImages") }} (Max 10):</label>
       <input
         type="file"
         id="images"
@@ -37,7 +36,7 @@
     </div>
 
     <div class="field-container">
-      <label for="brief-description">Kort beskrivelse:</label>
+      <label for="brief-description">{{ $t("briefDescription") }}:</label>
       <input
         type="text"
         id="brief-description"
@@ -46,7 +45,7 @@
     </div>
 
     <div class="field-container">
-      <label for="category">Kategori:</label>
+      <label for="category">{{ $t("category") }}:</label>
       <select id="category" v-model="category">
         
         <option
@@ -60,24 +59,24 @@
     </div>
 
     <div class="field-container">
-      <label for="full-description">Full beskrivelse:</label>
+      <label for="full-description">{{ $t("fullDescription") }}:</label>
       <textarea id="full-description" v-model="fullDescription"></textarea>
     </div>
 
     <div class="field-container">
       <div class="location-container">
-        <label for="location">Plassering:</label>
+        <label for="location">{{ $t("location") }}:</label>
         <input type="text" id="location" v-model="locationName" @change="handleLocation" />
       </div>
       <div id="map" ref="map" class="map"></div>
     </div>
 
     <div class="field-container">
-      <label for="price">Pris:</label>
+      <label for="price">{{ $t("price") }}:</label>
       <input type="number" id="price" v-model="price" />
     </div>
 
-    <button @click="submit">Legg ut annonse</button>
+    <button @click="submit">{{ $t("publishItem") }}</button>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     <br /><br />
   </div>

@@ -5,6 +5,7 @@
 package no.ntnu.ecomback.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,36 +17,42 @@ public class User {
      */
     @JsonProperty("email")
     @Id
+    @Schema(description = "The email address of the user")
     private String email;
 
     /**
      * The first name of the user.
      */
     @Column
+    @Schema(description = "The first name of the user")
     private String firstName;
 
     /**
      * The last name of the user.
      */
     @Column
+    @Schema(description = "The last name of the user")
     private String lastName;
 
     /**
      * The username of the user.
      */
     @Column
+    @Schema(description = "The username of the user")
     private String username;
 
     /**
      * The password of the user.
      */
     @Column
+    @Schema(description = "The password of the user")
     private String password;
 
     /**
      * The role of the user
      */
 
+    @Schema(description = "The role of the user")
     private Role role;
 
     /**
@@ -166,7 +173,9 @@ public class User {
      * @param role the password to set
      */
     public void setRole(Role role) {
-        this.role = role;
+        if (role != Role.ADMINISTRATOR) {
+            this.role = role;
+        }
     }
 
     @Override

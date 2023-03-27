@@ -1,5 +1,7 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import no.ntnu.ecomback.model.Bookmark;
 import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.service.BookmarkService;
@@ -26,9 +28,14 @@ public class BookmarkController {
         this.bookmarkService = bookmarkService;
     }
 
+
+    @Operation(summary = "Add a new bookmark")
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Bookmark> addBookmark(@RequestBody Bookmark bookmark){
+
+    public ResponseEntity<Bookmark> addBookmark(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The bookmark to be added")
+            @RequestBody Bookmark bookmark){
         try{
             Bookmark _bookmark=bookmarkService.addBookmark(bookmark);
             return new ResponseEntity<>(_bookmark,HttpStatus.CREATED);
@@ -37,9 +44,11 @@ public class BookmarkController {
         }
     }
 
+    @Operation(summary = "Get bookmarks by user")
     @GetMapping("/get")
     @PreAuthorize("hasRole('USER')")
-    public  ResponseEntity<List<Bookmark>> getBookmarks(@RequestParam String email) {
+    public ResponseEntity<List<Bookmark>> getBookmarks(
+            @Parameter(description = "The email of the user") @RequestParam String email){
         try {
             List<Bookmark> bookmarks = bookmarkService.getBookmarks(email);
             return new ResponseEntity<>(bookmarks, HttpStatus.OK);
@@ -48,10 +57,11 @@ public class BookmarkController {
         }
     }
 
-
+    @Operation(summary = "Delete a bookmark")
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> deleteBookmark(@PathVariable long id){
+    public ResponseEntity<HttpStatus> deleteBookmark(
+            @Parameter(description = "The id of the bookmark to be deleted") @PathVariable long id){
         return bookmarkService.deleteItem(id);
     }
 }

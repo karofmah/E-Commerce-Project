@@ -3,23 +3,23 @@
       <div class="main-container">
         <form>
             <div class="email">
-                <label for="password">Din epostadresse</label>
-            <input id="email" type="email" v-model="email" required autocomplete="username" placeholder="Din email">
+                <label for="password">{{ $t("email") }}</label>
+            <input id="email" type="email" v-model="email" required autocomplete="username" :placeholder="$t('yourEmail')">
             </div>
           <br>
           <div class="password">
-            <label for="password">Ditt passord</label>
-            <input id="password" type="password" v-model="password" autocomplete="current-password" required placeholder="Ditt passord">
+            <label for="password">{{ $t("password") }}</label>
+            <input id="password" type="password" v-model="password" autocomplete="current-password" required :placeholder="$t('yourPassword')">
           </div>
           <p>{{ error }}</p>
           <br>
           <div class="submit">
-            <button type="button" @click="login()">Logg inn</button>
+            <button type="button" @click="login()">{{ $t("logIn") }}</button>
           </div>
           <br>
           <div class="register">
-            <p>Har du lyst å registere en ny bruker? </p>
-            <button type="button" @click="changeRoute('Register')">Register ny bruker her</button>
+            <p>{{ $t("doYouWantToRegisterNewUser") }}? </p>
+            <button type="button" @click="changeRoute('Register')">{{ $t("registerNewUser") }}</button>
           </div>
           <br>
         </form>

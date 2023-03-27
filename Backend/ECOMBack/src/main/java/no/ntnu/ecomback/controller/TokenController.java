@@ -1,5 +1,6 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import no.ntnu.ecomback.model.LoginRequest;
 import no.ntnu.ecomback.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class TokenController {
         this.tokenService = tokenService;
     }
 
+    @Operation(summary = "Get a token for a user with valid credentials")
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public String getToken(final @RequestBody LoginRequest loginRequest) {

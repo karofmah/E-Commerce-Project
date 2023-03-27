@@ -4,12 +4,17 @@
 
 package no.ntnu.ecomback.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embeddable;
 
 
 @Embeddable
+@Schema(description = "The location of an item")
 public class Location {
+
+    @Schema(description = "The latitude of the location")
     private double latitude;
+    @Schema(description = "The latitude of the location")
     private double longitude;
 
 

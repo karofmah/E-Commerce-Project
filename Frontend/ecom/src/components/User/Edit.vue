@@ -37,37 +37,37 @@
       <form @submit.prevent="handleSubmit">
 
         <div class="form-group">
-          <label for="username">Brukernavn</label>
+          <label for="username">{{ $t("userName") }}</label>
           <input id="username" type="text" v-model="username" />
         </div>
         
         <div class="form-group">
-          <label for="firstName">Fornavn</label>
+          <label for="firstName">{{ $t("firstName") }}</label>
           <input id="firstName" type="text" v-model="firstName" />
         </div>
 
         <div class="form-group">
-          <label for="lastName">Etternavn</label>
+          <label for="lastName">{{ $t("lastName") }}</label>
           <input id="lastName" type="text" v-model="lastName" />
         </div>
 
         <div class="form-group">
-          <label for="newPassword" >Nytt passord</label>
+          <label for="newPassword" >{{ $t("newPassword") }}</label>
           <input id="newPassword" type="password" v-model="newPassword" />
         </div>
 
         <div class="form-group">
-          <label for="currentPassword">Gammelt passord</label>
+          <label for="currentPassword">{{ $t("oldPassword") }}</label>
           <input id="currentPassword" type="password" v-model="currentPassword" />
         </div>
 
         
-          <button type="submit">Lagre endringer</button>
+          <button type="submit">{{ $t("saveChanges") }}</button>
         
       </form>
 
       <br />
-      <button @click="changeRoute('Home')">Tilbake til start</button>
+      <button @click="changeRoute('Home')">{{ $t("returnToStart") }}</button>
       <br />
       <p>{{ error }}</p>
     </div>

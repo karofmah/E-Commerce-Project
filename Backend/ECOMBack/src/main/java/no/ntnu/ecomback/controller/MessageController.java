@@ -1,5 +1,7 @@
 package no.ntnu.ecomback.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import no.ntnu.ecomback.model.Message;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.MessageService;
@@ -11,10 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
-
-
-
 @RequestMapping("/api/messages")
 @CrossOrigin("http://localhost:5173/")
 public class MessageController {
@@ -26,9 +26,12 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    @Operation(summary = "Send a new message")
     @PostMapping("/sendMessage")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Message> sendMessage(@RequestBody Message message){
+    public ResponseEntity<Message> sendMessage(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The message to send")
+            @RequestBody Message message){
         try {
             Message _message = messageService.addMessage(message);
             return new ResponseEntity<>(_message, HttpStatus.CREATED);
@@ -38,6 +41,7 @@ public class MessageController {
     }
 
 
+    @Operation(summary = "Get all messages")
     @GetMapping("/getAllMessages")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Message>> getMessages() {
@@ -50,10 +54,12 @@ public class MessageController {
         }
     }
 
+    @Operation(summary = "Get all messages between two users")
     @GetMapping("/{fromEmail}/{toEmail}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Message>> getMessagesByToEmailAndFromEmail(
-            @PathVariable String fromEmail, @PathVariable String toEmail){
+            @Parameter(description = "The sender's email") @PathVariable String fromEmail,
+            @Parameter(description = "The recipient's email") @PathVariable String toEmail){
 
         try {
             List<Message> messages = messageService.getMessagesInBothDirections(toEmail, fromEmail);
@@ -69,9 +75,11 @@ public class MessageController {
     }
 
 
+    @Operation(summary = "Get all previously contacted users for a user")
     @GetMapping("/{email}/contacts")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<User>> getContacts(@PathVariable String email){
+    public ResponseEntity<List<User>> getContacts(
+            @Parameter(description = "The email of the user") @PathVariable String email){
         try {
 
             List<User> contacts = messageService.getContacts(email);

@@ -4,6 +4,7 @@
  It is an entity that is mapped to a database table using the Jakarta Persistence API.
  */
 package no.ntnu.ecomback.model;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Bookmark {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "The id of the bookmark")
     private long id;
 
     /**
@@ -21,6 +23,7 @@ public class Bookmark {
      */
     @ManyToOne
     @JoinColumn(name = "user_email")
+    @Schema(description = "The user that owns the bookmark")
     private User user;
 
     /**
@@ -28,6 +31,7 @@ public class Bookmark {
      */
     @ManyToOne
     @JoinColumn(name = "item_id")
+    @Schema(description = "The item that is bookmarked")
     private Item item;
 
     /**

@@ -6,29 +6,33 @@
     <div class="links">
       <div class="link-pair">
         <img @click="handleItemClick('NewItem')" src="../assets/bag-plus.svg" class="icon" alt="New Ad">
-        <a @click="handleItemClick('NewItem')" href="">New Add</a>
+        <a @click="handleItemClick('NewItem')" href="">{{ $t("addNew") }}</a>
       </div>
+
       <div class="link-pair">
         <img @click="handleItemClick('Message')" src="../assets/chat-left-dots.svg" class="icon" alt="Message">
-        <a @click="handleItemClick('Message')" href="">Messages</a>
+        <a @click="handleItemClick('Message')" href="">{{ $t("messages") }}</a>
       </div>
+
       <div class="link-pair">
-      <img @click="handleItemClick('Cart')" src="../assets/cart3.svg" class="icon" alt="Cart">
-      <a @click="handleItemClick('Cart')" href="">Cart</a>
-    </div>
+        <img @click="handleItemClick('Cart')" src="../assets/cart3.svg" class="icon" alt="Cart">
+        <a @click="handleItemClick('Cart')" href="">{{ $t("cart") }}</a>
+      </div>
+
       <div class="link-pair">
         <img @click="changeRoute('UserInfo')" src="../assets/person-fill.svg" class="icon" alt="Log in">
         <template v-if="tokenStore.jwtToken && tokenStore.loggedInUser">
           <a @click="changeRoute('UserInfo')" href="">{{ tokenStore.loggedInUser.firstName }}</a>
         </template>
         <template v-else>
-          <a @click="changeRoute('Login')" href="">Logg inn</a>
+          <a @click="changeRoute('Login')" href="">{{ $t("logIn") }}</a>
         </template>
       </div>
+
       <div v-if="tokenStore.loggedInUser && tokenStore.loggedInUser.role === 'ADMINISTRATOR'" class="link-pair">
-      <img @click="changeRoute('admin')" src="../assets/person-fill.svg" class="icon" alt="Admin">
-      <a @click="changeRoute('admin')" href="">Admin</a>
-    </div>
+        <img @click="changeRoute('admin')" src="../assets/person-fill.svg" class="icon" alt="Admin">
+        <a @click="changeRoute('admin')" href="">Admin</a>
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +47,7 @@ import { watch } from 'vue';
 export default {
   data() {
     return {
-      scrollPosition: 0
+      scrollPosition: 0,
     };
   },
   setup() {
@@ -85,10 +89,6 @@ export default {
 
 
 <style scoped>
-
-
-
-
 .header {
   position: sticky;
   top: 0;
@@ -124,9 +124,17 @@ export default {
   height: 10rem;
 }
 
+select{
+  margin-right: 1em;
+  outline: none;
+}
+
+select option:hover{
+  background: var(--color-blue);
+}
+
 .links {
   display: flex;
-  padding-right: 5%;
 }
 
 .link-pair{
@@ -159,11 +167,33 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .header {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  .logo img {
+    height: 5rem;
+  }
+
+  .links {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .link-pair {
+    margin-bottom: 10px;
+  }
+
+  .icon {
+    width: 1.5em;
+    margin-right: 1em;
+  }
+
   .links a {
     font-size: 1.2rem;
-  }
-  .logo h1{
-    font-size: 30px;
+    margin-right: 10px;
   }
 }
 </style>

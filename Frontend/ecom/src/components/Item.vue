@@ -20,6 +20,10 @@ import { useCartStore } from '../stores/cartStore';
 import starImg from '../assets/star.svg';
 import starFillImg from '../assets/star-fill.svg';
 
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const tokenStore = useTokenStore()
 const route = useRoute();
 const router = useRouter();
@@ -256,22 +260,22 @@ onMounted(async () => {
         <div>
           <h1>{{ item.briefDescription }}</h1>
           <h2>{{ item.price }}</h2>
-          <h3 v-if="item.seller">Seller: {{ item.seller.firstName }} {{ item.seller.lastName }}</h3>
+          <h3 v-if="item.seller">{{ t("seller") }}: {{ item.seller.firstName }} {{ item.seller.lastName }}</h3>
         </div>
         <br>
-        <button v-if="isUserSeller" @click="goToEditItem">Endre annonse</button>
-        <button v-else @click="addToCart">Legg i handlekurv</button>
+        <button v-if="isUserSeller" @click="goToEditItem">{{ t("editItem") }}</button>
+        <button v-else @click="addToCart">{{ t("addToCart") }}</button>
         <br>
-        <button v-if="isUserSeller" @click="deleteItem">Slett annonse</button>
-        <button v-else @click="contactSeller">Kontakt selger <img src="../assets/chat-dots-fill.svg" alt=""></button>
+        <button v-if="isUserSeller" @click="deleteItem">{{ t("deleteItem") }}</button>
+        <button v-else @click="contactSeller">{{ t("contactSeller") }} <img src="../assets/chat-dots-fill-white.svg" alt="chat"></button>
     </div>
 
     <img v-if="!isUserSeller" :src="favoriteBool ? starFill : star" id="favIcon" alt="favIcon" @click="getFavorite()">
 
     <div class="info">
         <nav>
-            <a href="#0" @click="descOrSpec(0)">Description</a>
-            <a href="#0" @click="descOrSpec(1)">Spesifications</a>
+            <a href="#0" @click="descOrSpec(0)">{{ t("description") }}</a>
+            <a href="#0" @click="descOrSpec(1)">{{ t("spesifications") }}</a>
         </nav>
         <br>
         <h3 :hidden="!descOrSpecBool">{{ item.fullDescription }}</h3>
