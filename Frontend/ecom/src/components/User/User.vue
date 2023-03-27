@@ -30,16 +30,18 @@ async function getMyItems() {
 }
 
 async function getMyFavorites() {
-    const config = {
-        headers: {
-            "Content-type": "application/json",
-            Authorization: "Bearer " + tokenStore.jwtToken,
-        },
-    };
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "Bearer " + tokenStore.jwtToken,
+    },
+  };
 
-    const userEmail = tokenStore.loggedInUser.email;
+  const userEmail = tokenStore.loggedInUser ? tokenStore.loggedInUser.email : null;
 
+  if (userEmail) {
     favorites.value = await axios.get("http://localhost:9090/api/bookmark/get?email=" + userEmail, config).then(res => res.data);
+  }
 }
 
 function favOrMy(key) {
