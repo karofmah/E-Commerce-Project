@@ -50,7 +50,7 @@ test:
     - cd Frontend/ecom
     - npm install axios
   script:
-    - cd Backend/ECOMBack
+    - cd ../Backend/ECOMBack
     - java -jar target/.jar &
     - cd ../../Frontend/ecom
     - npm ci
