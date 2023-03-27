@@ -386,18 +386,44 @@ onMounted(async () => {
         flex-direction: row;
     }
 
-    @media(max-width: 768px){
-        .container{
-            display: flex;
-            flex-direction: column;
-        }
-
-    }
-
     button img {
       width: 20px;
       height: 20px;
       margin: 0;
       float: right;
+    }
+
+    @media(max-width: 768px){
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+            width: 95%;
+            margin: 2em auto;
+            overflow-x: hidden;
+        }
+
+        .shopping{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 100%;
+            padding: 10em 3em;
+        }
+
+        button{
+            height: 5em;
+        }
+
+        button img {
+            width: 10px;
+            height: 10px;
+        }
+
+        .map{
+            width: 100%;
+        }
     }
 </style>
