@@ -2,7 +2,6 @@ package no.ntnu.ecomback.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.security.access.prepost.PreAuthorize;
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.model.Item;
@@ -31,8 +30,10 @@ public class ItemController {
 
     @Operation(summary = "Add a new item")
     @PostMapping("/add")
-    @PreAuthorize("hasRole('USER')") // Add this line
-    public ResponseEntity<Item> addItem(@RequestBody(description = "Item object to be created") Item item){
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Item> addItem(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Item object to be created")
+            @RequestBody Item item){
         try{
             Item _item=itemService.addItem(item);
             return new ResponseEntity<>(_item,HttpStatus.CREATED);
@@ -45,7 +46,8 @@ public class ItemController {
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
     public Item updateItem(
-            @RequestBody(description = "The updated item object") UpdateItemRequest updateItemRequest){
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated item object")
+            @RequestBody UpdateItemRequest updateItemRequest){
         return itemService.updateItem(updateItemRequest);
     }
 

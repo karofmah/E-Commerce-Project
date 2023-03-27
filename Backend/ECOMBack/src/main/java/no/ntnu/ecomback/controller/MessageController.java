@@ -2,7 +2,6 @@ package no.ntnu.ecomback.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import no.ntnu.ecomback.model.Message;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.service.MessageService;
@@ -31,7 +30,8 @@ public class MessageController {
     @PostMapping("/sendMessage")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Message> sendMessage(
-            @RequestBody(description = "The message to send") Message message){
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The message to send")
+            @RequestBody Message message){
         try {
             Message _message = messageService.addMessage(message);
             return new ResponseEntity<>(_message, HttpStatus.CREATED);

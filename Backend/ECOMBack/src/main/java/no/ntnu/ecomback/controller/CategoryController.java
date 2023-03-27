@@ -2,7 +2,6 @@ package no.ntnu.ecomback.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import no.ntnu.ecomback.model.Category;
 import no.ntnu.ecomback.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,8 @@ public class CategoryController {
     @PostMapping("/addCategory")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Category> addCategory(
-            @RequestBody(description = "The category to be added") Category category) {
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The category to be added")
+            @RequestBody Category category) {
         try {
             Category _category = categoryService.addCategory(category);
             return  new ResponseEntity<>(_category, HttpStatus.CREATED);

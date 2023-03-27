@@ -2,7 +2,6 @@ package no.ntnu.ecomback.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import no.ntnu.ecomback.model.Bookmark;
 import no.ntnu.ecomback.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,9 @@ public class BookmarkController {
     @Operation(summary = "Add a new bookmark")
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')")
-    public Bookmark addBookmark(@RequestBody(description = "The bookmark to be added") Bookmark bookmark){
+    public Bookmark addBookmark(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The bookmark to be added")
+            @RequestBody Bookmark bookmark){
         return bookmarkService.addBookmark(bookmark);
     }
 
