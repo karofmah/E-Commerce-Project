@@ -115,5 +115,12 @@ onMounted(async () => {
     transform: translateX(-100%);
   }
 }
+
+@media (max-width: 768px){
+    #displayFull{
+        width: 95%;
+        margin: 4em 1em;
+    }
+}
 </style>
 
