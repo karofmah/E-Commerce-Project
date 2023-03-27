@@ -256,7 +256,7 @@
         },
         images : this.images,
         briefDescription: this.briefDescription,
-        fullDescription: this.fullDescription + ` | \nLocation: ` + this.locationName,
+        fullDescription: this.fullDescription + ` | ` + this.locationName,
         category: {
           categoryName: this.category
         },
