@@ -51,8 +51,9 @@ test:
     - cd Frontend/ecom
     - npm install axios
     - npm install cypress --save-dev
+    - npm install
   script:
-    - cd ../../Frontend/ecom
+    - cd ../../Backend/ECOMBack
     - java -jar target/.jar &
     - cd ../../Frontend/ecom
     - npm ci
