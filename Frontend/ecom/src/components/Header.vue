@@ -2,7 +2,7 @@
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
       <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt="logo"></a>
-      <img src="../assets/list.svg" alt="menu" class="menyImg" v-if="windowWidth < 768" @click="linksVisibility()">
+      <img src="../assets/list.svg" alt="menu" class="menyImg" v-if="windowWidth <= 768" @click="linksVisibility()">
     </div>
     <div class="links" v-if="windowWidth > 768">
       <div class="link-pair">
@@ -242,12 +242,12 @@ select option:hover{
   }
 
   .icon {
-    width: 1.5em;
+    width: 2.5em;
     margin-right: 1em;
   }
 
   .links a {
-    font-size: 1.1em;
+    font-size: 1.6em;
     margin-right: 10px;
   }
 }

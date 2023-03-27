@@ -83,7 +83,7 @@ watch(
   .search-bar{
     background: url('../assets/search.svg') no-repeat 1.5% 50%;
     background-size: 20px;
-	color: rebeccapurple;
+	  color: rebeccapurple;
     margin: 1.3em 1em 1em 1em;
     padding: 0.5rem 1rem;
     padding-left: 2.5em;
@@ -96,5 +96,11 @@ watch(
 
   .search-bar::-webkit-input-placeholder{
     color: var(--color-blue);
+  }
+
+  @media (max-width: 768px){
+    .search-bar{
+      width: 100%;
+    }
   }
 </style>

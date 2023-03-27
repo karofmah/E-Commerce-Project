@@ -2,6 +2,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useCategoryStore } from '../../stores/categoryStore';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 
 let categories = ref([]);
@@ -35,7 +38,7 @@ onMounted(async () => {
         :class="{ selected: categoryStore.selectedCategory?.categoryName === 'all' }"
         @click="handleAllCategoriesClick"
       >
-        <h3>Alle kategorier</h3>
+        <h3>{{ t("allCategories") }}</h3>
       </div>
       <div
         class="categories"
@@ -52,7 +55,7 @@ onMounted(async () => {
 <style scoped>
   .container{
     border-radius: 8px;
-    margin: 0 0 0 0;
+    margin: 0;
     width: 10em;
     height: 15vh;  
   }
@@ -62,11 +65,12 @@ onMounted(async () => {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    height: 3vh;
     background-color: var(--color-blue-lighter);
     opacity: 0.9;
     margin: 5px;
-    height: 8vh;
+    height: fit-content;
+    width: fit-content;
+    min-height: 4em;
     min-width: 8em;
     border-radius: 8px;
     text-align: center;
@@ -83,5 +87,13 @@ onMounted(async () => {
   .selected {
     background-color: var(--color-blue); /* You can change this color to your preferred highlight color */
     color: white;
+  }
+
+  @media(max-width: 768){
+    .container{
+      width: 100%;
+      margin: 0;
+      background-color: red;
+    }
   }
 </style>
