@@ -198,7 +198,10 @@ async function initialize() {
           {{ chatInstance[0] }}
         </div>
       </div>
-	  <input type="text" id="chatInput" :placeholder="t('sendAChat')" autocomplete="off" v-model="chatInput" @keydown.enter="addChat(chatInput)"/>
+      <div class="chatInputContainer">
+        <input type="text" id="chatInput" :placeholder="t('sendAChat')" autocomplete="off" v-model="chatInput" @keydown.enter="addChat(chatInput)" />
+        <img src="../assets/send.svg" alt="Send" class="send-icon" @click="addChat(chatInput)" />
+      </div>
     </div>
   </div>
 </template>
@@ -295,13 +298,6 @@ async function initialize() {
   background-color: var(--color-blue-light);
 }
 
-.chat img {
-  height: 2em;
-  margin: 0.5em 0 0.5em 0.5em;
-  border-radius: 50px;
-  background-color: var(--color-blue-light);
-}
-
 .chat {
 	display: flex;
 	flex-direction: column;
@@ -352,11 +348,15 @@ async function initialize() {
 	color: #000;
 }
 
+.chatInputContainer {
+  position: relative;
+  display: flex;
+}
+
 #chatInput {
-  background: url('../assets/send.svg') no-repeat 97% 55%;
-  background-size: 20px;
   color: var(--color-blue);
-	margin-top: 1em;
+  background-color: var(--color-background);
+  margin-top: 1em;
   padding-left: 2em;
   width: 100%;
   transition: all 0.3s ease;
@@ -364,6 +364,24 @@ async function initialize() {
 
 #chatInput::-webkit-input-placeholder {
   color: var(--color-blue);
+}
+
+.send-icon {
+  position: absolute;
+  background: var(--color-background);
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  cursor: pointer;
+  height: 2em;
+  margin: 0.5em 0 0.5em 0.5em;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+#chatInput:focus-within ~ .send-icon{
+  transform: translate(.7em, -50%);
 }
 
 @media (max-width: 768px){
