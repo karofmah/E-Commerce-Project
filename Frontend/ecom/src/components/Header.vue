@@ -2,7 +2,7 @@
   <div class="header" :class="{ 'is-scrolled': scrollPosition > 125 }">
     <div class="logo">
       <a @click="changeRoute('Home')" href=""><img src="../assets/logo.png" alt="logo"></a>
-      <img src="../assets/list.svg" alt="menu" class="menyImg" v-if="windowWidth <= 768" @click="linksVisibility()">
+      <img src="../assets/list.svg" alt="menu" class="menyImg" v-if="windowWidth < 768" @click="linksVisibility()">
     </div>
     <div class="links" v-if="windowWidth > 768">
       <div class="link-pair">
@@ -114,16 +114,29 @@ export default {
     },
     linksVisibility(){
       this.links = !this.links
-    }
-  },
-  async mounted() {
-    window.addEventListener("scroll", this.updateScroll);
+    },
+    handleResize() {
+      const newWidth = window.innerWidth;
+      const oldWidth = this.windowWidth;
+      this.windowWidth = newWidth;
+      if (oldWidth < 768 && newWidth >= 768) {
+        this.reloadComponent();
+      } else if (oldWidth >= 768 && newWidth < 768) {
+        this.reloadComponent();
+      }
+    },
+    reloadComponent() {
+      
+    },
   },
   mounted() {
-    window.onresize = () => {
-      this.windowWidth = window.innerWidth
-    }
-  }
+    window.addEventListener("scroll", this.updateScroll);
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.updateScroll);
+    window.removeEventListener("resize", this.handleResize);
+  },
 };
 </script>
 
