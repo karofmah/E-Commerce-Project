@@ -28,29 +28,29 @@ describe('User Component Tests with Login', () => {
   
     it('displays the correct user information', () => {
         cy.visit('http://localhost:5173/userInfo');
-      cy.get('.user h2').should('contain', '1@gmail.com');
+      cy.get('.user h3').should('contain', '1@gmail.com');
       cy.get('.userFields h3').eq(0).should('contain', 'Fornavn: test');
       cy.get('.userFields h3').eq(1).should('contain', 'Etternavn: test');
-      cy.get('.userFields h4').should('contain', 'Brukernavn: test');
+      cy.get('.user h2').should('contain', 'test');
     });
 
     it('should update the user name and then change it back', () => {
         cy.visit('http://localhost:5173/userInfo');
         cy.get('#userImg').click();
-        cy.contains('Edit').click();
+        cy.contains('Rediger').click();
     
         
         cy.get('#username').clear().type('newusername');
         cy.contains('Lagre endringer').click();
         cy.wait(1000)
-        cy.get('.userFields h4').should('contain', 'Brukernavn: newusername');
+        cy.get('.user h2').should('contain', 'newusername');
         
         cy.get('#userImg').click();
-        cy.contains('Edit').click();
+        cy.contains('Rediger').click();
         cy.get('#username').clear().type('test');
         cy.contains('Lagre endringer').click();
         cy.wait(1000)
-        cy.get('.userFields h4').should('contain', 'Brukernavn: test');
+        cy.get('.user h2').should('contain', 'test');
        
       });
   

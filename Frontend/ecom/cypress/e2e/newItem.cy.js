@@ -4,8 +4,8 @@ describe('New Ad Post', () => {
     });
   
     it('should display an error message when required fields are empty', () => {
-      cy.get('button').contains('Legg ut annonse').click();
-      cy.get('.error-message').should('contain', 'Vennligst fyll ut alle obligatoriske felter');
+      cy.get('button').contains('Publiser element').click();
+      cy.get('.error-message').should('contain', 'Vennligst fyll ut alle påkrevde felt');
     });
   
     it('should upload an image and display an error message when brief description is longer than 42 characters and other fields are filled', () => {
@@ -28,8 +28,8 @@ describe('New Ad Post', () => {
       
         cy.get('#brief-description').type('This description is longer than 42 characters, which is not allowed');
       
-        cy.get('button').contains('Legg ut annonse').click();
-        cy.get('.error-message').should('contain', 'Breif Description can be longer than 42 characters');
+        cy.get('button').contains('Publiser element').click();
+        cy.get('.error-message').should('contain', 'Kort beskrivelse kan ikke være lengre enn 42 tegn');
       });
       
   
@@ -55,7 +55,7 @@ describe('New Ad Post', () => {
         cy.get('#location').type('New York');
         cy.get('#price').type('100');
       
-        cy.get('button').contains('Legg ut annonse').click();
+        cy.get('button').contains('Publiser element').click();
         cy.url().should('include', '/');
       });
       

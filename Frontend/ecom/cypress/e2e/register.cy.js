@@ -46,6 +46,6 @@ describe('New User Registration', () => {
 
   it('shows an error message when input fields are empty', () => {
     cy.get('.submit button').click();
-    cy.get('.main-container p').should('contain', 'Alle feltene må være utfylt');
+    cy.get('.main-container p').should('contain', 'Alle felt må fylles ut');
   });
 });

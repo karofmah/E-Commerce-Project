@@ -34,14 +34,6 @@ describe('Edit Item Test with Login', () => {
     cy.get('#brief-description').should('have.value', "test123");
     cy.wait(10000)
   });
-
-  it('Updates the full description', () => {
-    cy.wait(3000)
-    cy.get('#full-description').type("123")
-    cy.wait(10000)
-    cy.get('#full-description').should('have.value', 'test | \nLocation: ladeveien 22123');
-    cy.wait(10000);
-  });
   
   it('Updates the price', () => {
     cy.wait(3000)

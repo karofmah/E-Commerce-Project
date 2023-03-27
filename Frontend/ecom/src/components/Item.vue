@@ -152,7 +152,7 @@ async function contactSeller() {
           },
         };
 
-        const contact = `${this.$t("contact")}`;
+        const contact = `${t("contact")}`;
         
         let content = tokenStore.loggedInUser.firstName + " " + tokenStore.loggedInUser.lastName 
         + " " + contact + " " + item.value.briefDescription + "."
