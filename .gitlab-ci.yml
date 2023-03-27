@@ -56,10 +56,10 @@ test:
   script:
     - cd ../../Backend/ECOMBack
     - java -jar target/.jar &
-    - sleep 30
+    - sleep 60
     - cd ../../Frontend/ecom
     - npm ci
-    - npm run serve &
+    - npm run dev &
     - sleep 30
     - npm run test:e2e:ci
   artifacts:
