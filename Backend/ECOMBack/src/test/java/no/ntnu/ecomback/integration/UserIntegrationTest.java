@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
@@ -107,5 +108,18 @@ public class UserIntegrationTest {
         Assertions.assertEquals(newUser.getEmail(), retrievedUser.getEmail());
 
     }
+    @Test
+    @WithMockUser(username = "USER")
+    public void deleteUser() throws Exception {
+
+        mockMvc.perform((MockMvcRequestBuilders.delete("/api/users/deleteUser/karofm3@ntnu.no")
+                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        System.out.println(userRepository.findAll());
+        Assertions.assertEquals(2,userRepository.findAll().size());
+    }
+
 
 }
