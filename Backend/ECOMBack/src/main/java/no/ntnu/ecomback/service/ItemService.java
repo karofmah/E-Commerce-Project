@@ -169,7 +169,13 @@ public class ItemService {
     public List<Item> getItemsByKeyword(String keyword) {
         try {
             _logger.info("Getting items");
-            return itemRepository.findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContaining(keyword,keyword,keyword);
+            Integer priceKeyword = null;
+            try {
+                priceKeyword = Integer.parseInt(keyword);
+            } catch (NumberFormatException e) {
+                // keyword is not a valid integer, ignore
+            }
+            return itemRepository.findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContainingOrPriceLike(keyword, keyword, keyword, priceKeyword);
         } catch (Exception e) {
             _logger.warn("Error while getting items by description: " + e.getMessage());
             return null;

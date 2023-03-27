@@ -29,7 +29,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      * @param categoryKeyword the keyword to search for in category names
      * @return a list of items containing the given keywords
      */
-    List<Item> findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContaining(String briefKeyword, String fullKeyword, String categoryKeyword);
+    List<Item> findByBriefDescriptionContainingOrFullDescriptionContainingOrCategory_CategoryNameContainingOrPriceLike(String briefKeyword, String fullKeyword, String categoryKeyword, Integer priceKeyword);
 
     /**
      * Returns a list of items belonging to the given category.
