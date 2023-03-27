@@ -9,18 +9,19 @@ describe('New Ad Post', () => {
     });
   
     it('should upload an image and display an error message when brief description is longer than 42 characters and other fields are filled', () => {
-        cy.intercept('http://localhost:9090/api/categories/getCategories').as('getCategories');
-      
-        cy.visit('http://localhost:5173/newItem');
-        cy.wait('@getCategories');
-      
-        cy.fixture('logotest.png').then(fileContent => {
-            cy.get('#images').attachFile({
-              fileContent: fileContent.toString(),
-              fileName: 'logotest.png',
-              mimeType: 'image/png',
-            });
-          });
+      cy.intercept('http://localhost:9090/api/categories/getCategories').as('getCategories');
+    
+      cy.visit('http://localhost:5173/newItem');
+      cy.wait('@getCategories');
+    
+      cy.fixture('logotest.png', 'base64').then(fileContent => {
+        cy.get('#images').attachFile({
+          fileContent,
+          fileName: 'logotest.png',
+          mimeType: 'image/png',
+          encoding: 'base64',
+        });
+      });
 
         cy.get('#full-description').type('Sample Full Description');
         cy.get('#location').type('New York');
