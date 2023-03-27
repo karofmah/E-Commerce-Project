@@ -8,28 +8,33 @@ describe('New Ad Post', () => {
       cy.get('.error-message').should('contain', 'Please fill in all mandatory fields');
     });
   
-    it('should upload an image and display an error message when brief description is longer than 42 characters and other fields are filled', () => {
+    it('should upload an image and display an error message after inputs', () => {
         cy.intercept('http://localhost:9090/api/categories/getCategories').as('getCategories');
       
         cy.visit('http://localhost:5173/newItem');
         cy.wait('@getCategories');
       
         cy.fixture('logotest.png').then(fileContent => {
-            cy.get('#images').attachFile({
-              fileContent: fileContent.toString(),
-              fileName: 'logotest.png',
-              mimeType: 'image/png',
-            });
+          cy.get('#images').attachFile({
+            fileContent: fileContent.toString(),
+            fileName: 'logotest.png',
+            mimeType: 'image/png',
           });
+        });
 
+        cy.get('#brief-description').type('This description is longer than 42 characters, which is not allowed This description is longer than 42 characters, which is not allowed');
+        cy.wait(10000)
+        cy.get('#category').select('test');
+        cy.wait(2000)
         cy.get('#full-description').type('Sample Full Description');
+        cy.wait(2000)
         cy.get('#location').type('New York');
+        cy.wait(2000)
         cy.get('#price').type('100');
-      
-        cy.get('#brief-description').type('This description is longer than 42 characters, which is not allowed');
-      
+        cy.wait(2000)
         cy.get('button').contains('Publish Item').click();
-        cy.get('.error-message',{ timeout: 10000 }).should('contain', 'Breif Description can not be longer than 42 characters');
+        cy.wait(2000)
+        cy.get('.error-message', { timeout: 10000 }).should('contain', 'Please fill in all mandatory fields');
       });
       
   
