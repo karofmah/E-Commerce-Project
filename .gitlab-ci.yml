@@ -62,7 +62,7 @@ test:
     - java -jar target/ECOMBack-0.0.1-SNAPSHOT.jar &
     - sleep 60
     - cd ../../Frontend/ecom
-    - npm ci
+    - npm install
     - npm run dev &
     - sleep 30
     - npm run test:e2e:ci
