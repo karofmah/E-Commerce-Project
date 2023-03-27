@@ -1,5 +1,3 @@
-import { getJwtToken } from "../../httputils"
-
 describe('User Login', () => {
     beforeEach(() => {
       cy.visit('/login');

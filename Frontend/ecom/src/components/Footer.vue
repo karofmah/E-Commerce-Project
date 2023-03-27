@@ -1,19 +1,26 @@
 <script>
-import { useI18n } from 'vue-i18n';
+import { useLanguageStore } from '../stores/languageStore.js'; 
 
-export default{
-    data(){
-        return {
-            selectedLanguage: this.$i18n.locale,
-        };
+export default {
+  data() {
+    return {
+      selectedLanguage: this.$i18n.locale,
+    };
+  },
+  created() {
+    const languageStore = useLanguageStore();
+    languageStore.loadLanguageFromSession();
+    this.selectedLanguage = languageStore.selectedLanguage;
+    this.$i18n.locale = this.selectedLanguage;
+  },
+  methods: {
+    changeLanguage() {
+      const languageStore = useLanguageStore();
+      languageStore.changeLanguage(this.selectedLanguage);
+      this.$i18n.locale = this.selectedLanguage;
     },
-    methods: {
-        changeLanguage(){
-            this.$i18n.locale = this.selectedLanguage;
-        },
-    }
-}
-
+  },
+};
 </script>
 
 <template>

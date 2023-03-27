@@ -1,8 +1,4 @@
-// cypress/integration/admin.spec.js
-
-
 let testUser;
-
 describe('Admin page tests', () => {
     let testUser;
   
@@ -10,7 +6,6 @@ describe('Admin page tests', () => {
       const email = '1@gmail.com';
       const password = '123';
   
-      // Get the token for the test user
       try {
         const response = await getJwtToken(email, password);
         testUser = {
@@ -36,7 +31,7 @@ describe('Admin page tests', () => {
   it('should add and delete a category', () => {
     const newCategory = 'Test Category';
     cy.visit('/admin');
-
+    cy.wait(5000)
     cy.get('input[type="text"]').type(newCategory);
     cy.get('button[type="submit"]').click();
 

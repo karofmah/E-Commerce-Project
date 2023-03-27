@@ -4,23 +4,23 @@
             <br><h1>{{ $t("newUser") }}</h1>
             <br>
             <div class="email">
-                <input :placeholder="$t('email')" type="email" v-model="email">
+                <input :placeholder="$t('newEmail')" type="email" v-model="email">
             </div>
             <br>
             <div class="username">
-                <input :placeholder="$t('email')" type="text" v-model="username">
+                <input :placeholder="$t('newUsername')" type="text" v-model="username">
             </div>
             <br>
             <div class="password">
-                <input :placeholder="$t('email')" type="password" v-model="password">
+                <input :placeholder="$t('passwordRegister')" type="password" v-model="password">
             </div>
             <br>
             <div class="Forname">
-                <input :placeholder="$t('email')" type="text" v-model="firstName">
+                <input :placeholder="$t('newFirstname')" type="text" v-model="firstName">
             </div>
             <br>
             <div class="Surname">
-                <input :placeholder="$t('email')" type="text" v-model="lastName">
+                <input :placeholder="$t('newLastname')" type="text" v-model="lastName">
             </div>
             <br>
             <div class="submit">
@@ -55,7 +55,7 @@ data(){
     },
     async register() {
   if (!this.email || !this.username || !this.password || !this.firstName || !this.lastName) {
-    this.error = 'Alle feltene må være utfylt';
+    this.error = `${this.$t("allFields")}`;
     return;
   }
   const user = {
@@ -71,19 +71,17 @@ data(){
   try {
     this.access = await (await (axios.post("http://localhost:9090/api/users/register", user))).data;
     if (this.access.data !== null) {
-      this.error = 'Ny bruker var registert';
       this.changeRoute('Login');
     } else {
-      this.error = 'Registering av fungerte ikke. Prøv igjen....';
+      this.error = `${this.$t("noRegistration")}`;
     }
   } catch (error) {
     console.error(error);
-    this.error = 'An error occurred during registration. Please try again.';
+    this.error = `${this.$t("noRegistration")}`;
   }
 }
 }
 }
-
 
 </script>
 

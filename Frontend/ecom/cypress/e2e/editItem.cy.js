@@ -1,13 +1,10 @@
-import { getJwtToken } from "../../httputils"
-
 describe('Edit Item Test with Login', () => {
   let testUser;
 
   before(async () => {
     const email = '1@gmail.com';
     const password = '123';
-
-    // Get the token for the test user
+    
     try {
       const response = await getJwtToken(email, password);
       testUser = {
@@ -31,33 +28,29 @@ describe('Edit Item Test with Login', () => {
   });
 
   it('Updates the brief description', () => {
-    cy.get('#brief-description')
-    .clear().type("123")
-    .should('have.value', "test123");
+    cy.wait(3000)
+    cy.get('#brief-description').type("123")
+    cy.wait(10000)
+    cy.get('#brief-description').should('have.value', "test123");
     cy.wait(10000)
   });
 
   it('Updates the full description', () => {
-    cy.get('#full-description')
-      .clear()
-      .type("123")
-      .should('have.value', 'test | \nLocation: ladeveien 22123');
+    cy.wait(3000)
+    cy.get('#full-description').type("123")
+    cy.wait(10000)
+    cy.get('#full-description').should('have.value', 'test | \nLocation: ladeveien 22123');
     cy.wait(10000);
   });
   
   it('Updates the price', () => {
-    cy.get('#price')
-      .should('have.value',"123");
+    cy.wait(3000)
+    cy.get('#price').type("123")
+    cy.get('#price').should('have.value',"123123");
   });
   
   it('Submits the form successfully', () => {
-   
-  
     cy.get('#submit').click();
-    
     cy.url().should('include', '/');
   });
-  
-
-  // Add more tests related to the Edit Item page
 });

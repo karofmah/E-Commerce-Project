@@ -25,7 +25,7 @@
     </div>
 
     <div class="field-container">
-      <label for="images">{{ $t("uploadImages") }} (Max 10):</label>
+      <label for="images">{{ $t("uploadImages") }}</label>
       <input
         type="file"
         id="images"
@@ -86,7 +86,6 @@
   <script>
     import axios, { Axios } from 'axios';
     import { useTokenStore } from "../../stores/userToken";
-    import {getUserInfo} from "/httputils.js"
     import Map from 'ol/Map';
     import View from 'ol/View';
     import TileLayer from 'ol/layer/Tile';
@@ -126,9 +125,6 @@
     },
     async mounted() {
       this.initMap();
-
-      
-
       axios.get('http://localhost:9090/api/categories/getCategories')
       .then(response => {
         this.categories = response.data;
@@ -159,11 +155,11 @@
       async handleImages() {
         const files = this.$refs.images.files;
         if (files.length > 10) {
-          alert("Du kan max laste opp 10 bilder");
+          alert(`${this.$t("maxTotalImages")}`);
           return;
         }
 
-        this.images = await Promise.all(
+        const newImages = await Promise.all(
           Array.from(files).map((file) => {
             return new Promise((resolve) => {
               const reader = new FileReader();
@@ -174,122 +170,119 @@
             });
           })
         );
-      },
-      deleteImage(index) {
+
+        this.images = [...this.images, ...newImages];
+    },
+    
+    deleteImage(index) {
     this.images.splice(index, 1);
     },
     async handleLocation(event) {
-  const location = event.target.value;
-  
-  // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            location
-    )}&limit=1`
-  );
+      const location = event.target.value;
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                location
+        )}&limit=1`
+      );
 
-  if (!response.ok) {
-    console.error("Error fetching geocoding data");
-    return;
-  }
+      if (!response.ok) {
+        return;
+      }
 
-  const data = await response.json();
-  if (!data || data.length === 0) {
-    console.error("No location data found");
-    return;
-  }
+      const data = await response.json();
+      if (!data || data.length === 0) {
+        return;
+      }
 
-  const { lat, lon } = data[0];
-  this.latitude = parseFloat(lat);
-  this.longitude = parseFloat(lon);
+      const { lat, lon } = data[0];
+      this.latitude = parseFloat(lat);
+      this.longitude = parseFloat(lon);
 
-  // Update the map view and add a marker at the coordinates.
-  this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
-  this.map.getView().setZoom(13);
+      this.map.getView().setCenter(fromLonLat([this.longitude, this.latitude]));
+      this.map.getView().setZoom(13);
 
-  if (this.marker) {
-    this.markerLayer.getSource().removeFeature(this.marker);
-  }
+      if (this.marker) {
+        this.markerLayer.getSource().removeFeature(this.marker);
+      }
 
-  this.marker = new Feature({
-    geometry: new Point(fromLonLat([this.longitude, this.latitude])),
-  });
+      this.marker = new Feature({
+        geometry: new Point(fromLonLat([this.longitude, this.latitude])),
+      });
 
-  this.marker.setStyle(
-    new Style({
-      image: new Icon({
-        src: "https://openlayers.org/en/latest/examples/data/icon.png",
-        anchor: [0.5, 1],
-      }),
-    })
-  );
+      this.marker.setStyle(
+        new Style({
+          image: new Icon({
+            src: "https://openlayers.org/en/latest/examples/data/icon.png",
+            anchor: [0.5, 1],
+          }),
+        })
+      );
 
-  if (!this.markerLayer) {
-    const markerSource = new VectorSource({
-      features: [this.marker],
-    });
+      if (!this.markerLayer) {
+        const markerSource = new VectorSource({
+          features: [this.marker],
+        });
 
-    this.markerLayer = new VectorLayer({
-      source: markerSource,
-    });
+        this.markerLayer = new VectorLayer({
+          source: markerSource,
+        });
 
-    this.map.addLayer(this.markerLayer);
-  } else {
-    this.markerLayer.getSource().addFeature(this.marker);
-  }
-},
-
-      async submit() {
-  // Check if any required fields are empty
-  if (!this.images.length || !this.briefDescription || !this.fullDescription || !this.latitude || !this.longitude || !this.price || !this.category) {
-    this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
-    return;
-  }
-  if (this.briefDescription.length > 42) {
-    this.errorMessage = "Breif Description can be longer than 42 characters";
-    return;
-  }
-
-
-  const user = this.tokenStore.loggedInUser;
-  const newItem = {
-    seller:{
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      password: user.password,
-      role: user.role
+        this.map.addLayer(this.markerLayer);
+      } else {
+        this.markerLayer.getSource().addFeature(this.marker);
+      }
     },
-    images : this.images,
-    briefDescription: this.briefDescription,
-    fullDescription: this.fullDescription + ` | \nLocation: ` + this.locationName,
-    category: {
-      categoryName: this.category
-    },
-    location: {
-      latitude:this.latitude,
-      longitude: this.longitude
-    },
-    price: this.price
-  };
-            
-  const config = {
-    headers: {
-      "Content-type": "application/json",
-      "Authorization" : "Bearer " + this.tokenStore.jwtToken
-    },
-  };
 
-  this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data;
-  if(this.listed != null){
-    this.changeRoute('Home');
-  } else {
-    this.errorMessage = "Det oppsto en feil under forsøk på å liste elementet";
-  }
-},
+    async submit() {
+    if (!this.images.length || !this.briefDescription || !this.fullDescription || !this.latitude || !this.longitude || !this.price || !this.category) {
+      this.errorMessage = `${this.$t("missingInput")}`;
+      return;
+    }
+    if (this.briefDescription.length > 42) {
+      this.errorMessage = `${this.$t("briefDescriptionToLong")}`;
+      return;
+    }
+
+
+      const user = this.tokenStore.loggedInUser;
+      const newItem = {
+        seller:{
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          password: user.password,
+          role: user.role
+        },
+        images : this.images,
+        briefDescription: this.briefDescription,
+        fullDescription: this.fullDescription + ` | \nLocation: ` + this.locationName,
+        category: {
+          categoryName: this.category
+        },
+        location: {
+          latitude: this.latitude,
+          longitude: this.longitude
+        },
+        price: this.price
+      };
+                
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization" : "Bearer " + this.tokenStore.jwtToken
+        },
+      };
+
+      this.listed = await(await (axios.post("http://localhost:9090/api/items/add",newItem,config))).data;
+      if(this.listed != null){
+        this.changeRoute('Home');
+      } else {
+        this.errorMessage = `${this.$t("errorListingItem")}`;
+      }
     },
-  };
+        },
+    };
 </script>
   
 <style scoped>

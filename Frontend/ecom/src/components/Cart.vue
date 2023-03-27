@@ -25,7 +25,7 @@ function calcTotalPrice() {
       if (item && item.id && item.price) {
         totalPrice.value += item.price
       } else {
-        console.error(`Invalid item: ${item}`)
+        return ""
       }
     }
   }
@@ -35,7 +35,6 @@ async function buyItem(itemId) {
   const itemIndex = items.value.findIndex(item => item.id === itemId);
   const item = items.value[itemIndex];
 
-  // Contact the seller
   if (tokenStore.loggedInUser) {
     const config = {
       headers: {
@@ -44,8 +43,11 @@ async function buyItem(itemId) {
       },
     };
 
+    const bought = `${t("bought")}`;
+    const forPrice = `${t("for")}`;
+
     let content = tokenStore.loggedInUser.firstName + " " + tokenStore.loggedInUser.lastName 
-    + " har kjøpt " + item.briefDescription + " for " + item.price + "."
+    + " " + bought + " " + item.briefDescription + " " + forPrice + " " + item.price + "."
 
     let message = {
       "toEmail": item.seller.email,
@@ -116,8 +118,6 @@ onMounted(async () => {
 </template>
 
 
-
-
 <style scoped>
 .container {
   display: flex;
@@ -152,7 +152,6 @@ button:nth-of-type(2){
 
 .pay {
   height: 25em;
-  /* margin: 48em 48em; */
   background-color: var(--color-blue);
   color: var(--vt-c-white-mute);
   flex: 1;

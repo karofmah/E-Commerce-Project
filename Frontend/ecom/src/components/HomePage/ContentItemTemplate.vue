@@ -23,13 +23,11 @@ async function reverseGeocode(latitude, longitude){
   );
 
   if (!response.ok) {
-    console.error("Error fetching reverse geocoding data");
     return "";
   }
 
   const data = await response.json();
   if (!data || !data.display_name) {
-    console.error("No location data found");
     return "";
   }
 
@@ -61,7 +59,6 @@ onMounted(async () => {
     cursor: pointer;
     justify-content: space-evenly;
     background-color: var(--color-blue-lighter);
-    /* background-color: rgba(176, 176, 176, 0.5); */
     border-radius: 8px;
     text-align: start;
     padding: 1em;

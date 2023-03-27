@@ -35,135 +35,134 @@
       </div>
     </div>
   </template>
-  
-  <script>
-  import axios from 'axios';
-  import { useTokenStore } from "../stores/userToken";
 
-  export default {
-    data() {
-      return {
-        users: [],
-        categories: [],
-        items: [],
-        newCategory: ''
-      }
-    },
-    setup(){
-        const tokenStore = useTokenStore();
-        return { tokenStore };
-    },
-    mounted() {
-      this.loadData();
-    },
-    methods: {
-      async loadData() {
+<script >
+import axios from 'axios';
+import { useTokenStore } from "../stores/userToken";
 
-            const config = {
-            headers: {
-                "Content-type": "application/json",
-                "Authorization" : "Bearer " + this.tokenStore.jwtToken
-            },
-        };
+export default {
+  data() {
+    return {
+      users: [],
+      categories: [],
+      items: [],
+      newCategory: ''
+    }
+  },
+  setup(){
+      const tokenStore = useTokenStore();
+      return { tokenStore };
+  },
+  mounted() {
+    this.loadData();
+  },
+  methods: {
+    async loadData() {
 
-        await axios.get('http://localhost:9090/api/users/getAllUsers',config)
+          const config = {
+          headers: {
+              "Content-type": "application/json",
+              "Authorization" : "Bearer " + this.tokenStore.jwtToken
+          },
+      };
+
+      await axios.get('http://localhost:9090/api/users/getAllUsers',config)
+      .then(response => {
+        this.users = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      await axios.get('http://localhost:9090/api/categories/getCategories')
         .then(response => {
-          this.users = response.data;
-          console.log(this.users + "hello")
+          this.categories = response.data;
         })
         .catch(error => {
           console.log(error);
         });
-        await axios.get('http://localhost:9090/api/categories/getCategories')
-          .then(response => {
-            this.categories = response.data;
-          })
-          .catch(error => {
-            console.log(error);
-          });
-        await axios.get('http://localhost:9090/api/items/getItems')
-          .then(response => {
-            this.items = response.data;
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      },
-        async deleteUser(index) {
-            const user = this.users[index];
-            const config = {
-                headers: {
-                "Content-type": "application/json",
-                "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                }
-            };
-            await axios.delete(`http://localhost:9090/api/users/deleteUser/${user.email}`, config)
-                .then(response => {
-                if (response.status === 204) {
-                    this.users.splice(index, 1);
-                }
-                })
-                .catch(error => {
-                console.log(error);
-                });
-        },
-        async deleteCategory(index) {
-            const category = this.categories[index];
-            const config = {
-                headers: {
-                "Content-type": "application/json",
-                "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                }
-            };
-            await axios.delete(`http://localhost:9090/api/categories/deleteCategory/${category.categoryName}`, config)
-                .then(response => {
-                if (response.status === 204) {
-                    this.categories.splice(index, 1);
-                }
-                })
-                .catch(error => {
-                console.log(error);
-                });
-        },
-        async deleteItem(index) {
-            const item = this.items[index];
-            const config = {
-                headers: {
-                "Content-type": "application/json",
-                "Authorization" : "Bearer " + this.tokenStore.jwtToken
-                }
-            };
-            await axios.delete(`http://localhost:9090/api/items/delete/${item.id}`, config)
-                .then(response => {
-                if (response.status === 204) {
-                    this.items.splice(index, 1);
-                }
-                })
-                .catch(error => {
-                console.log(error);
-                });
-        },
-        async addCategory() {
-            const config = {
+      await axios.get('http://localhost:9090/api/items/getItems')
+        .then(response => {
+          this.items = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    async deleteUser(index) {
+        const user = this.users[index];
+        const config = {
             headers: {
             "Content-type": "application/json",
             "Authorization" : "Bearer " + this.tokenStore.jwtToken
             }
         };
-        await axios.post('http://localhost:9090/api/categories/addCategory', { categoryName: this.newCategory }, config)
+        await axios.delete(`http://localhost:9090/api/users/deleteUser/${user.email}`, config)
             .then(response => {
-            if (response.status === 201) {
-                this.categories.push(response.data);
-                this.newCategory = '';
+            if (response.status === 204) {
+                this.users.splice(index, 1);
             }
             })
             .catch(error => {
             console.log(error);
             });
+    },
+    async deleteCategory(index) {
+        const category = this.categories[index];
+        const config = {
+            headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + this.tokenStore.jwtToken
+            }
+        };
+        await axios.delete(`http://localhost:9090/api/categories/deleteCategory/${category.categoryName}`, config)
+            .then(response => {
+            if (response.status === 204) {
+                this.categories.splice(index, 1);
+            }
+            })
+            .catch(error => {
+            console.log(error);
+            });
+    },
+    async deleteItem(index) {
+        const item = this.items[index];
+        const config = {
+            headers: {
+            "Content-type": "application/json",
+            "Authorization" : "Bearer " + this.tokenStore.jwtToken
+            }
+        };
+        await axios.delete(`http://localhost:9090/api/items/delete/${item.id}`, config)
+            .then(response => {
+            if (response.status === 204) {
+                this.items.splice(index, 1);
+            }
+            })
+            .catch(error => {
+            console.log(error);
+            });
+    },
+    async addCategory() {
+        const config = {
+        headers: {
+        "Content-type": "application/json",
+        "Authorization" : "Bearer " + this.tokenStore.jwtToken
         }
+    };
+    await axios.post('http://localhost:9090/api/categories/addCategory', { categoryName: this.newCategory }, config)
+        .then(response => {
+        if (response.status === 201) {
+            this.categories.push(response.data);
+            this.newCategory = '';
+        }
+        })
+        .catch(error => {
+        console.log(error);
+        });
     }
   }
-  </script>
+}
+</script>
   
   <style scoped>
   .container-admin {

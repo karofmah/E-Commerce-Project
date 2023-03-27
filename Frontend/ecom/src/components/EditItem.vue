@@ -61,7 +61,6 @@
 <script>
 import axios from 'axios';
 import { useTokenStore } from "../stores/userToken";
-import { getUserInfo } from "/httputils.js";
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -99,14 +98,12 @@ export default {
     return { tokenStore };
   },
   async mounted() {
-  // Load item data from the backend
+ 
   await this.loadItemData();
 
-  // Initialize the map after the component has been rendered
   this.map = this.initMap();
   this.updateMapWithLocation(this.latitude, this.longitude);
 
-  // Reverse geocode the coordinates to get the location name
   await this.reverseGeocode(this.latitude, this.longitude);
 
   const config = {
@@ -125,37 +122,35 @@ export default {
       });
 },
 
-  methods: {
-    changeRoute(string){
-        this.$router.push({name:string})
-      },
-    
-    deleteImage(index) {
-      this.images.splice(index, 1);
+methods: {
+  changeRoute(string){
+      this.$router.push({name:string})
     },
+  
+  deleteImage(index) {
+    this.images.splice(index, 1);
+  },
 
-    async reverseGeocode(latitude, longitude) {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
-          latitude
-        )}&lon=${encodeURIComponent(longitude)}`
-      );
+  async reverseGeocode(latitude, longitude) {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(
+        latitude
+      )}&lon=${encodeURIComponent(longitude)}`
+    );
 
     if (!response.ok) {
-      console.error("Error fetching reverse geocoding data");
       return;
     }
 
     const data = await response.json();
     if (!data || !data.display_name) {
-      console.error("No location data found");
       return;
     }
 
     this.locationString = data.display_name;
-  },
+},
 
-async loadItemData() {
+  async loadItemData() {
   try {
     const itemId = this.$route.params.id;
     this.idOfItem = itemId;
@@ -165,65 +160,60 @@ async loadItemData() {
       const itemData = response.data;
       this.images = itemData.images;
       this.briefDescription = itemData.briefDescription;
-      this.category = itemData.category.categoryName; // set the category value
+      this.category = itemData.category.categoryName;
       this.fullDescription = itemData.fullDescription;
       this.latitude = itemData.location.latitude;
       this.longitude = itemData.location.longitude;
       this.price = itemData.price;
 
-      // Reverse geocode the coordinates to get the location name
       await this.reverseGeocode(this.latitude, this.longitude);
 
-      // Update map with the item's location
+    
       this.updateMapWithLocation(this.latitude, this.longitude);
     } else {
-      this.errorMessage = 'Error loading item data';
+      this.errorMessage = `${this.$t("errorLoading")}`;
     }
-  } catch (error) {
-    console.error("Error loading item data:", error);
-    // Set dummy latitude and longitude if API call fails
-    // Reverse geocode the coordinates to get the location name
+  }catch (error) {
     await this.reverseGeocode(this.latitude, this.longitude);
   }
-},
-updateMapWithLocation(lat, lon) {
-  if (!this.map) {
-    return;
-  }
-  
-  // Update the map view and add a marker at the coordinates.
-  this.map.getView().setCenter(fromLonLat([lon, lat]));
-  this.map.getView().setZoom(13);
+  },
+  updateMapWithLocation(lat, lon) {
+    if (!this.map) {
+      return;
+    }
 
-  if (this.marker) {
-    this.markerLayer.getSource().removeFeature(this.marker);
-  }
+    this.map.getView().setCenter(fromLonLat([lon, lat]));
+    this.map.getView().setZoom(13);
 
-  this.marker = new Feature({
-    geometry: new Point(fromLonLat([lon, lat])),
-  });
+    if (this.marker) {
+      this.markerLayer.getSource().removeFeature(this.marker);
+    }
 
-  this.marker.setStyle(
-    new Style({
-      image: new Icon({
-        src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-        anchor: [0.5, 1],
-      }),
-    })
-  );
-
-  if (!this.markerLayer) {
-    const markerSource = new VectorSource({
-      features: [this.marker],
+    this.marker = new Feature({
+      geometry: new Point(fromLonLat([lon, lat])),
     });
 
-    this.markerLayer = new VectorLayer({
-      source: markerSource,
-    });
+    this.marker.setStyle(
+      new Style({
+        image: new Icon({
+          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+          anchor: [0.5, 1],
+        }),
+      })
+    );
 
-    this.map.addLayer(this.markerLayer);
-  } else {
-    this.markerLayer.getSource().addFeature(this.marker);
+    if (!this.markerLayer) {
+      const markerSource = new VectorSource({
+        features: [this.marker],
+      });
+
+      this.markerLayer = new VectorLayer({
+        source: markerSource,
+      });
+
+      this.map.addLayer(this.markerLayer);
+    } else {
+      this.markerLayer.getSource().addFeature(this.marker);
   }
 },
 
@@ -246,7 +236,7 @@ async handleImages() {
   const totalImages = files.length + this.images.length;
 
   if (totalImages > 10) {
-    alert("Du kan kun laste opp maksimalt 10 bilder");
+    alert(`${this.$t("maxTotalImages")}`);
     return;
   }
 
@@ -268,7 +258,6 @@ async handleImages() {
 async handleLocation(event) {
   const location = event.target.value;
 
-  // Use OpenStreetMap Nominatim API to get latitude and longitude for the location
   const response = await fetch(
     `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       location
@@ -276,13 +265,11 @@ async handleLocation(event) {
   );
 
   if (!response.ok) {
-    console.error("Error fetching geocoding data");
     return;
   }
 
   const data = await response.json();
   if (!data || data.length === 0) {
-    console.error("No location data found");
     return;
   }
 
@@ -290,18 +277,17 @@ async handleLocation(event) {
   this.latitude = parseFloat(lat);
   this.longitude = parseFloat(lon);
 
-  // Update the map view and add a marker at the coordinates.
   this.updateMapWithLocation(this.latitude, this.longitude);
 },
 
 
 async submit() {
   if (!this.images.length || !this.briefDescription || !this.category.trim() || !this.fullDescription || !this.latitude || !this.longitude || !this.price) {
-    this.errorMessage = "Vennligst fyll ut alle obligatoriske felter";
+    this.errorMessage = `${this.$t("missingInput")}`;
     return;
   }
   if (this.briefDescription.length > 42) {
-    this.errorMessage = "Breif Description can be longer than 42 characters";
+    this.errorMessage = `${this.$t("briefDescriptionToLong")}`;
     return;
   }
 
@@ -347,11 +333,10 @@ async submit() {
     if (response.status === 200) {
       this.changeRoute('Home');
     } else {
-      this.errorMessage = "There was an error while trying to update the item";
+      this.errorMessage = `${this.$t("updateItemError")}`;
     }
   } catch (error) {
-    console.error("Error updating item:", error);
-    this.errorMessage = "There was an error while trying to update the item";
+    this.errorMessage = `${this.$t("updateItemError")}`;
   }
 },
 },

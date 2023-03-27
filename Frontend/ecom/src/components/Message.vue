@@ -35,8 +35,6 @@ const filteredContacts = computed(() => {
 })
 
 function getLastMessage(contact){
-	// let lastMessage = chat.value[contact][chat.value[contact].length - 1][0]
-	// return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
   return "last message";
 }
 
@@ -312,10 +310,6 @@ async function initialize() {
   background-color: var(--color-blue-light);
   color: #fff;
 }
-
-/* .chatSend ~ .chatSend:last-child {
-  margin-bottom: .5em;
-} */
 
 .chatReceive {
   margin-right: auto;

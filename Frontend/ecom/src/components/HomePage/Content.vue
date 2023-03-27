@@ -37,25 +37,10 @@ async function getItemsBySearch(keyword) {
   items.value = await axios.get('http://localhost:9090/api/items/get/keyword', { params: { keyword: keyword } }).then(res => res.data);
 }
 
-async function getItemsByLocation() {
-  items.value = await axios.get('http://localhost:9090/api/items/getItems').then(res => res.data);
-
-  // loop through each item and reverse geocode its latitude and longitude values using the OpenStreetMap Nominatim API
-  for (const item of items.value) {
-    const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${Number(item.location.latitude).toString()}&lon=${Number(item.location.longitude).toString()}&format=json`);
-    if (response.data.display_name) {
-      item.locationString = response.data.display_name;
-    } else {
-      item.locationString = `(${Number(item.location.latitude).toFixed(6)}, ${Number(item.location.longitude).toFixed(6)})`;
-    }
-  }
-
-  const keyword = getKeyword();
+const keyword = getKeyword();
   if (typeof keyword === 'string' && keyword.toLowerCase() !== '') {
     items.value = items.value.filter(item => item.locationString.toLowerCase().includes(keyword.toLowerCase()));
   }
-}
-
 
 function handleItemClick(linkItem) {
   router.push({ name: 'Item', params: { id: linkItem.id } });
@@ -69,14 +54,15 @@ watch(
     } else if (category && category.categoryName !== 'all') {
   await getItemsByCategory(category);
 } else {
-  await getItemsByLocation();
+  await getItems();
 }
 },
 { immediate: true }
 );
 
+
 onMounted(async () => {
-await getItemsByLocation();
+await getItems();
 });
 </script>
 

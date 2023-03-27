@@ -35,7 +35,7 @@ onMounted(async () => {
         :class="{ selected: categoryStore.selectedCategory?.categoryName === 'all' }"
         @click="handleAllCategoriesClick"
       >
-        <h3>Alle kategorier</h3>
+        <h3>{{ $t("TheCategories") }}</h3>
       </div>
       <div
         class="categories"
@@ -81,7 +81,7 @@ onMounted(async () => {
   }
 
   .selected {
-    background-color: var(--color-blue); /* You can change this color to your preferred highlight color */
+    background-color: var(--color-blue);
     color: white;
   }
 </style>

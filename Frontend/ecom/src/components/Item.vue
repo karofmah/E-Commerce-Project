@@ -58,7 +58,7 @@ async function addToCart() {
   }
 
   if (cartStore.items.length !== 0) {
-    alert("There is already an item in the cart. Only one item allowed at a time.");
+    alert(`${this.$t("alertCart")}`);
     return;
   }
   
@@ -151,9 +151,11 @@ async function contactSeller() {
             "Authorization" : "Bearer " + tokenStore.jwtToken
           },
         };
+
+        const contact = `${this.$t("contact")}`;
         
         let content = tokenStore.loggedInUser.firstName + " " + tokenStore.loggedInUser.lastName 
-        + " tok kontakt gjennom annonsen " + item.value.briefDescription + "."
+        + " " + contact + " " + item.value.briefDescription + "."
       
         let message = {
           "toEmail": item.value.seller.email,
@@ -183,7 +185,7 @@ function descOrSpec(key) {
       descOrSpecBool.value = false;
       break;
     default:
-      throw new Error('Something went wrong');
+      throw new Error`${this.$t("errorFav")}`;
   }
 }
 
@@ -293,111 +295,109 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-    .map-container {
-        width: 80%;
-        height: 100%;
-    }
+.map-container {
+    width: 80%;
+    height: 100%;
+}
+.container{
+    display: flex;
+    flex-flow: row wrap;
+    min-height: 80rem;
+    width: 80%;
+    margin: 10vh auto;
+    padding: 4vh;
+    box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.images{
+    display: flex;
+    align-items: center;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    max-width: 35%;
+    max-height: 26em;
+}
+.images::-webkit-scrollbar-track {
+    border-radius: 100vw;
+}
+
+.shopping{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2em 12em;
+    width: fit-content;
+    flex: 1;
+    max-height: 30%;
+}
+
+#favIcon{
+  position: absolute;
+  top: 1em;
+  right: -10em;
+  height: 2em;
+  cursor: pointer;
+}
+
+.star-spin{
+  animation: starSpin .6s linear;
+}
+
+@keyframes starSpin{
+  0%{
+    scale: 1;
+    rotate: 0deg;
+  }
+  50%{
+    scale: 1.3;
+    rotate: 180deg;
+  }
+  100%{
+    scale: 1;
+    rotate: 360deg;
+  }
+}
+
+.map{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 30em;
+    margin: 5em 0;
+    padding: 0em 0; 
+}
+
+#examplemap{
+    width: 80%;
+    height: 100%;
+}
+
+img{
+    height: 18em;
+    width: 18em;
+    margin: 0 3em;
+    scroll-snap-align: center;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+}
+
+@media(max-width: 768px){
     .container{
         display: flex;
-        flex-flow: row wrap;
-        min-height: 80rem;
-        width: 80%;
-        margin: 10vh auto;
-        padding: 4vh;
-        box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-    }
-
-    .images{
-        display: flex;
-        align-items: center;
-        overflow-x: scroll;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        max-width: 35%;
-        max-height: 26em;
-    }
-    .images::-webkit-scrollbar-track {
-        border-radius: 100vw;
-    }
-
-    .shopping{
-        display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        padding: 2em 12em;
-        width: fit-content;
-        flex: 1;
-        max-height: 30%;
     }
 
-    #favIcon{
-      position: absolute;
-      top: 1em;
-      right: -10em;
-      height: 2em;
-      cursor: pointer;
-    }
+}
 
-    .star-spin{
-      animation: starSpin .6s linear;
-    }
-
-    @keyframes starSpin{
-      0%{
-        scale: 1;
-        rotate: 0deg;
-      }
-      50%{
-        scale: 1.3;
-        rotate: 180deg;
-      }
-      100%{
-        scale: 1;
-        rotate: 360deg;
-      }
-    }
-
-    .map{
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 30em;
-        margin: 5em 0;
-        padding: 0em 0; 
-    }
-
-    #examplemap{
-        width: 80%;
-        height: 100%;
-    }
-
-    img{
-        height: 18em;
-        width: 18em;
-        margin: 0 3em;
-        scroll-snap-align: center;
-        /* if you need to change color of svg */
-        /* filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg); */
-    }
-
-    nav{
-        display: flex;
-        flex-direction: row;
-    }
-
-    @media(max-width: 768px){
-        .container{
-            display: flex;
-            flex-direction: column;
-        }
-
-    }
-
-    button img {
-      width: 20px;
-      height: 20px;
-      margin: 0;
-      float: right;
-    }
+button img {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  float: right;
+}
 </style>

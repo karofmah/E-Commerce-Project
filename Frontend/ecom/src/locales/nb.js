@@ -1,94 +1,128 @@
-export default {
-    //Header
-    addNew: "Legg til ny",
-    messages: "Meldinger",
-    cart: "Handlekurv",
-    logIn: "Logg inn",
-    selectLanguage: "Velg språk",
+export default{
+  //Header
+  addNew: "Legg til nytt element",
+  messages: "Meldinger",
+  cart: "Handlekurv",
+  logIn: "Logg inn",
   
-    search: "Søk",
+  search: "Søk",
   
-    allCategories: "Alle kategorier",
-    boat: "Båt",
-    car: "Bil",
-    realEstate: "Eiendom",
+  allCategories: "Alle Kategorier",
+  boat: "Båt",
+  car: "Bil",
+  realEstate: "Eiendom",
   
-    price: "Pris",
   
-    //Login
-    email: "E-post",
-    password: "Passord",
-    yourEmail: "Din Email",
-    yourPassword: "Ditt Passord",
-    doYouWantToRegisterNewUser: "Vil du registrere en ny bruker",
-    registerNewUser: "Registrer ny bruker",
+  //ContentItemTemplate
+  price: "Pris",
   
-    //Messages
-    chats: "Chatter",
-    sendAChat: "Send en chat",
+  //Categories
+  TheCategories: "Alle Kategorier",
   
-    //Shopping cart
-    shoppingCart: "Handlekurv",
-    product: "Produkt",
-    delete: "Slett",
-    buy: "Kjøp",
-    youHaveNotAddedAnyItemsToCart: "Du har ikke lagt til noen varer i handlekurven",
-    checkOut: "Sjekk ut",
-    totalPrice: "Totalpris",
+  //Login
+  email: "E-post",
+  password: "Passord",
+  yourEmail: "Din e-post",
+  yourPassword: "Ditt passord",
+  doYouWantToRegisterNewUser: "Ønsker du å registrere en ny bruker",
+  requiredFields: "E-post og passord er påkrevde felt",
+  loginFailed: "Innlogging mislyktes. Har du riktig e-post og passord?",
   
-    //User
-    firstName: "Fornavn",
-    lastName: "Etternavn",
-    edit: "Rediger",
-    logOut: "Logg ut",
-    favorites: "Favoritter",
-    myItems: "Mine varer",
+  //Messages
+  chats: "Chatter",
+  sendAChat: "Send en melding",
   
-    //Edit
-    userName: "Brukernavn",
-    newPassword: "Nytt passord",
-    oldPassword: "Gammelt passord",
-    saveChanges: "Lagre endringer",
-    returnToStart: "Gå tilbake til start",
+  //Shopping cart
+  shoppingCart: "Handlekurv",
+  product: "Produkt",
+  delete: "Slett",
+  buy: "Kjøp",
+  youHaveNotAddedAnyItemsToCart: "Du har ikke lagt til noen elementer i handlekurven",
+  checkOut: "Kasse",
+  totalPrice: "Totalpris",
+  bought: "kjøpt",
+  for: "for",
   
-    //Register
-    newUser: "Ny bruker",
-    password: "Passord",
+  //User
+  errorFav: "Noe gikk galt",
+  firstName: "Fornavn",
+  lastName: "Etternavn",
+  userEmail: "E-post",
+  edit: "Rediger",
+  logOut: "Logg ut",
+  favorites: "Favoritter",
+  myItems: "Mine elementer",
   
-    //New Item
-    addNewItem: "Legg til et nytt element",
-    currentPictures: "Nåværende bilder",
-    uploadImages: "Last opp bilder",
-    briefDescription: "Kort beskrivelse",
-    category: "Kategori",
-    fullDescription: "Full beskrivelse",
-    location: "Sted",
-    publishItem: "Publiser vare",
+  //Edit
+  passwordToShort: "Passordet må være minst 6 tegn",
+  wrongPassword: "Gammelt passord er feil",
+  blankPassword: "Gammelt passord kan ikke være blankt",
+  updatedUser: "Brukerinformasjonen ble oppdatert",
+  loggedOut: "Du er logget ut. Logg inn igjen for å fortsette",
+  error: "Feil. Prøv igjen senere",
+  mistake: "Feil",
+  userName: "Brukernavn",
+  newPassword: "Nytt passord",
+  oldPassword: "Gammelt passord",
+  saveChanges: "Lagre endringer",
+  returnToStart: "Tilbake til start",
   
-    //Edit Item
-    updateItem: "Oppdater vare",
-    existingPictures: "Eksisterende bilder",
+  //Register
+  newUser: "Ny bruker",
+  newEmail: "E-post",
+  newUsername: "Brukernavn",
+  passwordRegister: "Passord",
+  newFirstname: "Fornavn",
+  newLastname: "Etternavn",
+  registerNewUser: "Registrer ny bruker",
+  allFields: "Alle felt må fylles ut",
+  noRegistration: "Brukerregistrering fungerte ikke. Prøv igjen",
+  errorRegistrating: "Det oppstod en feil under registreringen. Vennligst prøv igjen",
   
-    //Item
-    seller: "Selger",
-    editItem: "Rediger vare",
-    addToCart: "Legg til i handlekurv",
-    deleteItem: "Slett vare",
-    contactSeller: "Kontakt selger",
-    description: "Beskrivelse",
-    spesifications: "Spesifikasjoner",
+  //New Item
+  addNewItem: "Legg til nytt element",
+  currentPictures: "Nåværende bilder",
+  uploadImages: "Last opp bilder (maks 10)",
+  briefDescription: "Kort beskrivelse",
+  category: "Kategori",
+  fullDescription: "Full beskrivelse",
+  location: "Plassering",
+  publishItem: "Publiser element",
+  maxTotalImages: "Du kan laste opp maksimalt 10 bilder",
+  missingInput: "Vennligst fyll ut alle påkrevde felt",
+  briefDescriptionToLong: "Kort beskrivelse kan være lengre enn 42 tegn",
+  errorListingItem: "Det oppstod en feil mens du forsøkte å legge ut elementet",
   
-    //Admin
-    adminPagePressXToDeleteThings: "Admin-side, trykk X for å slette ting",
-    users: "Brukere",
-    categories: "Kategorier",
-    addCategory: "Legg til kategori",
-    title: "Tittel",
+  //Edit Item
+  updateItem: "Oppdater element",
+  existingPictures: "Eksisterende bilder",
+  errorLoading: "Feil ved lasting av elementdata",
+  updateItemError: "Det oppstod en feil mens du prøvde å oppdatere elementet",
   
-    //Purchase
-    thanksForPurchase: "TAKK FOR KJØPET",
-
-    //Footer
-    logoCreatedBy: "Logo-en er laget av",
-  };
+  
+  //Item
+  seller: "Selger",
+  editItem: "Rediger element",
+  addToCart: "Legg til i handlekurv",
+  deleteItem: "Slett element",
+  contactSeller: "Kontakt selger",
+  description: "Beskrivelse",
+  spesifications: "Spesifikasjoner", 
+  alertCart: "Det er allerede et element i handlekurven. Kun ett element tillatt om gangen",
+  contact: "tok kontakt gjennom elementet",
+  
+  //Admin
+  adminPagePressXToDeleteThings: "Admin side, trykk X for å slette ting",
+  users: "Brukere",
+  categories: "Kategorier",
+  addCategory: "Legg til kategori",
+  title: "Tittel",
+  
+  //Purchase
+  thanksForPurchase: "TAKK FOR KJØPET",
+  
+  //Footer
+  logoCreatedBy: "Logo laget av",
+  selectLanguage: "Velg språk"
+  }
   

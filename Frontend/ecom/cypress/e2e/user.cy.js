@@ -5,7 +5,6 @@ describe('User Component Tests with Login', () => {
       const email = '1@gmail.com';
       const password = '123';
   
-      // Get the token for the test user
       try {
         const response = await getJwtToken(email, password);
         testUser = {
@@ -59,7 +58,6 @@ describe('User Component Tests with Login', () => {
         cy.visit('/userInfo');
       cy.get('#logOut').click();
   
-      // Check that the user is logged out and redirected to login page
       cy.url().should('include', '/Login');
       
     });

@@ -103,17 +103,17 @@ methods: {
   if(!(this.currentPassword.length == 0 && this.newPassword.length == 0)){
 
   if (this.newPassword !== "" && this.newPassword.length < 6) {
-    this.error = "Nytt passord må være minst 6 tegn.";
+    this.error = `${this.$t("passwordToShort")}`;
     return;
   }
 
   if (this.currentPassword !== this.tokenStore.loggedInUser.password) {
-    this.error = "Gammelt passord er feil.";
+    this.error = `${this.$t("wrongPassword")}`;
     return;
   }
 
   if(this.currentPassword.length !== this.tokenStore.loggedInUser.password){
-    this.error = "Gammelt passord kan ikke være blank";
+    this.error = `${this.$t("blankPassword")}`;
   }
 
 }
@@ -138,29 +138,23 @@ try {
   const response = await axios.put("http://localhost:9090/api/users/update", updateRequest, config);
   const updatedUser = response.data;
 
-  // Oppdater tokenstore med den oppdaterte brukerinformasjonen
   await this.tokenStore.getTokenAndSaveInStore(updatedUser.email, updatedUser.password);
 
-  // Vis suksessmelding og gå tilbake til UserInfo-siden
-  this.error = "Brukerinformasjonen ble oppdatert.";
+  this.error = `${this.$t("updatedUser")}`;
   this.changeRoute("UserInfo");
 } catch (error) {
   if (error.response) {
     if (error.response.status === 401) {
-      // Hvis tokenet er ugyldig, logg ut brukeren
       this.tokenStore.logout();
       this.changeRoute("Home");
-      this.error = "Du er logget ut. Logg inn på nytt for å fortsette.";
+      this.error = `${this.$t("loggedOut")}`;
     } else if (error.response.status === 400) {
-      // Hvis det var et problem med forespørselen, vis feilmelding
-      this.error = "Det oppstod en feil: " + error.response.data.error;
+      this.error = `${this.$t("mistake")}`; + error.response.data.error;
     } else {
-      // Hvis det var en annen type feil, vis generell feilmelding
-      this.error = "Det oppstod en feil. Prøv igjen senere.";
+      this.error = `${this.$t("error")}`;
     }
   } else {
-    // Hvis det ikke var noen respons, vis generell feilmelding
-    this.error = "Det oppstod en feil. Prøv igjen senere.";
+    this.error = `${this.$t("error")}`;
   }
 }
 },

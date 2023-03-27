@@ -20,7 +20,7 @@ public class TokenService {
             LoggerFactory.getLogger(TokenService.class);
     //Generate random in database
     public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(30);
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(5);
 
     private UserService userService;
 

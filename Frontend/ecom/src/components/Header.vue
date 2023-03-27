@@ -39,7 +39,6 @@
 
 
 <script>
-import axios from 'axios';
 import { useTokenStore } from "../stores/userToken";
 import { useRouter } from "vue-router";
 import { watch } from 'vue';
@@ -58,7 +57,6 @@ export default {
       () => tokenStore.jwtToken,
       () => {
         if (tokenStore.jwtToken === null) {
-          // Redirect to the Login page if jwtToken becomes null
           router.push("Login");
         }
       }

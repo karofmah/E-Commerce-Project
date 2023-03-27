@@ -1,6 +1,6 @@
 describe('New User Registration', () => {
   beforeEach(() => {
-    cy.visit('/register'); // Update this path with the actual path to your registration page
+    cy.visit('/register');
   });
 
   it('registers a new user successfully', () => {
