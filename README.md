@@ -4,7 +4,7 @@ CommersBay (trademark pending)
 ## Initial clone
 To get this project up and running there are 2 methods we show incase 1 does not work:<br>
 ### Cloning with git:
-For this Git is goind to be required if you don't have Git you can download it [here](https://git-scm.com/downloads).To clone with git you can use either the SSH link or HTTPS link you will find these under the code dropdown of the repository:
+For this Git is goind to be required if you don't have Git you can download it [here](https://git-scm.com/downloads).To clone with git you can use either the SSH link or HTTPS link you will find these under the code dropdown of the repository:<br>
 ![Clone links](./readmeImages/cloneLinks.png)
 <br>
 
