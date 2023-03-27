@@ -134,7 +134,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  background: var(--color-blue);
+  background-color: var(--color-blue);
   display: flex;
   flex-flow: row wrap;
   place-items: center;

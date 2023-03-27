@@ -3,7 +3,7 @@
 <div class="admin-container">
     <Header/>
     <Adminpage/>
-    <Footer/>
+    <Footer id="footer"/>
 </div>
 
 </template>
@@ -20,11 +20,12 @@ import Adminpage from '../components/Adminpage.vue';
 
 
 <style scoped>
-
-.admin-container{
+    .admin-container{
     display: flex;
     flex-direction: column;
-}
+    }
 
-
+    #footer{
+        transform: translateY(2em)
+    }
 </style>

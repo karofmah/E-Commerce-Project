@@ -7,5 +7,11 @@
 <template>
    <Header />
    <Edit />
-   <Footer />
+   <Footer id="footer"/>
 </template>
+
+<style scoped>
+    #footer{
+        transform: translateY(2em)
+    }
+</style>

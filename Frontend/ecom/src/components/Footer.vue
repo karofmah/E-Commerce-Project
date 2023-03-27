@@ -40,7 +40,6 @@ export default{
 
 <style scoped>
 .container{
-    background-color: var(--color-blue);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -48,6 +47,7 @@ export default{
     width: 100%;
     height: fit-content;
     padding: 1em;
+    background-color: var(--color-blue);
 }
 
 .copyright{

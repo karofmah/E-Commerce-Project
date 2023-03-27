@@ -49,6 +49,7 @@ watch(
       flex-flow: row wrap;
       padding: 0;
       width: 100%;
+      transform: translateY(-2em);
     }
     .catAndContAndSearch{
         display: flex;
@@ -101,7 +102,7 @@ watch(
 
     @media (max-width: 768px){
         .search-bar{
-        width: 100%;
+            width: 100%;
         }
 
         .catAndContAndSearch{

@@ -7,9 +7,11 @@
 <template>
   <Header />
   <UserInfo :ID="1"/>
-  <Footer />
+  <Footer id="footer"/>
 </template>
 
 <style scoped>
-
+    #footer{
+        transform: translateY(2em)
+    }
 </style>
