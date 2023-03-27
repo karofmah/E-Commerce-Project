@@ -32,7 +32,7 @@ build-backend:
     - mvn clean package
   artifacts:
     paths:
-      - Backend/ECOMBack/target/.jar
+      - Backend/ECOMBack/target/ECOMBack-0.0.1-SNAPSHOT.jar
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -55,7 +55,7 @@ test:
     - npm install
   script:
     - cd ../../Backend/ECOMBack
-    - java -jar ECOMBack-0.0.1-SNAPSHOT.jar &
+    - java -jar target/ECOMBack-0.0.1-SNAPSHOT.jar &
     - sleep 60
     - cd ../../Frontend/ecom
     - npm ci
