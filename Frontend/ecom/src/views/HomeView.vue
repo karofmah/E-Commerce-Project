@@ -81,10 +81,6 @@ watch(
         margin: 0 1em;
     }
 
-    #footer{
-        height: fit-content;
-    }
-
     .search-bar{
         background: url('../assets/search.svg') no-repeat 1.5% 50%;
         background-size: 20px;

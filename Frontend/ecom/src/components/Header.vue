@@ -233,8 +233,9 @@ select option:hover{
     height: fit-content;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     width: 100%;
+    margin: auto;
   }
 
   .link-pair {
