@@ -41,14 +41,16 @@ describe('User Component Tests with Login', () => {
     
         
         cy.get('#username').clear().type('newusername');
-        cy.contains('Save Changes').click();
+        cy.wait(10000);
+        cy.contains('Save changes').click();
         cy.wait(1000)
         cy.get('.user h2').should('contain', 'newusername');
         
         cy.get('#userImg').click();
         cy.contains('Edit').click();
         cy.get('#username').clear().type('test');
-        cy.contains('Save Changes').click();
+        cy.wait(10000);
+        cy.contains('Save changes').click();
         cy.wait(1000)
         cy.get('.user h2').should('contain', 'test');
        
