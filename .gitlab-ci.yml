@@ -47,6 +47,8 @@ test:
     - curl -sL https://deb.nodesource.com/setup_14.x | bash -
     - apt-get install -y nodejs
     - apt-get install -y openjdk-11-jdk
+    - cd Frontend/ecom
+    - npm install axios
   script:
     - cd Backend/ECOMBack
     - java -jar target/.jar &
