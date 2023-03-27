@@ -208,6 +208,10 @@ public class Item {
         this.images = images;
     }
 
+    /**
+     * string override formats output of object
+     * @return string
+     */
     @Override
     public String toString() {
         return "Item{" +

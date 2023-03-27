@@ -51,6 +51,10 @@ public class Location {
         this.longitude = longitude;
     }
 
+    /**
+     * string override formats output of object
+     * @return string
+     */
     @Override
     public String toString() {
         return "(" + latitude + ", " + longitude + ")";

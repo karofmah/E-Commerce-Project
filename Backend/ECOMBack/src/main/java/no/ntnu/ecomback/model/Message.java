@@ -146,6 +146,10 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    /**
+     * string override formats output of object
+     * @return string
+     */
     @Override
     public String toString() {
         return "Message{" +

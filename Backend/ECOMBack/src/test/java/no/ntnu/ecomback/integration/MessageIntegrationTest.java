@@ -64,6 +64,7 @@ public class MessageIntegrationTest {
 
     }
 
+    @DisplayName("Teardown of messageRepository")
     @AfterEach
     public void teardown() {
         messageRepository.deleteAll();
@@ -118,74 +119,5 @@ public class MessageIntegrationTest {
 
 
         }
-
-        /*
-        @Test
-        @WithMockUser(username = "USER")
-        @DisplayName("Testing the endpoint for sending a message with invalid content")
-        public void sendInvalidMessage() throws Exception {
-
-            String newMessageJson = objectMapper.writeValueAsString(new InvalidMessage());
-
-
-            mockMvc.perform(post("/api/messages/sendMessage")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newMessageJson)
-                    )
-                    .andExpect(status().isInternalServerError());
-        }*/
-
     }
-
-
-    /*
-    @Nested
-    class TestGetMessagesEmail{
-
-        @Test
-        @WithMockUser(username = "USER")
-        @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
-        public void getMessagesEmail() throws Exception {
-
-            MvcResult result = mockMvc.perform(get("/api/messages/'karo@ntnu.no'/'edvard@ntnu.no'")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andReturn();
-
-            String responseString = result.getResponse().getContentAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
-            });
-
-            Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
-
-            System.out.println(actualMessages);
-            System.out.println(mockMessagesToAndFrom);
-
-        }
-        @Test
-        @WithMockUser(username = "USER")
-        @DisplayName("Test the endpoint for retrieving messages based on which email they were sent from and to")
-        public void getEmptyMessagesEmail() throws Exception {
-            mockMessagesToAndFrom.clear();
-            when(messageController.getMessagesByToEmailAndFromEmail(Mockito.any(String.class),Mockito.any(String.class)))
-                    .thenReturn(new ResponseEntity<>(mockMessagesToAndFrom,HttpStatus.NO_CONTENT));
-            MvcResult result = mockMvc.perform(get("/api/messages/karo@ntnu.no/edvard@ntnu.no")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isNoContent())
-                    .andReturn();
-
-            String responseString = result.getResponse().getContentAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            List<Message> actualMessages = mapper.readValue(responseString, new TypeReference<>() {
-            });
-
-            Assertions.assertEquals(mockMessagesToAndFrom.size(), actualMessages.size());
-            //might add assert fields
-            System.out.println(actualMessages);
-            System.out.println(mockMessagesToAndFrom);
-
-        }*
-    }*/
 }
