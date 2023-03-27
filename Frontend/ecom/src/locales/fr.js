@@ -89,7 +89,7 @@ export default {
     publishItem: "publier l'article",
     maxTotalImages: "Vous pouvez télécharger un maximum de 10 images",
     missingInput: "Veuillez remplir tous les champs obligatoires",
-    briefDescriptionToLong: "La description brève peut comporter plus de 42 caractères",
+    briefDescriptionToLong: "La description brève ne peut dépasser 42 caractères",
     errorListingItem: "Une erreur s'est produite lors de la tentative de mise en liste de l'article",
     
     

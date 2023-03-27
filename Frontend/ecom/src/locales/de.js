@@ -90,7 +90,7 @@ export default{
     publishItem: "Artikel veröffentlichen",
     maxTotalImages: "Sie können maximal 10 Bilder hochladen",
     missingInput: "Bitte füllen Sie alle Pflichtfelder aus",
-    briefDescriptionToLong: "Die Kurzbeschreibung darf nicht länger als 42 Zeichen sein",
+    briefDescriptionToLong: "Kurze Beschreibung darf höchstens 42 Zeichen lang sein",
     errorListingItem: "Beim Versuch, den Artikel aufzulisten, ist ein Fehler aufgetreten",
     
     

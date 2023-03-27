@@ -90,7 +90,7 @@ export default{
   publishItem: "Publiser element",
   maxTotalImages: "Du kan laste opp maksimalt 10 bilder",
   missingInput: "Vennligst fyll ut alle påkrevde felt",
-  briefDescriptionToLong: "Kort beskrivelse kan være lengre enn 42 tegn",
+  briefDescriptionToLong: "Kort beskrivelse kan ikke være lengre enn 42 tegn",
   errorListingItem: "Det oppstod en feil mens du forsøkte å legge ut elementet",
   
   //Edit Item
