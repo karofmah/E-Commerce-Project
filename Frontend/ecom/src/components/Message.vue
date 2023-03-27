@@ -34,12 +34,17 @@ const filteredContacts = computed(() => {
   }
 
   return contacts.value.filter((contact) => {
-    return `Contact${contact} name`.toLowerCase().includes(searchText.value.toLowerCase())
+    return (contact.firstName + contact.lastName).toLowerCase().includes(searchText.value.toLowerCase())
   })
 })
 
 function getLastMessage(contact){
-  return "last message";
+  let contactIndex = contacts.value.indexOf(contact)
+  if (chat.value[contactIndex]) {
+    let thisChat = chat.value[contactIndex]
+    let lastMessage = thisChat[thisChat.length-1][0]
+    return (lastMessage.length > 35) ? lastMessage.substring(0, 35) + "..." : lastMessage;
+  }
 }
 
 async function addChat(input) {
@@ -67,14 +72,15 @@ async function addChat(input) {
 
 function scrollToBottom() {
   nextTick(() => {
-    if (currentScrollLength < chat.value[currentChat.value].length) {
-      let chatInstances = document.querySelector(".chatInstances");
-        
-      chatInstances.scrollTop = chatInstances.scrollHeight;
-      console.log(currentScrollLength + "," + chat.value[currentChat.value].length)
-      currentScrollLength = chat.value[currentChat.value].length
-    }
-  });
+      if (chat.value[currentChat.value]) {
+        if (currentScrollLength < chat.value[currentChat.value].length) {
+          let chatInstances = document.querySelector(".chatInstances");
+            
+          chatInstances.scrollTop = chatInstances.scrollHeight;
+          currentScrollLength = chat.value[currentChat.value].length
+        }
+      }
+    });
 }
 
 async function getContacts() {
@@ -86,6 +92,7 @@ async function getContacts() {
     };
 
   contacts.value = (await axios.get("http://localhost:9090/api/messages/" + tokenStore.loggedInUser.email + "/contacts",config)).data
+  contacts.value.reverse();
 }
 
 async function getMessages() {
