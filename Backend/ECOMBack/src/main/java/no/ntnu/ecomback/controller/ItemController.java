@@ -57,7 +57,12 @@ public class ItemController {
     public ResponseEntity<HttpStatus> deleteItem(
             @Parameter(description = "The id of the item")
             @PathVariable long id){
-        return itemService.deleteItem(id);
+        try {
+            itemService.deleteItem(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "Get all items")

@@ -19,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
@@ -70,8 +71,10 @@ public class ItemIntegrationTest {
         location.setLongitude(10);
 
         Item item1 = new Item(user1, "Description 1", "Full description 1",category, location, 150);
+        System.out.println(item1.getId());
 
         itemRepository.save(item1);
+        System.out.println(item1.getId());
 
     }
     @AfterEach
@@ -136,34 +139,8 @@ public class ItemIntegrationTest {
             Assertions.assertEquals(newItem.getBriefDescription(), retrievedItem.getBriefDescription());
 
         }
+
     }
 }
-/*
-        @Test
-        @DisplayName("Testing the endpoint for adding an item as an invalid user")
-        public void addItemInvalid() throws Exception {
-            User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
-            Location location2=new Location();
-            location2.setLatitude(25);
-            location2.setLongitude(50);
-            Item newItem=new Item(newUser, "Description 4", "Full description 4",new Category("Category 4"),location2 ,100);
-
-            when(itemController.addItem(Mockito.any(Item.class))).thenReturn(new ResponseEntity<>(newItem,HttpStatus.FORBIDDEN));
-
-            String newItemJson=objectMapper.writeValueAsString(newItem);
-
-            mockMvc.perform(post("/api/items/add")
-                            .accept(MediaType.APPLICATION_JSON)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(newItemJson)
-                    )
-                    .andExpect(MockMvcResultMatchers.status().is(403))
-                    .andReturn();
 
 
-        }
-    }
-
-
-}
-*/
