@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       scrollPosition: 0,
-      windowWidth: window.innerHeight,
+      windowWidth: window.innerWidth,
       links: false,
     };
   },
