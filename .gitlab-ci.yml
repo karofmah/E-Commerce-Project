@@ -49,6 +49,7 @@ test:
     - apt-get install -y openjdk-11-jdk
     - cd Frontend/ecom
     - npm install axios
+    - npm install cypress --save-dev
   script:
     - cd ../../Frontend/ecom
     - java -jar target/.jar &
