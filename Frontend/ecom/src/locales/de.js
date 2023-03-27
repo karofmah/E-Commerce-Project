@@ -1,6 +1,6 @@
 export default{
     //Header
-    addNew: "Neues Element hinzufügen",
+    addNew: "Neu",
     messages: "Nachrichten",
     cart: "Warenkorb",
     logIn: "Anmelden",
@@ -118,6 +118,7 @@ export default{
     categories: "Kategorien",
     addCategory: "Kategorien hinzufügen",
     title: "Titel",
+    items: "Artikel",
     
     //Purchase
     thanksForPurchase: "DANKE FÜR DEN KAUF",
