@@ -1,6 +1,7 @@
 <template>
     <div class="centered">
-      <h1>{{ t("thanksForThePurchase") }}</h1>
+      <h1>{{ t("thanksForPurchase") }}</h1>
+      <br>
       <button @click="goToStart">{{ t("returnToStart") }}</button>
     </div>
   </template>

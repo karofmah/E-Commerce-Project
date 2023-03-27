@@ -5,12 +5,18 @@ export default{
     data(){
         return {
             selectedLanguage: this.$i18n.locale,
+            windowWidth: window.innerWidth,
         };
     },
     methods: {
         changeLanguage(){
             this.$i18n.locale = this.selectedLanguage;
         },
+    },
+    mounted() {
+        window.onresize = () => {
+            this.windowWidth = window.innerWidth;
+        };
     }
 }
 
@@ -18,7 +24,7 @@ export default{
 
 <template>
      <div class="container">
-        <div class="logo">
+        <div class="logo" v-if="windowWidth > 768">
             <img src="../assets/logo.png" alt="Logo">
         </div>
         <div class="copyright">
@@ -89,16 +95,11 @@ select{
     .logo img{
         height: 8rem;
     }
-}
 
-@media (max-width: 768px) {
-    .opphavsrett{
+    .copyright{
         font-size: 13px;
     }
-}
-
-@media (max-width: 768px) {
-    .info-box{
+    .selectContainer{
         font-size: 13px;
     }
 }
