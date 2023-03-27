@@ -240,19 +240,49 @@ async handleImages() {
     return;
   }
 
+  const maxWidth = 1110;
+  const maxHeight = 600;
+
   const newImages = await Promise.all(
-    Array.from(files).map((file) => {
+    Array.from(files).map(async (file) => {
+      const resizedImageBlob = await this.resizeImage(file, maxWidth, maxHeight);
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = () => {
           resolve(reader.result);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(resizedImageBlob);
       });
     })
   );
 
   this.images = this.images.concat(newImages);
+},
+
+async resizeImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth || height > maxHeight) {
+        const ratio = Math.min(maxWidth / width, maxHeight / height);
+        width *= ratio;
+        height *= ratio;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, file.type);
+    };
+  });
 },
 
 async handleLocation(event) {

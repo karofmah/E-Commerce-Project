@@ -45,7 +45,7 @@ watch(
     .container{
       display: flex;
       align-items: space-between;
-      justify-content: space-between;
+     
       flex-flow: row wrap;
       padding: 0;
       width: 100%;
