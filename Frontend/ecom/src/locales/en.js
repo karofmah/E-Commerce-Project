@@ -1,6 +1,6 @@
 export default{
     //Header
-    addNew: "Add New Item",
+    addNew: "Add New",
     messages: "Messages",
     cart: "Cart",
     logIn: "Log In",
@@ -91,7 +91,7 @@ export default{
     publishItem: "Publish Item",
     maxTotalImages: "You can upload a maximum of 10 images",
     missingInput: "Please fill in all mandatory fields",
-    briefDescriptionToLong: "Breif Description can be longer than 42 characters",
+    briefDescriptionToLong: "Breif Description can not be longer than 42 characters",
     errorListingItem: "An error occurred while attempting to list the item",
 
     //Edit Item
@@ -118,6 +118,7 @@ export default{
     categories: "Categories",
     addCategory: "Add Categories",
     title: "Title",
+    items: "Items",
 
     //Purchase
     thanksForPurchase: "THANK YOU FOR THE PURCHASE",

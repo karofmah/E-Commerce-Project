@@ -25,7 +25,7 @@
           </form>
         </div>
         <div class="item-section">
-          <h1>{{ $t("addCategory") }}</h1>
+          <h1>{{ $t("items") }}</h1>
           <ul>
             <li v-for="(item, index) in items" :key="index">
               {{ $t("seller") + ": " + item.seller.email + " " + $t("title") + ": " + item.briefDescription}} <span class="delete" @click="deleteItem(index)">X</span>

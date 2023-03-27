@@ -323,6 +323,10 @@ onMounted(async () => {
     border-radius: 100vw;
 }
 
+.images img {
+      object-fit: contain;
+    }
+
 .shopping{
     display: flex;
     flex-direction: column;

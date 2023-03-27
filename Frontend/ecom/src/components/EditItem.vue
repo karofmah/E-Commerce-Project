@@ -425,15 +425,15 @@ async submit() {
 
     input, select{
       height: 5em;
-      width: 40em;
-    }
-
-    #full-description{
       width: 30em;
     }
 
+    #full-description{
+      width: 20em;
+    }
+
     .map{
-      min-width: 50em;
+      min-width: 15em;
     }
 
     button{
