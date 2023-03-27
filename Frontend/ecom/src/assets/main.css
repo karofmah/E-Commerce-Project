@@ -71,6 +71,7 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   box-shadow: 0 0 0 30px var(--color-blue-light) inset !important;
   -webkit-box-shadow: 0 0 0 30px var(--color-blue-light) inset !important;
+  -webkit-text-fill-color: white !important;
 }
 
 input,
@@ -196,6 +197,7 @@ nav a:first-of-type {
     border: 1px solid transparent;
     outline: none;
     border-color: var(--color-blue);
+    -webkit-text-fill-color: var(--color-text) !important;
   }
 
   input:-webkit-autofill {
