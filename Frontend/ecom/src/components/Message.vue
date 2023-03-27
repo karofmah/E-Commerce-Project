@@ -11,8 +11,9 @@ let currentChat = ref(0)
 let chat = ref([])
 let chatInput = ref("")
 let currentScrollLength = 0;
-const tokenStore = useTokenStore();
-
+const tokenStore = useTokenStore()
+let windowWidth = ref(window.innerWidth)
+let showSide = ref(false)
 
 
 function openChat(contactValue){
@@ -20,6 +21,9 @@ function openChat(contactValue){
   currentScrollLength = 0
   currentChat.value = index
 	chatInput.value = ""
+  if (windowWidth.value < 768) {
+    switchSide()
+  }
 }
 
 let searchText = ref('')
@@ -123,6 +127,10 @@ async function getMessages() {
   
 }
 
+function switchSide() {
+  showSide.value = (!showSide.value)
+}
+
 onUpdated(() => {
 	scrollToBottom()
 })
@@ -130,6 +138,9 @@ onUpdated(() => {
 onMounted(() => {
   initialize()
 
+  window.addEventListener('resize', () => {
+    windowWidth.value = window.innerWidth
+  })
 
   setInterval(() => {
     getContacts()
@@ -147,10 +158,11 @@ async function initialize() {
 
 <template>
   <div class="container">
-    <div class="chats">
+    <div class="chats" v-if="!showSide">
       <div class="header">
         <img src="../assets/chat-dots-fill.svg" id="chatLogo" alt="Chat" />
         <h1>Chats</h1>
+        <img src="../assets/arrow-bar-right.svg" id="arrowRight" alt="Arrow Right" v-if="windowWidth < 768" @click="switchSide()">
       </div>
       <hr />
       <input type="text" id="search" :placeholder="t('search')" v-model="searchText" />
@@ -159,16 +171,17 @@ async function initialize() {
             <img src="../assets/person-fill.svg" alt="Person img">
             <div>
                 <h2> {{ contact.firstName + " " + contact.lastName }} </h2>
-                <h3>{{ getLastMessage(contact) }}</h3>
+                <h3 v-if="windowWidth > 768">{{ getLastMessage(contact) }}</h3>
             </div>
         </div>
     </div>
     </div>
 
-    <div class="chat">
+    <div class="chat" v-if="showSide || windowWidth > 768">
       <div class="header">
-        <img src="../assets/person-fill.svg" alt="Person img" />
+        <img src="../assets/person-fill.svg" alt="Person img" :style="{'margin-left': (windowWidth < 768) ? '3em' : 'none'}"/>
         <h1 v-if="contacts[currentChat]"> {{ contacts[currentChat].firstName + " " + contacts[currentChat].lastName }} </h1>
+        <img src="../assets/arrow-bar-left.svg" id="arrowLeft" alt="Arrow Left" v-if="windowWidth < 768" @click="switchSide()">
       </div>
       <hr />
       <div class="chatInstances">
@@ -190,7 +203,7 @@ async function initialize() {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  margin: auto;
+  margin: 2em auto;
   align-items: center;
   height: 85vh;
   width: 90%;
@@ -227,6 +240,21 @@ async function initialize() {
 
 #chatLogo {
   height: 2em;
+}
+
+#arrowRight{
+  position: absolute;
+  height: 2em;
+  top: 0;
+  right: 0;
+}
+
+#arrowLeft{
+  position: absolute;
+  height: 2em;
+  top: 0;
+  left: 0;
+  background-color: var(--color-background);
 }
 
 .contacts {
@@ -335,5 +363,36 @@ async function initialize() {
 
 #chatInput::-webkit-input-placeholder {
   color: var(--color-blue);
+}
+
+@media (max-width: 768px){
+  .chats{
+    width: 100%;
+    min-height: 40em;
+    border-radius: 15px;
+  }
+
+  .contacts{
+    height: 100%;
+    padding: 1.5em auto;
+  }
+
+  .contact{
+    width: 95%;
+    margin: auto;
+  }
+
+  .contact:nth-last-of-type(1){
+    margin-bottom: 1em;
+  }
+
+  .chat{
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  #chatInstance{
+    border-radius: 11px;
+  }
 }
 </style>
