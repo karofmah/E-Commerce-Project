@@ -104,9 +104,10 @@ public class ItemService {
         try {
             bookmarkRepository.deleteBookmarksByItem(itemRepository.findById(id).get());
             itemRepository.deleteById(id);
+            _logger.info("Deleting item");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch(Exception e){
-            _logger.error(String.valueOf(e));
+            _logger.warn("Error deleting item: " + String.valueOf(e));
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -185,7 +186,7 @@ public class ItemService {
             _logger.info("Getting items");
             return itemRepository.findByCategory(category);
         }catch (Exception e){
-            System.out.println("Error while getting items by category: "+ e.getMessage());
+            _logger.warn("Error while getting items by category: "+ e.getMessage());
             return null;
         }
     }

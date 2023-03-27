@@ -61,6 +61,7 @@ public class TokenService {
      * @return the generated JWT token.
      */
     public String generateToken(final String userId) {
+        _logger.info("Generating token");
         final Instant now = Instant.now();
         final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
         final JWTVerifier verifier = JWT.require(hmac512).build();
