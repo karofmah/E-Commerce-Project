@@ -151,7 +151,7 @@ onMounted(async () => {
         align-items: center;
         background-color: var(--color-blue);
         color: var(--vt-c-white-mute);
-        height: 36em;
+        height: fit-content;
         width: 40%;
         margin: 0 3em 3em 0em;
         padding: 1em 3em;
@@ -256,25 +256,25 @@ onMounted(async () => {
 
 
     @media(max-width: 768px){
-        .user{
-            position: relative;
-        }
-        .contentWrapper{
-            min-width: 0em;
-            margin: 0;
-        }
-
-        .favoritesWrapper,
-        .myItemsWrapper {
+        .container{
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        .item {
+        .user{
             width: 100%;
-            margin-bottom: 20px;
         }
 
+        .contentWrapper{
+            width: 100%;
+        }
+
+        .favoritesWrapper, .myItemsWrapper{
+            margin: 1em auto;
+        }
+
+        .item{
+            width: 100%;
+            margin: 0 3em;
+        }
     }
 </style>
