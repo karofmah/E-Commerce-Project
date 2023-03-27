@@ -160,11 +160,12 @@
         }
 
         const newImages = await Promise.all(
-          Array.from(files).map((file) => {
-            return new Promise((resolve) => {
+          Array.from(files).map(async (file) => {
+            return new Promise(async (resolve) => {
               const reader = new FileReader();
-              reader.onload = () => {
-                resolve(reader.result);
+              reader.onload = async () => {
+                const resizedImage = await this.resizeImage(reader.result);
+                resolve(resizedImage);
               };
               reader.readAsDataURL(file);
             });
@@ -172,8 +173,46 @@
         );
 
         this.images = [...this.images, ...newImages];
-    },
-    
+  },
+
+  async resizeImage(imageDataUrl) {
+    const maxWidth = 1110;
+    const maxHeight = 600;
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = imageDataUrl;
+      img.onload = () => {
+        if (img.width <= maxWidth && img.height <= maxHeight) {
+          resolve(imageDataUrl);
+          return;
+        }
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        let newWidth = img.width;
+        let newHeight = img.height;
+
+        if (img.width > maxWidth || img.height > maxHeight) {
+          const aspectRatio = img.width / img.height;
+
+          if (img.width > img.height) {
+            newWidth = maxWidth;
+            newHeight = newWidth / aspectRatio;
+          } else {
+            newHeight = maxHeight;
+            newWidth = newHeight * aspectRatio;
+          }
+        }
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+        resolve(canvas.toDataURL());
+      };
+    });
+},
     deleteImage(index) {
     this.images.splice(index, 1);
     },
