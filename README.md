@@ -36,6 +36,22 @@ Find the downloaded file and extract the file<br>
 ![Extract project from zip](./readmeImages/extractZip.png)<br>
 
 ## Backend Setup
+To setup the backend of the project, navigate into the project folder(full-stack-project) -> Backend -> ECOMBack. This is the Spring boot Java project that communicates with the database. Open this folder in an IDE, we recoment using IntelliJ IDEA.
+<br><br>
+The IDE shoul automatically import all necessary Maven dependencies, based on the pom.xml file. Alternatively, you can use the Maven command line to download and install the dependencies:
+ ```
+ mvn clean install
+ ```
+To start the backend application, navigate to src/main/java/no/ntnu/ecomback/EcomBackApplication.java and run the main method in the IDE:<br>
+![npm install](./readmeImages/runBackend.png)<br>
+
+You can alternatively run the command 
+ ``` 
+ mvn spring-boot:run
+ ```
+ in the root of the backend project.
+<br><br>
+In the application.properties class, you can choose which database to use with the project. By default, the 'central' profile is selected, which connects to a centralized IDI MySQL database.
 
 ## Frontend Setup
 To setup frontend navigate into project folder(full-stack-project) -> Frontend -> ecom. That is the frontend vue project. Open that folder in whatever IDE you want to open it in. We recoment VS Code for this.
