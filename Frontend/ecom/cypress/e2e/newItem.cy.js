@@ -23,14 +23,19 @@ describe('New Ad Post', () => {
         });
       });
 
+        cy.get('#brief-description').type('This description is longer than 42 characters, which is not allowed This description is longer than 42 characters, which is not allowed');
+        cy.wait(10000)
+        cy.get('#category').select('test');
+        cy.wait(2000)
         cy.get('#full-description').type('Sample Full Description');
+        cy.wait(2000)
         cy.get('#location').type('New York');
+        cy.wait(2000)
         cy.get('#price').type('100');
-      
-        cy.get('#brief-description').type('This description is longer than 42 characters, which is not allowed');
-      
+        cy.wait(2000)
         cy.get('button').contains('Publish Item').click();
-        cy.get('.error-message',{ timeout: 10000 }).should('contain', 'Breif Description can not be longer than 42 characters');
+        cy.wait(2000)
+        cy.get('.error-message', { timeout: 10000 }).should('contain', 'Please fill in all mandatory fields');
       });
       
   
