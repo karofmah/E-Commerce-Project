@@ -56,8 +56,8 @@ onMounted(async () => {
   .container{
     border-radius: 8px;
     margin: 0;
-    width: 10em;
-    height: 15vh;  
+    flex-grow: inherit;
+    height: 15vh;
   }
   .categories{
     display: flex;
@@ -89,11 +89,7 @@ onMounted(async () => {
     color: white;
   }
 
-  @media(max-width: 768){
-    .container{
-      width: 100%;
-      margin: 0;
-      background-color: red;
-    }
+  @media (max-width: 768px){
+    
   }
 </style>
