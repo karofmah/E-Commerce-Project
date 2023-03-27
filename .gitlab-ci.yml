@@ -48,7 +48,7 @@ test:
     - apt-get install -y nodejs
     - apt-get install -y openjdk-11-jdk
     - apt-get install -y xvfb
-    - apt-get install -y libgtk2.0-0
+    - apt-get install -y libgtk-3-0
     - cd Frontend/ecom
     - npm install axios
     - npm install cypress --save-dev
