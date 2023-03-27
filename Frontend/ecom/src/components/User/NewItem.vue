@@ -351,10 +351,10 @@ gap: 10px;
 width: 100%;
 }
 
-textarea {
-width: 100%;
-height: 150px;
-resize: vertical;
+#full-description {
+  width: 30em;
+  height: 10em;
+  resize: vertical;
 }
 
 label {
@@ -371,5 +371,28 @@ width: 100%;
 width: 400px;
 height: 300px;
 margin-top: 10px;
+}
+
+@media (max-width: 768px){
+  .new-item{
+    width: 100%;
+  }
+  .existing-images{
+    width: 85%;
+  }
+
+  input, select{
+    width: 27em;
+  }
+
+  #full-description{
+    width: 20em;
+  }
+
+  .map{
+    width: 150%;
+    height: 200px;
+  }
+
 }
 </style>

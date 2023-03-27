@@ -44,10 +44,12 @@ watch(
 <style scoped>
     .container{
       display: flex;
-      align-items: start;
+      align-items: space-between;
+      justify-content: space-between;
       flex-flow: row wrap;
       padding: 0;
       width: 100%;
+      transform: translateY(-2em);
     }
     .catAndContAndSearch{
         display: flex;
@@ -80,21 +82,35 @@ watch(
         margin: 0 1em;
     }
 
-  .search-bar{
-    background: url('../assets/search.svg') no-repeat 1.5% 50%;
-    background-size: 20px;
-	color: rebeccapurple;
-    margin: 1.3em 1em 1em 1em;
-    padding: 0.5rem 1rem;
-    padding-left: 2.5em;
-    width: 20%;
-    height: 3em;
-    font-size: 1rem;
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-  }
+    .search-bar{
+        background: url('../assets/search.svg') no-repeat 1.5% 50%;
+        background-size: 20px;
+        color: rebeccapurple;
+        margin: 1.3em 1em 1em 1em;
+        padding: 0.5rem 1rem;
+        padding-left: 2.5em;
+        width: 20%;
+        height: 3em;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
 
-  .search-bar::-webkit-input-placeholder{
-    color: var(--color-blue);
-  }
+    .search-bar::-webkit-input-placeholder{
+        color: var(--color-blue);
+    }
+
+    @media (max-width: 768px){
+        .search-bar{
+            width: 100%;
+        }
+
+        .catAndContAndSearch{
+            margin: 0em 0;
+        }
+
+        #categories{
+            width: 95%;
+        }
+    }
 </style>

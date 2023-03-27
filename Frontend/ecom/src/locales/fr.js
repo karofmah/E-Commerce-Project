@@ -1,6 +1,6 @@
-export default{
-    //Header
-    addNew: "Ajouter un nouvel article",
+export default {
+    // Header
+    addNew: "Ajouter",
     messages: "Messages",
     cart: "Panier",
     logIn: "Connexion",

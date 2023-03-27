@@ -170,11 +170,21 @@ hr {
 }
 
 @media(max-width: 768px){
+    .container{
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 2em auto;
+    }
+
+    .cart{
+      width: 100%;
+      margin: 1em 0;
+    }
+
     .pay{
-        position: relative;
-        margin: 3em;
-        margin-left: 5em;
-        flex: 1;
+      width: 100%;
+      margin: 1em 0;
     }
 }
 </style>

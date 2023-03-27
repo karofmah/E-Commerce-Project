@@ -6,10 +6,12 @@
 
 <template>
     <Header />
-    <div>
-      <Login/>
-    </div>
-    <Footer />
-  </template>
+    <Login/>
+    <Footer id="footer"/>
+</template>
   
-
+<style scoped>
+    #footer{
+        transform: translateY(2em)
+    }
+</style>

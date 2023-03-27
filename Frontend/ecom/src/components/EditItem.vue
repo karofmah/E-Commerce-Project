@@ -416,4 +416,28 @@ async submit() {
   #submit{
     margin: 2em;
   }
+
+  @media (max-width: 768px){
+    .container{
+      display: flex;
+      width: 100%;
+    }
+
+    input, select{
+      height: 5em;
+      width: 40em;
+    }
+
+    #full-description{
+      width: 30em;
+    }
+
+    .map{
+      min-width: 50em;
+    }
+
+    button{
+      width: 25em;
+    }
+  }
 </style>

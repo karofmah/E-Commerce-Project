@@ -141,20 +141,20 @@ onMounted(async () => {
     margin: 3em auto;
 }
 
-.user {
-    position: relative;
-    display: flex;
-    flex-flow: column wrap;
-    align-items: center;
-    background-color: var(--color-blue);
-    color: var(--vt-c-white-mute);
-    height: 36em;
-    width: 40%;
-    margin: 0 3em 3em 0em;
-    padding: 1em 3em;
-    box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-}
+    .user {
+        position: relative;
+        display: flex;
+        flex-flow: column wrap;
+        align-items: center;
+        background-color: var(--color-blue);
+        color: var(--vt-c-white-mute);
+        height: fit-content;
+        width: 40%;
+        margin: 0 3em 3em 0em;
+        padding: 1em 3em;
+        box-shadow: 2px 5px 10px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+    }
 
 .contentWrapper {
     min-height: 35em;
@@ -249,26 +249,26 @@ h3 {
     line-height: 3;
 }
 
-@media(max-width: 768px){
-    .user{
-        position: relative;
-    }
-    .contentWrapper{
-        min-width: 0em;
-        margin: 0;
-    }
+    @media(max-width: 768px){
+        .container{
+            flex-direction: column;
+        }
 
-    .favoritesWrapper,
-    .myItemsWrapper {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+        .user{
+            width: 100%;
+        }
 
-    .item {
-        width: 100%;
-        margin-bottom: 20px;
-    }
+        .contentWrapper{
+            width: 100%;
+        }
 
-}
+        .favoritesWrapper, .myItemsWrapper{
+            margin: 1em auto;
+        }
+
+        .item{
+            width: 100%;
+            margin: 0 3em;
+        }
+    }
 </style>

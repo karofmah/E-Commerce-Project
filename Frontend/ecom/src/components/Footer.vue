@@ -5,6 +5,7 @@ export default {
   data() {
     return {
       selectedLanguage: this.$i18n.locale,
+            windowWidth: window.innerWidth,
     };
   },
   created() {
@@ -19,13 +20,18 @@ export default {
       languageStore.changeLanguage(this.selectedLanguage);
       this.$i18n.locale = this.selectedLanguage;
     },
+    },
+    mounted() {
+        window.onresize = () => {
+            this.windowWidth = window.innerWidth;
+        };
   },
 };
 </script>
 
 <template>
      <div class="container">
-        <div class="logo">
+        <div class="logo" v-if="windowWidth > 768">
             <img src="../assets/logo.png" alt="Logo">
         </div>
         <div class="copyright">
@@ -47,14 +53,14 @@ export default {
 
 <style scoped>
 .container{
-    background-color: var(--color-blue);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 10em;
+    height: fit-content;
     padding: 1em;
+    background-color: var(--color-blue);
 }
 
 .copyright{
@@ -96,16 +102,11 @@ select{
     .logo img{
         height: 8rem;
     }
-}
 
-@media (max-width: 768px) {
-    .opphavsrett{
+    .copyright{
         font-size: 13px;
     }
-}
-
-@media (max-width: 768px) {
-    .info-box{
+    .selectContainer{
         font-size: 13px;
     }
 }
