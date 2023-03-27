@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-karo.properties")
 
 public class UserIntegrationTest {
 
@@ -47,28 +47,18 @@ public class UserIntegrationTest {
     @Autowired
     UserService userService;
 
-    List <User> users=new ArrayList<>();
-
     @BeforeEach
     @DisplayName("Setting up mock data for tests")
     public void setup() {
+
 
         User user1=new User("karofm@ntnu.no","Karo","Mahmoud","karofm","pw",Role.NORMAL_USER);
         User user2=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
         User user3=new User("karofm3@ntnu.no","Karo3","Mahmoud3","karofm3","pw3",Role.NORMAL_USER);
 
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
-
-
-
-        //Mockito.when(userController.getAllUsers()).thenReturn(new ResponseEntity<>(mockUsers,HttpStatus.OK));
-
     }
     @AfterEach
     public void teardown(){

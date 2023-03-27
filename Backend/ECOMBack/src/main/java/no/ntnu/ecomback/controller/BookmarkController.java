@@ -1,6 +1,7 @@
 package no.ntnu.ecomback.controller;
 
 import no.ntnu.ecomback.model.Bookmark;
+import no.ntnu.ecomback.model.Item;
 import no.ntnu.ecomback.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,14 +28,26 @@ public class BookmarkController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER')")
-    public Bookmark addBookmark(@RequestBody Bookmark bookmark){
-        return bookmarkService.addBookmark(bookmark);
+    public ResponseEntity<Bookmark> addBookmark(@RequestBody Bookmark bookmark){
+        try{
+            Bookmark _bookmark=bookmarkService.addBookmark(bookmark);
+            return new ResponseEntity<>(_bookmark,HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
     @GetMapping("/get")
     @PreAuthorize("hasRole('USER')")
-    public List<Bookmark> getBookmarks(@RequestParam String email){
-        return bookmarkService.getBookmarks(email);
+    public  ResponseEntity<List<Bookmark>> getBookmarks(@RequestParam String email) {
+        try {
+            List<Bookmark> bookmarks = bookmarkService.getBookmarks(email);
+            return new ResponseEntity<>(bookmarks, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('USER')")

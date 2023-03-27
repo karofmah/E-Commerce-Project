@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes= EcomBackApplication.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-karo.properties")
 
 public class MessageIntegrationTest {
     @Autowired
@@ -104,7 +104,6 @@ public class MessageIntegrationTest {
         public void sendValidMessage() throws Exception {
             Message newMessage = new Message();
             newMessage.setMessageContent("hei3");
-
 
             String newMessageJson = objectMapper.writeValueAsString(newMessage);
 

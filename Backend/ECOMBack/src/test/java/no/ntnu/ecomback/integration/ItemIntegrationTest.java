@@ -1,4 +1,4 @@
-/*
+
 package no.ntnu.ecomback.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.ntnu.ecomback.EcomBackApplication;
 import no.ntnu.ecomback.controller.ItemController;
 import no.ntnu.ecomback.model.*;
+import no.ntnu.ecomback.repository.CategoryRepository;
 import no.ntnu.ecomback.repository.ItemRepository;
+import no.ntnu.ecomback.repository.UserRepository;
 import no.ntnu.ecomback.service.ItemService;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
@@ -50,26 +49,42 @@ public class ItemIntegrationTest {
     ItemController itemController;
     @Autowired
     ItemRepository itemRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     @Autowired
     ItemService itemService;
-
-     List<Item> mockItems=new ArrayList<>();
-
 
 
     @BeforeEach
     @DisplayName("Setting up mock data for tests")
     public void setup() {
 
-        User user1=new User("karofm@ntnu.no","Karo","Mahmoud","karofm","pw",Role.NORMAL_USER);
-        Location location=new Location();
+        User user1 = new User("karofm@ntnu.no", "Karo", "Mahmoud", "karofm", "pw", Role.NORMAL_USER);
+        userRepository.save(user1);
+        Location location = new Location();
+
+
+        Category category=new Category("Category");
+        categoryRepository.save(category);
         location.setLatitude(5);
         location.setLongitude(10);
-        mockItems.add(new Item(user1, "Description 1", "Full description 1",new Category("Category 1"),location ,100));
-        mockItems.add(new Item(user1, "Description 2", "Full description 2",new Category("Category 2"),location ,150));
-        mockItems.add(new Item(user1, "Description 3", "Full description 3",new Category("Category 3"),location ,200));
 
-        when(itemController.getItems()).thenReturn(new ResponseEntity<>(mockItems, HttpStatus.OK));
+        Item item1 = new Item(user1, "Description 1", "Full description 1",category, location, 150);
+
+        itemRepository.save(item1);
+
+    }
+    @AfterEach
+    public void teardown(){
+        itemRepository.deleteAll();
+        userRepository.deleteAll();
+        categoryRepository.deleteAll();
+
     }
 
     @Test
@@ -87,41 +102,47 @@ public class ItemIntegrationTest {
         });
 
         System.out.println(actualItems);
-        org.junit.jupiter.api.Assertions.assertEquals(mockItems.size(), actualItems.size());
     }
+
     @Nested
-    class TestAddItem{
+    class TestAddItem {
+
 
         @Test
         @WithMockUser(username = "USER")
         @DisplayName("Testing the endpoint for adding an item as a valid user")
         public void addItemValid() throws Exception {
-            User newUser=new User("karofm2@ntnu.no","Karo2","Mahmoud2","karofm2","pw2",Role.NORMAL_USER);
-            Location location2=new Location();
-            location2.setLatitude(25);
-            location2.setLongitude(50);
-            Item newItem=new Item(newUser, "Description 4", "Full description 4",new Category("Category 4"),location2 ,100);
 
-            when(itemController.addItem(Mockito.any(Item.class))).thenReturn(new ResponseEntity<>(newItem,HttpStatus.CREATED));
+            User newUser = new User("karofm2@ntnu.no", "Karo2", "Mahmoud2", "karofm2", "pw2", Role.NORMAL_USER);
+            userRepository.save(newUser);
+            Location newLocation = new Location();
+            newLocation.setLatitude(25);
+            newLocation.setLongitude(50);
+            Category newCategory=new Category("Category 2");
+            categoryRepository.save(newCategory);
+            Item newItem = new Item(newUser, "Description 2", "Full description 2", newCategory, newLocation , 200);
+            List <String> imageList=new ArrayList<>();
+            imageList.add("image");
+            newItem.setImages(imageList);
+            String newItemJson = objectMapper.writeValueAsString(newItem);
 
-            String newItemJson=objectMapper.writeValueAsString(newItem);
-
-            MvcResult result= mockMvc.perform(post("/api/items/add")
+             mockMvc.perform(post("/api/items/add")
                             .accept(MediaType.APPLICATION_JSON)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(newItemJson)
+                            .content(newItemJson))
+                    .andExpect(MockMvcResultMatchers.status().isCreated());
 
-                    )
-                    .andExpect(MockMvcResultMatchers.status().isCreated())
-                    .andReturn();
 
-            Assertions.assertThat(result).isNotNull();
-            String itemJson = result.getResponse().getContentAsString();
-            Assertions.assertThat(itemJson).isNotEmpty();
-            Assertions.assertThat(itemJson).isEqualToIgnoringCase(objectMapper.writeValueAsString(newItem));
+            Item retrievedItem = itemRepository.findAll()
+                    .get(itemRepository.findAll().size() - 1);
 
-            System.out.println(itemJson);
+            Assertions.assertNotEquals(0, retrievedItem.getId());
+            Assertions.assertEquals(newItem.getFullDescription(), retrievedItem.getFullDescription());
+            Assertions.assertEquals(newItem.getBriefDescription(), retrievedItem.getBriefDescription());
+
         }
+    }
+}
 /*
         @Test
         @DisplayName("Testing the endpoint for adding an item as an invalid user")
