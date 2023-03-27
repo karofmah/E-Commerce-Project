@@ -43,11 +43,14 @@ public class CategoryIntegrationTest {
     @Autowired
     CategoryService categoryService;
 
+    @DisplayName("Setup")
     @BeforeEach
     public void setup(){
         Category category=new Category("Category");
         categoryRepository.save(category);
     }
+
+    @DisplayName("Delete categoriesRepository table")
     @AfterEach
     public void teardown(){
         categoryRepository.deleteAll();

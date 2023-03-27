@@ -77,6 +77,7 @@ public class ItemIntegrationTest {
         System.out.println(item1.getId());
 
     }
+    @DisplayName("Teardown of itemRepository, userRepository and categoryRepository tables")
     @AfterEach
     public void teardown(){
         itemRepository.deleteAll();

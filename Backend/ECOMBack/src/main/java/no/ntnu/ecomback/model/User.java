@@ -178,6 +178,11 @@ public class User {
         }
     }
 
+    /**
+     * Returns a string representation of the category.
+     *
+     * @return the name of the category
+     */
     @Override
     public String toString() {
         return "User{" +

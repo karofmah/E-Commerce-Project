@@ -37,6 +37,8 @@ public class TokenIntegrationTest {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(obj);
     }
+
+    @DisplayName("Setup")
     @BeforeEach
     public void setup(){
 
@@ -48,6 +50,7 @@ public class TokenIntegrationTest {
         userRepository.save(user2);
         userRepository.save(user3);
     }
+    @DisplayName("Teardown of userRepository table")
     @AfterEach
     public void teardown(){
         userRepository.deleteAll();
@@ -84,7 +87,4 @@ public class TokenIntegrationTest {
         }
 
     }
-
-    // utility method to convert object to JSON string
-
 }

@@ -61,6 +61,8 @@ public class UserIntegrationTest {
         userRepository.save(user2);
         userRepository.save(user3);
     }
+
+    @DisplayName("Teardown of userRepository")
     @AfterEach
     public void teardown(){
        userRepository.deleteAll();
@@ -111,6 +113,7 @@ public class UserIntegrationTest {
     }
     @Test
     @WithMockUser(username = "USER")
+    @DisplayName("Test deletion of user")
     public void deleteUser() throws Exception {
 
         mockMvc.perform((MockMvcRequestBuilders.delete("/api/users/deleteUser/karofm3@ntnu.no")
@@ -123,6 +126,7 @@ public class UserIntegrationTest {
     }
     @Test
     @WithMockUser(username = "USER")
+    @DisplayName("Test getting user")
     public void getUser() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/users/login/user?email=karofm@ntnu.no")
                         .contentType(MediaType.APPLICATION_JSON))

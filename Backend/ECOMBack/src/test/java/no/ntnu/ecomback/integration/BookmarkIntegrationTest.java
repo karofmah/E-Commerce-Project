@@ -58,6 +58,7 @@ public class BookmarkIntegrationTest {
     @Autowired
     CategoryRepository categoryRepository;
     @BeforeEach
+    @DisplayName("Setup")
     public void setup(){
         User user1 = new User("karofm@ntnu.no", "Karo", "Mahmoud", "karofm", "pw", Role.NORMAL_USER);
         userRepository.save(user1);
@@ -76,6 +77,7 @@ public class BookmarkIntegrationTest {
         bookmarkRepository.save(bookmark1);
     }
 
+    @DisplayName("Delete all from book")
     @AfterEach
     public void teardown(){
         bookmarkRepository.deleteAll();
