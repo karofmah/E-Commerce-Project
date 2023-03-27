@@ -37,6 +37,7 @@ public class CategoryService {
         try {
             return categoryRepository.findAll();
         } catch (Exception e) {
+            _logger.warn("Error getting all categories: " + e.getMessage());
             return null;
         }
     }
@@ -51,6 +52,7 @@ public class CategoryService {
         try {
             return categoryRepository.save(new Category(category.getCategoryName()));
         } catch (Exception e) {
+            _logger.warn("Error getting category: " + e.getMessage());
             return null;
         }
     }
@@ -66,6 +68,7 @@ public class CategoryService {
             categoryRepository.deleteById(categoryName);
             return true;
         } catch (Exception e) {
+            _logger.warn("Error deleting category: " + e.getMessage());
             return false;
         }
     }

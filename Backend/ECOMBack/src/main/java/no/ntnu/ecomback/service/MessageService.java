@@ -6,6 +6,8 @@ package no.ntnu.ecomback.service;
 import no.ntnu.ecomback.model.Message;
 import no.ntnu.ecomback.model.User;
 import no.ntnu.ecomback.repository.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 public class MessageService {
     private MessageRepository messageRepository;
     private UserService userService;
+
+    private static final Logger _logger =
+        LoggerFactory.getLogger(UserService.class);
 
     /**
      * Sets the user service to use for retrieving user information.
@@ -46,9 +51,10 @@ public class MessageService {
      */
     public Message addMessage(Message message){
         try {
+            _logger.info("Adding message");
             return messageRepository.save(message);
         } catch (Exception e) {
-            System.out.println("Error occurred while adding message: " + e.getMessage());
+            _logger.warn("Error occurred while adding message: " + e.getMessage());
             return null;
         }
     }
@@ -62,8 +68,9 @@ public class MessageService {
         List<Message> myMessages;
         try {
             myMessages = messageRepository.findAll();
+            _logger.info("Finding all");
         } catch (Exception e) {
-            System.out.println("Error getting message: " + e.getMessage());
+            _logger.warn("Error getting messages: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
@@ -80,8 +87,9 @@ public class MessageService {
         List<Message> myMessages;
         try {
             myMessages = messageRepository.findByToEmailAndFromEmailOrderByTimestamp(toEmail, fromEmail);
+            _logger.info("Getting messages by, to and from email");
         } catch (Exception e) {
-            System.out.println("Error getting messages: " + e.getMessage());
+            _logger.warn("Error getting messages: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
@@ -98,8 +106,9 @@ public class MessageService {
         List<Message> myMessages;
         try {
             myMessages = messageRepository.findByToEmailAndFromEmailOrToEmailAndFromEmailOrderByTimestamp(email1, email2, email2, email1);
+            _logger.info("Getting messages in both directions");
         } catch (Exception e) {
-            System.out.println("Error getting messages: " + e.getMessage());
+            _logger.warn("Error getting messages: " + e.getMessage());
             myMessages = null;
         }
         return myMessages;
@@ -118,6 +127,7 @@ public class MessageService {
         try {
             List<Message> contactMessages = new ArrayList<>();
             contactMessages.addAll(messageRepository.findByToEmail(email));
+
             for (Message message : contactMessages) {
                 contacts.add(userService.getUser(message.getFromEmail()).get());
             }
@@ -126,9 +136,10 @@ public class MessageService {
             for (Message message : contactMessages) {
                 contacts.add(userService.getUser(message.getToEmail()).get());
             }
+            _logger.info("Getting all contacts");
             return contacts.stream().distinct().collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println("Error getting contacts: " + e.getMessage());
+            _logger.warn("Error getting contacts: " + e.getMessage());
             return null;
         }
     }

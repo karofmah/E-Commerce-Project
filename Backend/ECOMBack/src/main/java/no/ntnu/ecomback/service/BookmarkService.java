@@ -72,8 +72,10 @@ public class BookmarkService {
     public ResponseEntity<HttpStatus> deleteItem(long id) {
         try {
             bookmarkRepository.deleteById(id);
+            _logger.info("Deleting item");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch(Exception e){
+            _logger.warn("Error deleting item: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

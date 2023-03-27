@@ -169,9 +169,10 @@ public class UserService {
                 }
                 return userRepository.save(_user);
             }
-
+            _logger.info("Updating user");
         } catch (Exception e) {
             _logger.warn(e.getMessage());
+            _logger.warn("Error while updating user" + e.getMessage());
             return null;
         }
         _logger.warn("User doesnt exist");
@@ -186,8 +187,10 @@ public class UserService {
      */
     public List<User> getAllUsers() {
         try {
+            _logger.info("Getting all users");
             return new ArrayList<>(userRepository.findAll());
         } catch (Exception e) {
+            _logger.warn("Error while getting all users" + e.getMessage());
             return null;
         }
     }
@@ -205,9 +208,10 @@ public class UserService {
             itemRepositoryRepository.deleteAllBySellerEmail(email);
             messageRepository.deleteAllByFromEmailOrToEmail(email, email);
             userRepository.deleteById(email);
+            _logger.info("Getting all users");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            _logger.error(String.valueOf(e));
+            _logger.warn("Error while deleting user" + String.valueOf(e));
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
