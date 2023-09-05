@@ -51,7 +51,9 @@ You can alternatively run the command
  ```
  in the root of the backend project.
 <br><br>
-In the application.properties class, you can choose which database to use with the project. By default, the 'central' profile is selected, which connects to a centralized IDI MySQL database.
+In the application-central.properties class, you can specify which database to use with the project (url, username and password). To get access to the centralized IDI MySQL database, please take contact
+![application-central.properties](./readmeImages/applicationPropertiesCentral.png)<br>
+
 
 ## Frontend Setup
 To setup frontend navigate into project folder(full-stack-project) -> Frontend -> ecom. That is the frontend vue project. Open that folder in whatever IDE you want to open it in. We recoment VS Code for this.
