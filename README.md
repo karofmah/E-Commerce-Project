@@ -42,6 +42,12 @@ The IDE shoul automatically import all necessary Maven dependencies, based on th
  ```
  mvn clean install
  ```
+
+In the application-central.properties class, you can specify which database to use with the project (url, username and password). To get access to the centralized IDI MySQL database, please reach me at karo.f.mahmoud@gmail.com
+
+![application-central.properties](./readmeImages/applicationPropertiesCentral.png)'
+<br><br>
+
 To start the backend application, navigate to src/main/java/no/ntnu/ecomback/EcomBackApplication.java and run the main method in the IDE:<br>
 ![npm install](./readmeImages/runBackend.png)<br>
 
@@ -51,8 +57,7 @@ You can alternatively run the command
  ```
  in the root of the backend project.
 <br><br>
-In the application-central.properties class, you can specify which database to use with the project (url, username and password). To get access to the centralized IDI MySQL database, please take contact
-![application-central.properties](./readmeImages/applicationPropertiesCentral.png)<br>
+
 
 
 ## Frontend Setup
