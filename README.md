@@ -1,5 +1,5 @@
 # Full Stack Project
-CommersBay (trademark pending)
+A volunteer project as a part of the subject IDATT2105
 
 ## Initial clone
 To get this project up and running there are 2 methods we show incase 1 does not work:<br>
